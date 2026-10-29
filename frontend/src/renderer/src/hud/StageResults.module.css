@@ -1,0 +1,570 @@
+/* Shared styling for the per-stage result content (config/analysis/baseline/
+   monitoring), ported from the Studio markup. */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.block8 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+}
+.headNoLs {
+  letter-spacing: 0;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+/* rows */
+.rows {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.rowKey {
+  font-size: 12px;
+  color: var(--mut);
+}
+.rowVal {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* checks */
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.checkDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: none;
+}
+.checkK {
+  flex: 1;
+}
+.checkV {
+  font-family: var(--font-mono);
+  color: var(--mut);
+}
+
+.note {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--mut);
+}
+.primaryBtn {
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--inv);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* progress box */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.progressHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.progressVal {
+  font-family: var(--font-mono);
+  color: var(--mut);
+}
+.progressTrack {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.progressFill {
+  height: 100%;
+  background: var(--acc);
+}
+
+/* baseline mode card */
+.modeCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.modeHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.modeK {
+  color: var(--mut);
+}
+.modeF {
+  font-family: var(--font-mono);
+}
+.modeSvg {
+  width: 100%;
+  height: 36px;
+  display: block;
+}
+.atSvg {
+  width: 100%;
+  height: 96px;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+/* ---- shared cards / bars ---- */
+.infoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--hover);
+}
+.infoText {
+  font-size: 13px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.infoText12 {
+  font-size: 12px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.thinTrack {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.impRow {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 36px;
+  gap: 8px;
+  align-items: center;
+}
+.impK {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.impBar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.impFill {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+.impV {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+  text-align: right;
+}
+
+/* ---- labelled prediction card (synthetic / ml) ---- */
+.predCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.predDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  flex: none;
+}
+.predBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.predSmall {
+  font-size: 11px;
+  color: var(--mut);
+}
+.predBig {
+  font-size: 18px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.predConf {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ---- ndt bands ---- */
+.bandRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.bandSq {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex: none;
+}
+.bandL { flex: 1; }
+.bandR {
+  font-family: var(--font-mono);
+  color: var(--mut);
+  white-space: nowrap;
+}
+.bandN {
+  font-family: var(--font-mono);
+  width: 52px;
+  text-align: right;
+}
+
+/* ---- inspection legend + log ---- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--mut);
+}
+.legendSq {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+.logRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.logComp {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.logSev {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.logDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+}
+.logLoc {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+}
+.logE {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+  text-align: right;
+}
+
+/* ---- class balance (synthetic) ---- */
+.classBar {
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* ---- preview table (synthetic) ---- */
+.prevTable {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.prevHead,
+.prevRow {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 40px 40px 40px;
+  gap: 6px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+.prevHead { color: var(--mut); }
+.prevLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.prevLabelDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  flex: none;
+}
+.csvBtn {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* ---- correlation matrix (features) ---- */
+.corrGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.corrRow {
+  display: grid;
+  gap: 2px;
+  align-items: center;
+}
+.corrK {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.corrCell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+}
+.corrLegend {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mut);
+}
+
+/* ---- confusion matrix (ml) ---- */
+.cmGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cmRow {
+  display: grid;
+  gap: 3px;
+  align-items: center;
+}
+.cmK {
+  font-size: 11px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmCell {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* ---- maintenance actions ---- */
+.actionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.actionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.actionDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: none;
+}
+.whyWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.whyChip {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--hover);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mut);
+}
+
+/* ---- report thumbs + toc ---- */
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.thumb {
+  aspect-ratio: 1 / 1.414;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: var(--glass);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.thumbN {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--mut);
+}
+.thumbL {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.thumbBar {
+  height: 3px;
+  background: var(--line);
+  border-radius: 2px;
+}
+.thumbFig {
+  flex: 1;
+  min-height: 20px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(135deg, var(--hover) 0 4px, transparent 4px 8px);
+  border: 1px solid var(--line);
+}
+.toc {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.tocRow {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 28px;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.tocN {
+  font-family: var(--font-mono);
+  color: var(--mut);
+}
+.tocL {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tocP {
+  font-family: var(--font-mono);
+  color: var(--mut);
+  text-align: right;
+}
+.downloadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.downloadBtn {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 12px;
+  cursor: pointer;
+}

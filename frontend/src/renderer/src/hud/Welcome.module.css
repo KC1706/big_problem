@@ -1,0 +1,180 @@
+/* Welcome overlay — ported from the Studio markup (lines 694–745). */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow-y: auto;
+}
+.inner {
+  min-height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  gap: 32px;
+  align-items: stretch;
+  justify-content: space-between;
+}
+.left {
+  flex: 1;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+}
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.h1 {
+  margin: 0;
+  font-size: clamp(36px, 5.5vw, 68px);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+.lede {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--mut);
+  max-width: 440px;
+  text-wrap: pretty;
+}
+.recentBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 420px;
+}
+.recent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter-pill);
+  backdrop-filter: var(--glass-filter-pill);
+  border: 1px solid var(--glassB);
+  cursor: pointer;
+}
+.recent:hover { border-color: var(--ink); }
+.recentL {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.recentM {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+  white-space: nowrap;
+}
+.recentBtns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.openBtn {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+.skipBtn {
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--mut);
+  font-size: 13px;
+  cursor: pointer;
+}
+.card {
+  width: 100%;
+  max-width: 380px;
+  align-self: center;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  border: 1px solid var(--glassB);
+  border-radius: 24px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+}
+.cardTitle {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fieldLabel {
+  font-size: 12px;
+  color: var(--mut);
+}
+.input {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+  color: var(--ink);
+  font-size: 13px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.seg {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--hover);
+  border: 1px solid var(--line);
+}
+.segBtn {
+  flex: 1;
+  height: 30px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.depthNote {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+}
+.createBtn {
+  height: 46px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--inv);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}

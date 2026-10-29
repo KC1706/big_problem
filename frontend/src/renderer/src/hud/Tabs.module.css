@@ -1,0 +1,30 @@
+/* Ported from the Studio tabs bar (markup lines 84–91). Shown only in narrow
+   mode when the stage has panels (L.tabs). */
+.wrap {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: calc(46vh + 24px);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.bar {
+  pointer-events: auto;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter-pill);
+  backdrop-filter: var(--glass-filter-pill);
+  border: 1px solid var(--glassB);
+  border-radius: 999px;
+}
+.tab {
+  height: 32px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}

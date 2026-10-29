@@ -1,0 +1,206 @@
+/* Ported from the Studio results panel (markup lines 175–213). The generic branch
+   (rows + action/Save) is complete here; per-stage ws branches (config/analysis/…)
+   land in F3+. The shared header, title/desc, and bigInPanel grid are done. */
+.wrap {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+.panel {
+  pointer-events: auto;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  border: 1px solid var(--glassB);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+.panel::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---- Header ---- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.statusChip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+}
+
+/* ---- Title / desc ---- */
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+.desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--mut);
+  text-wrap: pretty;
+}
+
+/* ---- bigInPanel grid (narrow / ws stages) ---- */
+.bigGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.bigTile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-width: 0;
+}
+.bigKey {
+  font-size: 11px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bigVal {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.bigNum {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.bigUnit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+}
+
+/* ---- Generic rows + actions ---- */
+.rows {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+}
+.rowKey {
+  font-size: 12px;
+  color: var(--mut);
+}
+.rowVal {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.primaryBtn {
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--inv);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.saveBtn {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ---- honesty banner (ML & Maintenance, cur.ai) ---- */
+.honesty {
+  pointer-events: auto;
+  flex: none;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter-pill);
+  backdrop-filter: var(--glass-filter-pill);
+  border: 1px solid var(--glassB);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+.honestyDot {
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
+  border-radius: 999px;
+  background: #e6893c;
+  flex: none;
+}
+.honestyText {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+}

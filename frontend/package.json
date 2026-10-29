@@ -1,0 +1,33 @@
+{
+  "name": "bridgelife-studio",
+  "version": "0.0.0",
+  "description": "BridgeLife Studio — explorable 3D lifecycle studio for a 33 m PSC I-girder bridge",
+  "main": "./out/main/index.js",
+  "author": "kunal chandola",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "dev:web": "vite --config vite.web.config.ts",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "0.160.0",
+    "zustand": "4.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.15",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@types/three": "0.160.0",
+    "@vitejs/plugin-react": "4.3.1",
+    "electron": "32.2.0",
+    "electron-vite": "2.3.0",
+    "typescript": "5.6.3",
+    "vite": "5.4.8"
+  }
+}

@@ -1,0 +1,192 @@
+/* Ported verbatim from the Studio top bar (markup lines 25–59). Raw CSS over the
+   design token vars. Dynamic display (chrome/brandText/lensPill/healthText) is
+   driven by the layout flags in TopBar.tsx. */
+
+.bar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* ---- Project pill (hamburger + brand) ---- */
+.projectPill {
+  flex: none;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  border: 1px solid var(--glassB);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.glyph {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: none;
+}
+.glyphBar {
+  width: 16px;
+  height: 3px;
+  background: var(--inv);
+  border-radius: 1px;
+}
+.glyphLegs {
+  width: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+.glyphLeg {
+  width: 3px;
+  height: 6px;
+  background: var(--inv);
+}
+.brand {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  padding-right: 8px;
+}
+
+/* ---- Lens pill ---- */
+.lensPill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 44px;
+  padding: 0 6px 0 16px;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter-pill);
+  backdrop-filter: var(--glass-filter-pill);
+  border: 1px solid var(--glassB);
+  border-radius: 999px;
+  pointer-events: auto;
+  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+}
+.lensEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.lensName {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 8px 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ghostBtn {
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ghostBtn:hover {
+  background: var(--hover);
+}
+
+/* ---- Right cluster ---- */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+  flex: none;
+  white-space: nowrap;
+}
+.healthPill {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 7px;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter-pill);
+  backdrop-filter: var(--glass-filter-pill);
+  border: 1px solid var(--glassB);
+  border-radius: 999px;
+}
+.gauge {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: conic-gradient(#d9b443 0 82%, var(--line) 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.gaugeHole {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--bg);
+}
+.healthText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  padding-right: 7px;
+}
+.healthValue {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+.healthLabel {
+  font-size: 10px;
+  color: var(--mut);
+}
+.themeBtn {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--glassB);
+  border-radius: 999px;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter-pill);
+  backdrop-filter: var(--glass-filter-pill);
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.exportBtn {
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--inv);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}

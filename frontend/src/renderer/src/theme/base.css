@@ -1,0 +1,22 @@
+/* Global base — ported from the Studio design's <helmet> base rules.
+   No framework reset (no Tailwind preflight); only what the design itself sets. */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #e4e6e7; /* light default; the themed root div paints var(--bg) over this */
+  overflow: hidden;
+}
+
+#root { height: 100%; }
+
+button,
+input,
+select { font: inherit; }
+
+a { color: inherit; }
+a:hover { color: var(--acc); }

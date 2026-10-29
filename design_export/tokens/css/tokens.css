@@ -1,0 +1,55 @@
+/* BridgeLife tokens. Theme blocks copied verbatim from BridgeLife Studio.dc.html <helmet>. */
+[data-theme="light"] {
+  --bg: #e4e6e7;
+  --ink: #16181a;
+  --mut: #5d6368;
+  --faint: #8b9196;
+  --glass: rgba(255,255,255,.76);
+  --glassB: rgba(22,24,26,.08);
+  --hover: rgba(22,24,26,.05);
+  --line: rgba(22,24,26,.1);
+  --inv: #f6f7f7;
+  --acc: #127f94;
+  --shadow: 0 10px 40px rgba(20,24,28,.08);
+}
+[data-theme="dark"] {
+  --bg: #0a0b0c;
+  --ink: #eef1f3;
+  --mut: #9aa3a9;
+  --faint: #6b7378;
+  --glass: rgba(20,22,24,.72);
+  --glassB: rgba(255,255,255,.09);
+  --hover: rgba(255,255,255,.06);
+  --line: rgba(255,255,255,.1);
+  --inv: #0a0b0c;
+  --acc: #3fc1d9;
+  --shadow: 0 10px 40px rgba(0,0,0,.4);
+}
+:root {
+  --cond-healthy: #4FAE7F;
+  --cond-minor: #D9B443;
+  --cond-deteriorated: #E6893C;
+  --cond-severe: #E0442F;
+  --instrument-cyan: #2FB3CC;
+
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+
+  /* font shorthand + letter-spacing pairs */
+  --type-numeral: 300 48px/1 var(--font-sans);   --type-numeral-ls: -0.03em;
+  --type-title:   500 26px/1.1 var(--font-sans); --type-title-ls: -0.025em;
+  --type-body:    400 13px/1.55 var(--font-sans); --type-body-ls: 0;
+  --type-value:   500 13px var(--font-mono);     --type-value-ls: 0;
+  --type-value-callout: 500 16px/20px var(--font-mono);
+  --type-eyebrow: 400 11px var(--font-mono);     --type-eyebrow-ls: 0.08em;
+
+  --radius-panel: 24px;
+  --radius-card: 20px;
+  --radius-tile: 16px;
+  --radius-input: 10px;
+  --radius-pill: 999px;
+
+  --glass-filter: blur(18px) saturate(1.2);
+  --glass-filter-pill: blur(18px);
+  --glass-filter-callout: blur(12px) saturate(1.2);
+}

@@ -1,0 +1,13 @@
+concreteproperties==0.8.0
+fastapi==0.162.0
+matplotlib==3.11.2
+matplotlib-inline==0.2.2
+numpy==2.5.4
+pandas==3.1.0
+pydantic==2.14.1
+pydantic_core==2.50.1
+scikit-learn==1.9.1
+scipy==1.18.1
+sectionproperties==3.10.2
+starlette==1.10.0
+uvicorn==0.54.0

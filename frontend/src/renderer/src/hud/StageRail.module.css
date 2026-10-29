@@ -1,0 +1,101 @@
+/* Ported from the Studio stage rail (markup lines 62–82). Positioning, radius,
+   padding, direction, overflow, and per-item colours are applied inline in
+   StageRail.tsx from the layout + stage status (they are dynamic); the fixed
+   styling lives here. */
+
+.wrap {
+  position: absolute;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.rail {
+  pointer-events: auto;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  border: 1px solid var(--glassB);
+  display: flex;
+  gap: 2px;
+  box-shadow: var(--shadow);
+  max-height: 100%;
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---- Header (wide only) ---- */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px 10px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}
+.projName {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.projSub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lifecycleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 10px 6px;
+}
+.lcEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.lcValue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+}
+
+/* ---- Items ---- */
+.item {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.itemNum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  opacity: 0.7;
+  min-width: 16px;
+}
+.itemName {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.itemDot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 999px;
+  box-sizing: border-box;
+}

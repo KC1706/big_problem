@@ -1,0 +1,12 @@
+/* App root — the themed, full-bleed container. Ported from the Studio root div
+   (markup line 22). HUD chrome lives in hud/*.module.css. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans, 'Geist', system-ui, sans-serif);
+  overflow: hidden;
+  transition: background 0.4s;
+}

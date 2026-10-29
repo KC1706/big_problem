@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#e4e6e7;overflow:hidden}
+a{color:inherit}a:hover{color:var(--acc)}
+button,input,select{font:inherit}
+[data-rail]{scrollbar-width:none}[data-rail]::-webkit-scrollbar{display:none}
+[data-theme="light"]{--bg:#e4e6e7;--ink:#16181a;--mut:#5d6368;--faint:#8b9196;--glass:rgba(255,255,255,.76);--glassB:rgba(22,24,26,.08);--hover:rgba(22,24,26,.05);--line:rgba(22,24,26,.1);--inv:#f6f7f7;--acc:#127f94;--shadow:0 10px 40px rgba(20,24,28,.08)}
+[data-theme="dark"]{--bg:#0a0b0c;--ink:#eef1f3;--mut:#9aa3a9;--faint:#6b7378;--glass:rgba(20,22,24,.72);--glassB:rgba(255,255,255,.09);--hover:rgba(255,255,255,.06);--line:rgba(255,255,255,.1);--inv:#0a0b0c;--acc:#3fc1d9;--shadow:0 10px 40px rgba(0,0,0,.4)}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" style="position:fixed;inset:0;background:var(--bg);color:var(--ink);font-family:'Geist',system-ui,sans-serif;overflow:hidden;transition:background .4s">
+  <x-import component-from-global-scope="bridge-twin" from="./bridge-twin.js" stage="{{ twinStage }}" theme="{{ theme }}" paused="{{ pausedStr }}" replay="{{ replay }}" geom="{{ geomStr }}" style="position:absolute;inset:0" hint-size="100%,100%"></x-import>
+
+  <div style="position:absolute;top:16px;left:16px;right:16px;height:52px;display:{{ L.chrome }};align-items:center;justify-content:space-between;gap:8px;pointer-events:none">
+    <div onClick="{{ openWelcome }}" title="Projects" style="flex:none;height:44px;display:flex;align-items:center;gap:10px;padding:0 8px;background:var(--glass);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid var(--glassB);border-radius:999px;box-shadow:var(--shadow);pointer-events:auto;cursor:pointer">
+      <div style="width:30px;height:30px;border-radius:999px;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;flex:none">
+        <div style="width:16px;height:3px;background:var(--inv);border-radius:1px"></div>
+        <div style="width:16px;display:flex;justify-content:space-between"><div style="width:3px;height:6px;background:var(--inv)"></div><div style="width:3px;height:6px;background:var(--inv)"></div></div>
+      </div>
+      <sc-if value="{{ L.brandText }}" hint-placeholder-val="{{ true }}">
+        <div style="font-size:14px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;padding-right:8px">BridgeLife Studio</div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ L.lensPill }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:4px;height:44px;padding:0 6px 0 16px;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glassB);border-radius:999px;pointer-events:auto;white-space:nowrap;min-width:0;overflow:hidden">
+        <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">LENS</span>
+        <span style="font-size:13px;font-weight:500;margin:0 8px 0 6px;overflow:hidden;text-overflow:ellipsis">{{ cur.lens }}</span>
+        <button onClick="{{ togglePause }}" style="height:32px;padding:0 12px;border:none;border-radius:999px;background:transparent;color:var(--ink);font-size:12px;cursor:pointer;white-space:nowrap" style-hover="background:var(--hover)">{{ pauseLabel }}</button>
+        <button onClick="{{ doReplay }}" style="height:32px;padding:0 12px;border:none;border-radius:999px;background:transparent;color:var(--ink);font-size:12px;cursor:pointer;white-space:nowrap" style-hover="background:var(--hover)">Replay</button>
+      </div>
+    </sc-if>
+
+    <div style="display:flex;align-items:center;gap:8px;pointer-events:auto;flex:none;white-space:nowrap">
+      <div style="height:44px;display:flex;align-items:center;gap:10px;padding:0 7px;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glassB);border-radius:999px">
+        <div style="width:30px;height:30px;border-radius:999px;background:conic-gradient(#d9b443 0 82%, var(--line) 0);display:flex;align-items:center;justify-content:center;flex:none">
+          <div style="width:22px;height:22px;border-radius:999px;background:var(--bg)"></div>
+        </div>
+        <sc-if value="{{ L.healthText }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;line-height:1.1;padding-right:7px">
+            <span style="font-family:'Geist Mono',monospace;font-size:13px;font-weight:500">0.82</span>
+            <span style="font-size:10px;color:var(--mut)">Health · Minor</span>
+          </div>
+        </sc-if>
+      </div>
+      <button onClick="{{ toggleTheme }}" style="height:44px;padding:0 14px;border:1px solid var(--glassB);border-radius:999px;background:var(--glass);backdrop-filter:blur(18px);color:var(--ink);font-size:13px;cursor:pointer;white-space:nowrap">{{ themeLabel }}</button>
+      <button style="height:44px;padding:0 18px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap">{{ L.exportLabel }}</button>
+    </div>
+  </div>
+
+  <div style="position:absolute;top:{{ L.railTop }};left:16px;right:{{ L.railRight }};bottom:{{ L.railBottom }};width:{{ L.railW }};height:{{ L.railH }};display:{{ L.chrome }};flex-direction:column;pointer-events:none">
+    <div data-rail="1" style="pointer-events:auto;background:var(--glass);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid var(--glassB);border-radius:{{ L.railRadius }};padding:{{ L.railPad }};display:flex;flex-direction:{{ L.railDir }};gap:2px;box-shadow:var(--shadow);max-height:100%;overflow-x:{{ L.railOX }};overflow-y:{{ L.railOY }};box-sizing:border-box">
+      <sc-if value="{{ L.railHead }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:2px;padding:6px 10px 10px;border-bottom:1px solid var(--line);margin-bottom:6px">
+          <span style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">NH-16 Mahananda Bridge</span>
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ projLine }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:2px 10px 6px">
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">LIFECYCLE</span>
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">9 / 12</span>
+        </div>
+      </sc-if>
+      <sc-for list="{{ stages }}" as="s" hint-placeholder-count="13">
+        <div onClick="{{ s.go }}" title="{{ s.name }}" style="flex:none;display:flex;align-items:center;justify-content:{{ L.itemJustify }};gap:{{ L.itemGap }};height:36px;padding:{{ L.itemPad }};border-radius:999px;cursor:pointer;background:{{ s.bg }};color:{{ s.fg }};transition:background .2s,color .2s">
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;opacity:.7;min-width:16px">{{ s.num }}</span>
+          <span style="display:{{ L.nameDisp }};flex:{{ L.nameFlex }};font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:{{ s.op }}">{{ s.name }}</span>
+          <span style="width:8px;height:8px;flex:none;border-radius:999px;box-sizing:border-box;background:{{ s.dot }};border:1.5px solid {{ s.dotB }}"></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{ L.tabs }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:16px;right:16px;bottom:calc(46vh + 24px);display:flex;justify-content:center;pointer-events:none">
+      <div style="pointer-events:auto;display:flex;gap:2px;padding:4px;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glassB);border-radius:999px">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="2">
+          <button onClick="{{ t.go }}" style="height:32px;padding:0 16px;border:none;border-radius:999px;background:{{ t.bg }};color:{{ t.fg }};font-size:12px;cursor:pointer">{{ t.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ L.showInputs }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;top:{{ L.inTop }};left:{{ L.inLeft }};right:{{ L.inRight }};bottom:16px;width:{{ L.inW }};height:{{ L.inH }};display:flex;flex-direction:column;pointer-events:none">
+      <div style="pointer-events:auto;background:var(--glass);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid var(--glassB);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow);max-height:100%;overflow-y:auto;overflow-x:hidden;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">INPUTS</span>
+          <span style="font-size:11px;color:var(--mut)">{{ inNote }}</span>
+        </div>
+        <sc-if value="{{ pickList }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;color:var(--mut)">{{ pickList.k }}</span>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ pickList.items }}" as="it" hint-placeholder-count="9">
+                <div onClick="{{ it.go }}" style="display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:10px;cursor:pointer;background:{{ it.bg }}" style-hover="background:var(--hover)">
+                  <span style="width:8px;height:8px;border-radius:999px;flex:none;background:{{ it.dot }}"></span>
+                  <span style="flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span>
+                  <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">{{ it.n }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-for list="{{ chipGroups }}" as="cg" hint-placeholder-count="0">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;color:var(--mut)">{{ cg.k }}</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ cg.opts }}" as="o" hint-placeholder-count="5">
+                <button onClick="{{ o.go }}" style="height:30px;padding:0 12px;border-radius:999px;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};font-size:12px;cursor:pointer;white-space:nowrap">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <sc-for list="{{ segs }}" as="g" hint-placeholder-count="2">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;color:var(--mut)">{{ g.k }}</span>
+            <div style="display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--hover);border:1px solid var(--line)">
+              <sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.go }}" style="flex:1;min-width:0;height:30px;padding:0 6px;border:none;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }};font-size:12px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <sc-for list="{{ sliders }}" as="p" hint-placeholder-count="6">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+              <span style="font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.k }}</span>
+              <span style="font-family:'Geist Mono',monospace;font-size:13px;white-space:nowrap;color:{{ p.col }}">{{ p.vs }} <span style="font-size:11px;color:var(--mut)">{{ p.u }}</span></span>
+            </div>
+            <input type="range" min="{{ p.min }}" max="{{ p.max }}" step="{{ p.step }}" value="{{ p.v }}" onChange="{{ p.on }}" style="width:100%;margin:0;accent-color:var(--acc);cursor:pointer">
+            <sc-if value="{{ p.err }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:11px;color:#e0442f">{{ p.err }}</span>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-for list="{{ textFields }}" as="t" hint-placeholder-count="0">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;color:var(--mut)">{{ t.k }}</span>
+            <textarea value="{{ t.v }}" onChange="{{ t.on }}" rows="4" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font:13px/1.5 'Geist',sans-serif;resize:vertical"></textarea>
+          </div>
+        </sc-for>
+        <sc-if value="{{ inAction }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ inAction.go }}" style="height:44px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 16px">{{ inAction.label }}</button>
+        </sc-if>
+        <sc-if value="{{ isML }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ train }}" style="height:44px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:13px;font-weight:500;cursor:pointer">{{ trainLabel }}</button>
+          <div style="display:flex;flex-direction:column;gap:14px;padding-top:16px;border-top:1px solid var(--line)">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">LIVE PREDICT</span>
+            <sc-for list="{{ predSliders }}" as="p" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+                  <span style="font-size:12px;color:var(--mut)">{{ p.k }}</span>
+                  <span style="font-family:'Geist Mono',monospace;font-size:13px">{{ p.vs }} <span style="font-size:11px;color:var(--mut)">{{ p.u }}</span></span>
+                </div>
+                <input type="range" min="{{ p.min }}" max="{{ p.max }}" step="{{ p.step }}" value="{{ p.v }}" onChange="{{ p.on }}" style="width:100%;margin:0;accent-color:var(--acc);cursor:pointer">
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ L.showResults }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;top:{{ L.resTop }};right:16px;left:{{ L.resLeft }};bottom:16px;width:{{ L.resW }};height:{{ L.resH }};display:flex;flex-direction:column;gap:12px;pointer-events:none">
+      <div style="pointer-events:auto;background:var(--glass);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid var(--glassB);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow);overflow-y:auto;overflow-x:hidden;min-height:0;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ cur.eyebrow }}</span>
+          <span style="flex:none;display:flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;border:1px solid var(--line);font-size:11px;white-space:nowrap">
+            <span style="width:6px;height:6px;border-radius:999px;background:{{ cur.statusCol }}"></span>{{ cur.statusLabel }}
+          </span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:24px;font-weight:500;letter-spacing:-.025em;line-height:1.1">{{ cur.title }}</div>
+          <div style="font-size:13px;line-height:1.55;color:var(--mut);text-wrap:pretty">{{ cur.desc }}</div>
+        </div>
+
+        <sc-if value="{{ L.bigInPanel }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+            <sc-for list="{{ big }}" as="b" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:4px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;min-width:0">
+                <span style="font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.k }}</span>
+                <span style="display:flex;align-items:baseline;gap:5px;white-space:nowrap;overflow:hidden"><span style="font-size:22px;font-weight:300;letter-spacing:-.02em;line-height:1">{{ b.v }}</span><span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">{{ b.u }}</span></span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isGeneric }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <sc-for list="{{ cur.rows }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)">
+                <span style="font-size:12px;color:var(--mut)">{{ r.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:13px;text-align:right">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button style="height:44px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap">{{ cur.action }}</button>
+            <button style="height:44px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:13px;cursor:pointer">Save</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isConfig }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">CROSS-SECTION · COMPOSITE</span>
+            <svg viewBox="0 0 300 210" style="width:100%;height:auto;display:block;color:var(--ink);border:1px solid var(--line);border-radius:12px">
+              <rect x="{{ xs.slab.x }}" y="{{ xs.slab.y }}" width="{{ xs.slab.w }}" height="{{ xs.slab.h }}" fill="none" stroke="currentColor" strokeWidth="1"></rect>
+              <polygon points="{{ xs.pts }}" fill="currentColor" fillOpacity="0.06" stroke="currentColor" strokeWidth="1"></polygon>
+              <line x1="{{ xs.cx0 }}" y1="{{ xs.yb }}" x2="{{ xs.cx1 }}" y2="{{ xs.yb }}" stroke="var(--acc)" strokeWidth="1" strokeDasharray="4 3"></line>
+              <text x="{{ xs.cx1 }}" y="{{ xs.ybT }}" fill="var(--acc)" fontFamily="Geist Mono, monospace" fontSize="10" textAnchor="end">y_b {{ xs.ybS }}</text>
+              <line x1="{{ xs.dx }}" y1="{{ xs.top }}" x2="{{ xs.dx }}" y2="{{ xs.bot }}" stroke="currentColor" strokeWidth="0.8"></line>
+              <line x1="{{ xs.dx0 }}" y1="{{ xs.top }}" x2="{{ xs.dx1 }}" y2="{{ xs.top }}" stroke="currentColor" strokeWidth="0.8"></line>
+              <line x1="{{ xs.dx0 }}" y1="{{ xs.bot }}" x2="{{ xs.dx1 }}" y2="{{ xs.bot }}" stroke="currentColor" strokeWidth="0.8"></line>
+              <text x="{{ xs.dxT }}" y="{{ xs.mid }}" fill="currentColor" fontFamily="Geist Mono, monospace" fontSize="10">{{ xs.hS }}</text>
+              <line x1="{{ xs.bf0 }}" y1="198" x2="{{ xs.bf1 }}" y2="198" stroke="currentColor" strokeWidth="0.8"></line>
+              <text x="150" y="194" fill="currentColor" fontFamily="Geist Mono, monospace" fontSize="10" textAnchor="middle">{{ xs.bfS }}</text>
+              <text x="150" y="{{ xs.spT }}" fill="currentColor" fontFamily="Geist Mono, monospace" fontSize="10" textAnchor="middle">{{ xs.spS }}</text>
+              <text x="{{ xs.twX }}" y="{{ xs.mid }}" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="10">{{ xs.twS }}</text>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <sc-for list="{{ secRows }}" as="r" hint-placeholder-count="6">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)">
+                <span style="font-size:12px;color:var(--mut)">{{ r.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:13px">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ checks }}" as="c" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                <span style="width:8px;height:8px;border-radius:999px;flex:none;background:{{ c.col }}"></span>
+                <span style="flex:1">{{ c.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ c.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="font-size:11px;line-height:1.5;color:var(--mut)">Preview calculation, modular ratio 1. Final properties come from sectionproperties in the backend.</span>
+        </sc-if>
+
+        <sc-if value="{{ isMon }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>a(t) · A5 · L/2</span><span>±0.08 g · 4 s window</span></div>
+            <svg viewBox="0 0 300 96" preserveAspectRatio="none" style="width:100%;height:96px;display:block;border:1px solid var(--line);border-radius:12px">
+              <line x1="0" y1="48" x2="300" y2="48" stroke="var(--line)" strokeWidth="1"></line>
+              <path d="{{ mon.at }}" fill="none" stroke="var(--ink)" strokeWidth="1.2" vectorEffect="non-scaling-stroke"></path>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;gap:8px;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>FFT · 0–12 Hz</span><span style="white-space:nowrap">— measured  - - baseline</span></div>
+            <svg viewBox="0 0 300 120" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <path d="{{ mon.fb }}" fill="none" stroke="var(--mut)" strokeWidth="1" strokeDasharray="3 3"></path>
+              <path d="{{ mon.fm }}" fill="none" stroke="var(--acc)" strokeWidth="1.5"></path>
+              <sc-for list="{{ mon.peaks }}" as="k" hint-placeholder-count="3">
+                <text x="{{ k.x }}" y="{{ k.y }}" fill="var(--ink)" fontFamily="Geist Mono, monospace" fontSize="10" textAnchor="middle">{{ k.t }}</text>
+              </sc-for>
+              <text x="4" y="116" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="9">0</text>
+              <text x="296" y="116" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="9" textAnchor="end">12 Hz</text>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <sc-for list="{{ mon.rows }}" as="r" hint-placeholder-count="4">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)">
+                <span style="font-size:12px;color:var(--mut)">{{ r.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:13px">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isAna }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;gap:8px;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>BENDING MOMENT</span><span style="white-space:nowrap">— at x  - - dead  · envelope</span></div>
+            <svg viewBox="0 0 300 124" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <line x1="10" y1="20" x2="290" y2="20" stroke="var(--ink)" strokeWidth="1"></line>
+              <path d="{{ an.pt }}" fill="var(--ink)" fillOpacity="0.07" stroke="var(--ink)" strokeWidth="1.4"></path>
+              <path d="{{ an.pd }}" fill="none" stroke="var(--mut)" strokeWidth="1" strokeDasharray="3 3"></path>
+              <path d="{{ an.pe }}" fill="none" stroke="var(--acc)" strokeWidth="1"></path>
+              <line x1="{{ an.posX }}" y1="8" x2="{{ an.posX }}" y2="20" stroke="var(--acc)" strokeWidth="1.5"></line>
+              <text x="150" y="{{ an.MtY }}" fill="var(--ink)" fontFamily="Geist Mono, monospace" fontSize="10" textAnchor="middle">{{ an.MtS }}</text>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">SHEAR FORCE</span>
+            <svg viewBox="0 0 300 110" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <line x1="10" y1="55" x2="290" y2="55" stroke="var(--ink)" strokeWidth="1"></line>
+              <path d="{{ an.ps }}" fill="var(--ink)" fillOpacity="0.07" stroke="var(--ink)" strokeWidth="1.4"></path>
+              <line x1="{{ an.posX }}" y1="10" x2="{{ an.posX }}" y2="100" stroke="var(--acc)" strokeWidth="1" strokeDasharray="2 3"></line>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <sc-for list="{{ an.rows }}" as="r" hint-placeholder-count="6">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)">
+                <span style="font-size:12px;color:var(--mut)">{{ r.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:13px">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <span style="width:8px;height:8px;border-radius:999px;flex:none;background:{{ an.check.col }}"></span>
+            <span style="flex:1">{{ an.check.k }}</span>
+            <span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ an.check.v }}</span>
+          </div>
+          <sc-if value="{{ an.running }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>Running OpenSeesPy analysis</span><span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ an.progS }}</span></div>
+              <div style="height:3px;border-radius:999px;background:var(--line);overflow:hidden"><div style="width:{{ an.progW }};height:100%;background:var(--acc)"></div></div>
+            </div>
+          </sc-if>
+          <button onClick="{{ an.run }}" style="height:44px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:13px;font-weight:500;cursor:pointer">Run full FE analysis</button>
+          <span style="font-size:11px;line-height:1.5;color:var(--mut)">Preview uses a single equivalent axle and a distribution factor. Check the load model against the current IRC code.</span>
+        </sc-if>
+
+        <sc-if value="{{ isPre }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>CABLE PROFILE · ELEVATION</span><span>vertical ×5</span></div>
+            <svg viewBox="0 0 300 110" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <rect x="10" y="{{ pr.girderY }}" width="280" height="78" fill="var(--ink)" fillOpacity="0.05" stroke="var(--ink)" strokeWidth="1"></rect>
+              <sc-for list="{{ pr.cab }}" as="c" hint-placeholder-count="3">
+                <path d="{{ c.d }}" fill="none" stroke="var(--acc)" strokeWidth="1.5"></path>
+              </sc-for>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">LOSS WATERFALL · P₀ → Pₑ</span>
+            <svg viewBox="0 0 300 124" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <line x1="4" y1="104" x2="296" y2="104" stroke="var(--line)" strokeWidth="1"></line>
+              <sc-for list="{{ pr.bars }}" as="b" hint-placeholder-count="8">
+                <rect x="{{ b.x }}" y="{{ b.y }}" width="26" height="{{ b.h }}" rx="2" fill="{{ b.fill }}"></rect>
+                <text x="{{ b.lx }}" y="117" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="8.5" textAnchor="middle">{{ b.k }}</text>
+              </sc-for>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <sc-for list="{{ pr.rows }}" as="r" hint-placeholder-count="9">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)">
+                <span style="font-size:12px;color:var(--mut)">{{ r.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:13px">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ pr.checks }}" as="c" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                <span style="width:8px;height:8px;border-radius:999px;flex:none;background:{{ c.col }}"></span>
+                <span style="flex:1">{{ c.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ c.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="font-size:11px;line-height:1.5;color:var(--mut)">Simplified loss model for preview. Time-dependent losses come from concreteproperties in the backend; compare stresses with your project limits.</span>
+        </sc-if>
+
+        <sc-if value="{{ isBase }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>MODE SHAPES</span><span>baseline {{ bs.ver }}</span></div>
+            <sc-for list="{{ bs.modes }}" as="m" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:12px">
+                <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mut)">{{ m.k }}</span><span style="font-family:'Geist Mono',monospace">{{ m.f }}</span></div>
+                <svg viewBox="0 0 300 44" preserveAspectRatio="none" style="width:100%;height:36px;display:block">
+                  <line x1="0" y1="22" x2="300" y2="22" stroke="var(--line)" strokeWidth="1" strokeDasharray="3 3"></line>
+                  <path d="{{ m.d }}" fill="none" stroke="var(--acc)" strokeWidth="1.5" vectorEffect="non-scaling-stroke"></path>
+                </svg>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <sc-for list="{{ bs.rows }}" as="r" hint-placeholder-count="6">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)">
+                <span style="font-size:12px;color:var(--mut)">{{ r.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:13px">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ bs.running }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>Freezing fingerprint</span><span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ bs.progS }}</span></div>
+              <div style="height:3px;border-radius:999px;background:var(--line);overflow:hidden"><div style="width:{{ bs.progW }};height:100%;background:var(--acc)"></div></div>
+            </div>
+          </sc-if>
+          <button onClick="{{ bs.establish }}" style="height:44px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:13px;font-weight:500;cursor:pointer">Establish baseline</button>
+          <span style="font-size:11px;line-height:1.5;color:var(--mut)">{{ bs.note }}</span>
+        </sc-if>
+
+        <sc-if value="{{ isIns }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>ELEVATION · COMPONENT HEALTH</span><span>click to select</span></div>
+            <svg viewBox="0 0 300 118" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <line x1="0" y1="110" x2="300" y2="110" stroke="var(--line)" strokeWidth="1"></line>
+              <sc-for list="{{ ins.parts }}" as="p" hint-placeholder-count="16">
+                <rect x="{{ p.x }}" y="{{ p.y }}" width="{{ p.w }}" height="{{ p.h }}" rx="1.5" fill="{{ p.fill }}" fillOpacity="{{ p.op }}" stroke="{{ p.stroke }}" strokeWidth="1.5" onClick="{{ p.go }}" style="cursor:pointer"></rect>
+              </sc-for>
+            </svg>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <sc-for list="{{ ins.legend }}" as="l" hint-placeholder-count="4">
+                <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mut)"><span style="width:8px;height:8px;border-radius:2px;background:{{ l.c }}"></span>{{ l.l }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">INSPECTION LOG</span>
+            <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+              <sc-for list="{{ ins.log }}" as="o" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)">
+                  <span style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ o.comp }} · {{ o.d }}</span>
+                  <span style="display:flex;align-items:center;gap:6px;font-size:11px;white-space:nowrap"><span style="width:6px;height:6px;border-radius:999px;background:{{ o.col }}"></span>{{ o.sev }}</span>
+                  <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">{{ o.loc }}</span>
+                  <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut);text-align:right">{{ o.e }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <span style="font-size:11px;line-height:1.5;color:var(--mut)">Component rating is the worst observation on it. Visual index = 1 − Σ rating / (3 × components).</span>
+        </sc-if>
+
+        <sc-if value="{{ isNdt }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:14px;background:var(--hover)">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">ENGINEERING QUESTION</span>
+            <span style="font-size:13px;line-height:1.5;text-wrap:pretty">{{ nd.q }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>{{ nd.gl }} · WEB FACE GRID</span><span>{{ nd.ref }}</span></div>
+            <svg viewBox="0 0 300 96" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <sc-for list="{{ nd.cells }}" as="c" hint-placeholder-count="42">
+                <rect x="{{ c.x }}" y="{{ c.y }}" width="19" height="19" rx="2" fill="{{ c.fill }}" fillOpacity="0.85"></rect>
+              </sc-for>
+              <circle cx="{{ nd.minX }}" cy="{{ nd.minY }}" r="12" fill="none" stroke="var(--ink)" strokeWidth="1.2"></circle>
+              <text x="10" y="14" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="9">support</text>
+              <text x="150" y="14" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="9" textAnchor="middle">mid-span</text>
+              <text x="290" y="14" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="9" textAnchor="end">support</text>
+            </svg>
+          </div>
+          <sc-if value="{{ nd.running }}" hint-placeholder-val="{{ false }}">
+            <div style="height:3px;border-radius:999px;background:var(--line);overflow:hidden"><div style="width:{{ nd.progW }};height:100%;background:var(--acc)"></div></div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{ nd.bands }}" as="b" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                <span style="width:10px;height:10px;border-radius:2px;flex:none;background:{{ b.c }}"></span>
+                <span style="flex:1">{{ b.l }}</span>
+                <span style="font-family:'Geist Mono',monospace;color:var(--mut);white-space:nowrap">{{ b.r }}</span>
+                <span style="font-family:'Geist Mono',monospace;width:52px;text-align:right">{{ b.n }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <sc-for list="{{ nd.rows }}" as="r" hint-placeholder-count="4">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)">
+                <span style="font-size:12px;color:var(--mut)">{{ r.k }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:13px">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="font-size:11px;line-height:1.5;color:var(--mut)">Band limits shown for preview. Confirm against the current IS / ASTM documents; SonReb coefficients need calibration on cores.</span>
+        </sc-if>
+
+        <sc-if value="{{ isSyn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;border:1px solid var(--line)">
+            <span style="width:12px;height:12px;border-radius:999px;flex:none;background:{{ sy.labCol }}"></span>
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1">
+              <span style="font-size:11px;color:var(--mut)">Scenario label (auto)</span>
+              <span style="font-size:18px;font-weight:500">{{ sy.label }}</span>
+            </div>
+          </div>
+          <sc-for list="{{ sy.met }}" as="m" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>{{ m.k }} BY CLASS (%)</span><span>{{ m.scS }}</span></div>
+              <svg viewBox="0 0 300 58" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px">
+                <line x1="8" y1="50" x2="292" y2="50" stroke="var(--line)" strokeWidth="1"></line>
+                <sc-for list="{{ m.bars }}" as="b" hint-placeholder-count="4">
+                  <rect x="{{ b.x }}" y="{{ b.y }}" width="40" height="{{ b.h }}" rx="2" fill="{{ b.c }}"></rect>
+                  <text x="{{ b.tx }}" y="{{ b.ty }}" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="8.5" textAnchor="middle">{{ b.t }}</text>
+                </sc-for>
+                <line x1="8" y1="{{ m.lineY }}" x2="292" y2="{{ m.lineY }}" stroke="var(--ink)" strokeWidth="1" strokeDasharray="4 3"></line>
+              </svg>
+            </div>
+          </sc-for>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>CLASS BALANCE</span><span>{{ sy.ver }}</span></div>
+            <div style="display:flex;height:8px;border-radius:999px;overflow:hidden">
+              <sc-for list="{{ sy.dist }}" as="d" hint-placeholder-count="4"><span style="width:{{ d.w }};background:{{ d.c }}"></span></sc-for>
+            </div>
+          </div>
+          <sc-if value="{{ sy.running }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>Generating · FEM reruns</span><span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ sy.progS }}</span></div>
+              <div style="height:3px;border-radius:999px;background:var(--line);overflow:hidden"><div style="width:{{ sy.progW }};height:100%;background:var(--acc)"></div></div>
+            </div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">PREVIEW</span><button style="height:26px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:11px;cursor:pointer">Export CSV</button></div>
+            <div style="display:flex;flex-direction:column;font-family:'Geist Mono',monospace;font-size:11px">
+              <div style="display:grid;grid-template-columns:52px minmax(0,1fr) 40px 40px 40px;gap:6px;padding:6px 0;border-bottom:1px solid var(--line);color:var(--mut)"><span>id</span><span>label</span><span>f₁</span><span>δ</span><span>UPV</span></div>
+              <sc-for list="{{ sy.prev }}" as="r" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:52px minmax(0,1fr) 40px 40px 40px;gap:6px;padding:6px 0;border-bottom:1px solid var(--line);align-items:center">
+                  <span style="color:var(--mut)">{{ r.id }}</span>
+                  <span style="display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden"><span style="width:6px;height:6px;border-radius:999px;flex:none;background:{{ r.c }}"></span>{{ r.l }}</span>
+                  <span>{{ r.f }}</span><span>{{ r.d }}</span><span>{{ r.u }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isFeat }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">CORRELATION MATRIX</span>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ fe.cm }}" as="row" hint-placeholder-count="10">
+                <div style="display:grid;grid-template-columns:{{ fe.cols }};gap:2px;align-items:center">
+                  <span style="font-family:'Geist Mono',monospace;font-size:9px;color:var(--mut);white-space:nowrap;overflow:hidden">{{ row.k }}</span>
+                  <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="10">
+                    <span title="{{ c.v }}" style="aspect-ratio:1;border-radius:3px;background:{{ c.bg }}"></span>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:var(--mut)"><span>■ ink = negative</span><span>■ cyan = positive</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>{{ fe.sel }} BY CONDITION</span><span>±2σ</span></div>
+            <svg viewBox="0 0 300 96" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <sc-for list="{{ fe.dist }}" as="d" hint-placeholder-count="4">
+                <line x1="{{ d.x0 }}" y1="{{ d.y }}" x2="{{ d.x1 }}" y2="{{ d.y }}" stroke="{{ d.c }}" strokeWidth="6" strokeLinecap="round"></line>
+                <circle cx="{{ d.xm }}" cy="{{ d.y }}" r="4" fill="var(--ink)"></circle>
+                <text x="4" y="{{ d.ly }}" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="8.5">{{ d.l }}</text>
+              </sc-for>
+              <text x="40" y="92" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="8.5">{{ fe.lo }}</text>
+              <text x="290" y="92" fill="var(--mut)" fontFamily="Geist Mono, monospace" fontSize="8.5" textAnchor="end">{{ fe.hi }}</text>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:14px;background:var(--hover)">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">PHYSICAL MEANING · {{ fe.sel }}</span>
+            <span style="font-size:12px;line-height:1.55;text-wrap:pretty">{{ fe.meaning }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">IMPORTANCE PREVIEW</span>
+            <sc-for list="{{ fe.imp }}" as="f" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:64px minmax(0,1fr) 36px;gap:8px;align-items:center">
+                <span style="font-family:'Geist Mono',monospace;font-size:11px">{{ f.k }}</span>
+                <span style="height:6px;border-radius:999px;background:var(--line);overflow:hidden"><span style="display:block;height:100%;width:{{ f.w }};background:var(--ink)"></span></span>
+                <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut);text-align:right">{{ f.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isMaint }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">DECISION PATH</span>
+            <svg viewBox="0 0 320 200" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <sc-for list="{{ mt.edges }}" as="e" hint-placeholder-count="7">
+                <line x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" stroke="{{ e.s }}" strokeWidth="{{ e.w }}"></line>
+              </sc-for>
+              <sc-for list="{{ mt.nodes }}" as="n" hint-placeholder-count="6">
+                <rect x="{{ n.x }}" y="{{ n.y }}" width="{{ n.w }}" height="26" rx="13" fill="{{ n.fill }}" stroke="{{ n.bd }}" strokeWidth="1"></rect>
+                <text x="{{ n.tx }}" y="{{ n.ty }}" fill="{{ n.fg }}" fontFamily="Geist, sans-serif" fontSize="10" textAnchor="middle">{{ n.l }}</text>
+              </sc-for>
+            </svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">RECOMMENDED ACTIONS</span>
+            <sc-for list="{{ mt.actions }}" as="a" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:12px">
+                <span style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="width:8px;height:8px;border-radius:999px;flex:none;background:{{ a.c }}"></span>{{ a.t }}</span>
+                <div style="display:flex;flex-wrap:wrap;gap:4px">
+                  <sc-for list="{{ a.why }}" as="w" hint-placeholder-count="2">
+                    <span style="height:20px;display:flex;align-items:center;padding:0 8px;border-radius:999px;background:var(--hover);font-family:'Geist Mono',monospace;font-size:10px;color:var(--mut)">{{ w }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>TIMELINE</span><span>0 – 24 months</span></div>
+            <svg viewBox="0 0 300 60" style="width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px">
+              <line x1="16" y1="32" x2="284" y2="32" stroke="var(--line)" strokeWidth="2"></line>
+              <sc-for list="{{ mt.tl }}" as="t" hint-placeholder-count="4">
+                <circle cx="{{ t.x }}" cy="32" r="4" fill="var(--ink)"></circle>
+                <text x="{{ t.x }}" y="{{ t.ly }}" fill="var(--ink)" fontFamily="Geist Mono, monospace" fontSize="9" textAnchor="middle">{{ t.l }}</text>
+              </sc-for>
+            </svg>
+          </div>
+          <button style="height:44px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:13px;font-weight:500;cursor:pointer">Confirm decision</button>
+        </sc-if>
+
+        <sc-if value="{{ isRep }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+            <sc-for list="{{ rp.thumbs }}" as="t" hint-placeholder-count="4">
+              <div style="aspect-ratio:1 / 1.414;border:1px solid var(--line);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:5px;background:var(--glass);box-sizing:border-box;overflow:hidden">
+                <span style="font-family:'Geist Mono',monospace;font-size:8px;color:var(--mut)">{{ t.n }}</span>
+                <span style="font-size:10px;font-weight:500;line-height:1.2">{{ t.l }}</span>
+                <span style="height:3px;width:90%;background:var(--line);border-radius:2px"></span>
+                <span style="height:3px;width:75%;background:var(--line);border-radius:2px"></span>
+                <sc-if value="{{ t.fig }}" hint-placeholder-val="{{ true }}">
+                  <span style="flex:1;min-height:20px;border-radius:4px;background:repeating-linear-gradient(135deg,var(--hover) 0 4px,transparent 4px 8px);border:1px solid var(--line)"></span>
+                </sc-if>
+                <span style="height:3px;width:85%;background:var(--line);border-radius:2px"></span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>CONTENTS</span><span>{{ rp.pages }} pages</span></div>
+            <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+              <sc-for list="{{ rp.toc }}" as="t" hint-placeholder-count="12">
+                <div style="display:grid;grid-template-columns:24px minmax(0,1fr) 28px;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12px">
+                  <span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ t.n }}</span>
+                  <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.l }}</span>
+                  <span style="font-family:'Geist Mono',monospace;color:var(--mut);text-align:right">{{ t.p }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <sc-if value="{{ rp.running }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>Compiling figures and tables</span><span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ rp.progS }}</span></div>
+              <div style="height:3px;border-radius:999px;background:var(--line);overflow:hidden"><div style="width:{{ rp.progW }};height:100%;background:var(--acc)"></div></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ rp.compiled }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px">
+              <span style="font-size:12px">{{ rp.verS }}</span>
+              <button style="height:30px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:12px;cursor:pointer">Download</button>
+            </div>
+          </sc-if>
+          <span style="font-size:11px;line-height:1.5;color:var(--mut)">Every value flagged for code verification is listed in Assumptions &amp; limitations.</span>
+        </sc-if>
+
+        <sc-if value="{{ isML }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ ml.training }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>Training {{ ml.model }}</span><span style="font-family:'Geist Mono',monospace;color:var(--mut)">{{ ml.progS }}</span></div>
+              <div style="height:3px;border-radius:999px;background:var(--line);overflow:hidden"><div style="width:{{ ml.progW }};height:100%;background:var(--acc);transition:width .1s linear"></div></div>
+            </div>
+          </sc-if>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;border:1px solid var(--line)">
+            <span style="width:12px;height:12px;border-radius:999px;flex:none;background:{{ ml.predCol }}"></span>
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1">
+              <span style="font-size:11px;color:var(--mut)">Live prediction</span>
+              <span style="font-size:18px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ml.pred }}</span>
+            </div>
+            <span style="font-family:'Geist Mono',monospace;font-size:13px;white-space:nowrap">{{ ml.confS }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)"><span>CONFUSION MATRIX</span><span>test n = {{ ml.nTest }}</span></div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <sc-for list="{{ ml.cm }}" as="row" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:{{ ml.cmCols }};gap:3px;align-items:center">
+                  <span style="font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ row.k }}</span>
+                  <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="4">
+                    <span style="height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-family:'Geist Mono',monospace;font-size:12px;background:{{ c.bg }};color:{{ c.fg }}">{{ c.v }}</span>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">FEATURE IMPORTANCE</span>
+            <sc-for list="{{ ml.imp }}" as="f" hint-placeholder-count="10">
+              <div style="display:grid;grid-template-columns:64px minmax(0,1fr) 36px;gap:8px;align-items:center;font-size:12px">
+                <span style="font-family:'Geist Mono',monospace;font-size:11px">{{ f.k }}</span>
+                <span style="height:6px;border-radius:999px;background:var(--line);overflow:hidden"><span style="display:block;height:100%;width:{{ f.w }};background:var(--ink)"></span></span>
+                <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut);text-align:right">{{ f.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:14px;background:var(--hover)">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">PHYSICAL INTERPRETATION</span>
+            <span style="font-size:12px;line-height:1.55;text-wrap:pretty">A drop in f₁ with a rise in δ_max both indicate lost flexural stiffness. Low UPV at the same girder supports cracking as the cause. The model's top features follow that physics.</span>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ cur.ai }}" hint-placeholder-val="{{ false }}">
+        <div style="pointer-events:auto;flex:none;display:flex;gap:10px;align-items:flex-start;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glassB);border-radius:16px;padding:12px 14px">
+          <span style="width:8px;height:8px;margin-top:5px;border-radius:999px;background:#e6893c;flex:none"></span>
+          <span style="font-size:12px;line-height:1.5;color:var(--ink)">AI-generated, not a verified engineering result. Check thresholds against the current IRC / IS codes before acting.</span>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ wel.show }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:5;overflow-y:auto;background:{{ wel.bg }}">
+      <div style="min-height:100%;box-sizing:border-box;padding:{{ wel.pad }};display:flex;flex-direction:{{ wel.dir }};gap:32px;align-items:stretch;justify-content:space-between">
+        <div style="flex:1;max-width:560px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <span style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--mut)">PSC I-GIRDER · LIFECYCLE STUDIO</span>
+            <h1 style="margin:0;font-size:clamp(36px,5.5vw,68px);font-weight:400;letter-spacing:-.04em;line-height:.98">One bridge, through its whole service life.</h1>
+            <p style="margin:0;font-size:15px;line-height:1.55;color:var(--mut);max-width:440px;text-wrap:pretty">Configure, analyse and prestress the girder, establish a healthy baseline, then inspect, monitor and assess it with AI/ML through to a maintenance decision and an integrated report.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;max-width:420px">
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mut)">RECENT</span>
+            <sc-for list="{{ wel.recent }}" as="r" hint-placeholder-count="3">
+              <div onClick="{{ r.go }}" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glassB);cursor:pointer" style-hover="border-color:var(--ink)">
+                <span style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.l }}</span>
+                <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut);white-space:nowrap">{{ r.m }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+              <button style="height:40px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:13px;cursor:pointer">Open .bridgeproj</button>
+              <button onClick="{{ wel.skip }}" style="height:40px;padding:0 16px;border:none;border-radius:999px;background:transparent;color:var(--mut);font-size:13px;cursor:pointer">Skip to dashboard</button>
+            </div>
+          </div>
+        </div>
+        <div style="width:100%;max-width:380px;align-self:center;background:var(--glass);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid var(--glassB);border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow);box-sizing:border-box">
+          <span style="font-size:20px;font-weight:500;letter-spacing:-.02em">New project</span>
+          <sc-for list="{{ wel.fields }}" as="f" hint-placeholder-count="3">
+            <label style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;color:var(--mut)">{{ f.k }}</span>
+              <input value="{{ f.v }}" placeholder="{{ f.ph }}" onChange="{{ f.on }}" style="height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-size:13px;box-sizing:border-box;width:100%">
+            </label>
+          </sc-for>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;color:var(--mut)">Span</span>
+            <div style="display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--hover);border:1px solid var(--line)">
+              <sc-for list="{{ wel.spans }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.go }}" style="flex:1;height:30px;border:none;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }};font-size:12px;cursor:pointer">{{ o.label }}</button>
+              </sc-for>
+            </div>
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">Implied girder depth L/20 = {{ wel.depth }} m</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;color:var(--mut)">Concrete · steel Fe500</span>
+            <div style="display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--hover);border:1px solid var(--line)">
+              <sc-for list="{{ wel.grades }}" as="o" hint-placeholder-count="3">
+                <button onClick="{{ o.go }}" style="flex:1;height:30px;border:none;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }};font-size:12px;cursor:pointer">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <button onClick="{{ wel.create }}" style="height:46px;border:none;border-radius:999px;background:var(--ink);color:var(--inv);font-size:14px;font-weight:500;cursor:pointer">Create and build bridge</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ L.strip }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;left:{{ L.stripLeft }};right:{{ L.stripRight }};bottom:16px;display:flex;flex-direction:column;gap:10px;pointer-events:none">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:0 6px;white-space:nowrap;overflow:hidden;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mut)">
+        <span style="overflow:hidden;text-overflow:ellipsis;min-width:0">Drag to orbit · scroll to zoom · double-click to reset view</span>
+        <span style="flex:none">↑ ↓ · T</span>
+      </div>
+      <div style="pointer-events:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--glass);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid var(--glassB);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)">
+        <sc-for list="{{ big }}" as="b" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-left:1px solid var(--line);margin-left:-1px;min-width:0">
+            <span style="font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.k }}</span>
+            <span style="display:flex;align-items:baseline;gap:6px;white-space:nowrap;overflow:hidden">
+              <span style="font-size:clamp(20px,2.2vw,30px);font-weight:300;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1">{{ b.v }}</span>
+              <span style="font-family:'Geist Mono',monospace;font-size:12px;color:var(--mut)">{{ b.u }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;tour&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;welcome&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = {
+    i: 0, theme: null, paused: false, replay: 0, w: typeof window !== 'undefined' ? window.innerWidth : 1440, tab: 'results', tick: 0,
+    g: { span: 33, depth: 1.65, web: 0.3, tfw: 1.1, tft: 0.18, bfw: 0.75, bft: 0.25, slab: 0.22, nG: 5, sp: 3.2 },
+    mon: { sensors: 6, fs: 200, dur: 600, ex: 'Ambient' },
+    ml: { model: 'Random Forest', split: 0.8, trees: 300, prog: null, df: -8.4, dmax: 24.9, upv: 3.71 },
+    ana: { load: '70R', IF: 1.1, barrier: 20, fp: 5, dist: 'Courbon', a: 16.5 },
+    pre: { n: 3, strands: 19, jack: 0.75, mu: 0.17, K: 0.002, slip: 6 },
+    base: { engine: 'OpenSeesPy', mass: 'incl', zeta: 2, Ec: 33.5, ver: 1 },
+    jobs: {},
+    ins: { sel: 'girders', defect: 'Cracking', sev: 1, ext: 0.5, obs: [
+      { c: 'girders', d: 'Cracking', s: 1, loc: 'G5 · 0.50 L', e: '0.3 mm' }, { c: 'bearings', d: 'Corrosion staining', s: 2, loc: 'B5', e: 'Grade 3' },
+      { c: 'deck', d: 'Leakage', s: 1, loc: 'Soffit bay 4', e: '0.6 m²' }, { c: 'ej', d: 'Surface deterioration', s: 1, loc: 'EJ1', e: '—' },
+      { c: 'drain', d: 'Leakage', s: 1, loc: 'Spout D3', e: '—' }, { c: 'abut', d: 'Honeycombing', s: 1, loc: 'A2 face', e: '0.2 m²' }] },
+    ndt: { test: 'UPV', g: 4, seed: 1 },
+    syn: { mech: { 'Prestress loss': 1, 'Cracking': 1 }, loc: 0.5, ext: 6, sev: 35, n: 2400, noise: 3, ver: 7 },
+    feat: { on: { 'f₁': 1, 'f₂': 1, 'f₃': 1, 'a_RMS': 1, 'a_max': 1, 'Kurt.': 1, 'δ_max': 1, 'ε_max': 1, 'UPV': 1, 'RH': 1 }, sel: 'f₁', norm: 'z-score' },
+    mnt: { trig: 2, anom: 0.6, risk: 'Moderate' },
+    rep: { on: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], fmt: 'PDF', figs: 'yes', sel: 0, intro: {}, ver: 0 },
+    welcome: null, wz: { name: 'NH-16 Mahananda Bridge', student: '', roll: '', span: 33, grade: 'M45' }
+  };
+  setK(grp, k, v) { this.setState(s => ({ [grp]: Object.assign({}, s[grp], { [k]: v }) })); }
+  job(key, done) {
+    const set = v => this.setState(s => ({ jobs: Object.assign({}, s.jobs, { [key]: v }) }));
+    clearInterval(this['j_' + key]); set(0);
+    this['j_' + key] = setInterval(() => {
+      const p = this.state.jobs[key];
+      if (p == null || p >= 100) { clearInterval(this['j_' + key]); set(null); done && done(); return; }
+      set(Math.min(100, p + 3));
+    }, 50);
+  }
+  cal() {
+    if (this._cal) return this._cal;
+    const g0 = { span: 33, depth: 1.65, web: 0.3, tfw: 1.1, tft: 0.18, bfw: 0.75, bft: 0.25, slab: 0.22, nG: 5, sp: 3.2 }, s0 = this.section(g0);
+    const a0 = { load: '70R', IF: 1.1, barrier: 20, fp: 5, dist: 'Courbon', a: 16.5 };
+    const p0 = { n: 3, strands: 19, jack: 0.75, mu: 0.17, K: 0.002, slip: 6 }, b0 = { engine: 'OpenSeesPy', mass: 'incl', zeta: 2, Ec: 33.5 };
+    const k = { M: 1, d: 1, V: 1, L: 1, c: 0, f: 1 };
+    k.M = 6840 / this.calcAna(g0, s0, a0, k).Mt;
+    const r1 = this.calcAna(g0, s0, a0, k); k.d = 18.4 / r1.dLL; k.V = 1120 / r1.V;
+    const an0 = this.calcAna(g0, s0, a0, k);
+    k.L = 19.6 / this.calcPre(g0, s0, p0, an0, k).tot;
+    k.c = 12 - this.calcPre(g0, s0, p0, an0, k).camber;
+    k.f = 3.21 / this.calcF1(g0, s0, b0, an0, k).f1;
+    return (this._cal = k);
+  }
+  calcPre(g, sec, p, an, k0) {
+    const k = k0 || this.cal(), L = g.span, D = g.depth;
+    const P0 = p.n * p.strands * 98.7 * 1860 * p.jack / 1000, ycE = .52 * D, ycM = .11 * D, th = 8 * (ycE - ycM) / L, r = P0 / 7848;
+    const raw = [(1 - Math.exp(-(p.mu * th + p.K * L / 2))) * 100, 195000 * p.slip / 1000 / (L / 2) / (p.jack * 1860) * 100 * .5, 2.4 * r * (.85 / sec.A), 6 * r * (.85 / sec.A), 3.2, 2.5 * (p.jack / .75) ** 2];
+    const [L1, L2, L3, L4, L5, L6] = raw.map(v => v * k.L);
+    const tot = L1 + L2 + L3 + L4 + L5 + L6, Pe = P0 * (1 - tot / 100), e = sec.cy - ycM, Zg = sec.Ic / sec.cy;
+    const Mg = sec.A * 25 * L * L / 8, Pi = P0 * (1 - (L1 + L2 + L3) / 100);
+    const sT = (Pi / sec.A + Pi * e / Zg - Mg / Zg) / 1000, sS = (Pe / sec.A + Pe * e / Zg - Mg / Zg) / 1000 - ((an.Mt - Mg) / sec.Zb) / 1000;
+    const EI = 33.5e6 * sec.I, camber = (5 * Pe * e * L * L / (48 * EI) - 5 * sec.At * 25 * L ** 4 / (384 * EI)) * 1000 + k.c;
+    return { P0, L1, L2, L3, L4, L5, L6, tot, Pe, sT, sS, camber };
+  }
+  calcF1(g, sec, b, an, k0) {
+    const k = k0 || this.cal(), L = g.span;
+    const m = sec.At * 2500 + (b.mass === 'incl' ? an.wSidl * 1000 / 9.81 : 0), EI = b.Ec * 1e9 * sec.I;
+    return { m, EI, f1: Math.PI / (2 * L * L) * Math.sqrt(EI / m) * k.f };
+  }
+  calcAna(g, sec, a0, k0) {
+    const a = a0 || this.state.ana, k = k0 || this.cal(), L = g.span, E = 33.5e6;
+    const wSelf = sec.At * 25 * k.M, wSidl = (a.barrier * 2 / g.nG + 0.065 * 22 * g.sp + a.fp * 1.5 * 2 / g.nG) * k.M, w = wSelf + wSidl;
+    const P = a.load === '70R' ? 1000 : a.load === 'Class A' ? 554 : 1554;
+    const DF = a.dist === 'Courbon' ? 0.32 : 0.27, Pe = P * DF * a.IF * k.M, pos = Math.min(L, a.a);
+    const Mdl = w * L * L / 8, Mll = Pe * L / 4, Mt = Mdl + Mll, V = (w * L / 2 + Pe) * k.V;
+    const dLL = Pe * L ** 3 / (48 * E * sec.I) * 1000 * k.d, lim = L * 1000 / 800;
+    const X = x => (10 + x / L * 280).toFixed(1), N = 60;
+    let pd = '', pt = '', pe = '', ps = '';
+    for (let j = 0; j <= N; j++) {
+      const x = j / N * L, md = w * x * (L - x) / 2, ml = x < pos ? Pe * x * (L - pos) / L : Pe * pos * (L - x) / L, me = md + Pe * x * (L - x) / L;
+      const Y = m => (20 + m / Mt * 90).toFixed(1);
+      pd += (j ? 'L' : 'M') + X(x) + ' ' + Y(md); pt += (j ? 'L' : 'M') + X(x) + ' ' + Y(md + ml); pe += (j ? 'L' : 'M') + X(x) + ' ' + Y(me);
+    }
+    const VY = v => (55 - v / (w * L / 2 + Pe) * 40).toFixed(1), Ra = Pe * (L - pos) / L;
+    ps = 'M10 55 L10 ' + VY(w * L / 2 + Ra) + ' L' + X(pos) + ' ' + VY(w * (L / 2 - pos) + Ra) + ' L' + X(pos) + ' ' + VY(w * (L / 2 - pos) + Ra - Pe) + ' L290 ' + VY(-w * L / 2 + Ra - Pe) + ' L290 55';
+    return { w, wSelf, wSidl, Pe, Mdl, Mll, Mt, V, dLL, lim, pd, pt: pt + ' L290 20 L10 20 Z', pe, ps, posX: X(pos), MtY: 116, L };
+  }
+  data() {
+    if (this._d) return this._d;
+    const S = (id, num, name, status, lens, title, desc, rows, big, action, ai) => ({ id, num, name, status, lens, title, desc, rows: rows.map(([k, v]) => ({ k, v })), big: big.map(([k, v, u]) => ({ k, v, u })), action, ai: !!ai });
+    this._d = [
+      S('dashboard', '00', 'Dashboard', 'done', 'Studio', 'Bridge digital twin', 'One model carries every stage. Pins show the latest result from each completed stage.', [['Stages complete', '9 / 12'], ['Last run', 'AI/ML training · 4 min ago'], ['Engine', 'OpenSeesPy'], ['Span', '33.0 m']], [['Span', '33.0', 'm'], ['Baseline f₁', '3.21', 'Hz'], ['Pₑ / P₀', '0.804', ''], ['Condition · 0.82', 'Minor', '']], 'Resume · AI/ML assessment'),
+      S('config', '01', 'Configuration', 'done', 'Blueprint · exploded', 'Bridge configuration', 'Section geometry drives the model. Change a value and the 3D girders rebuild.', [], [], ''),
+      S('analysis', '02', 'Analysis & design', 'done', 'Load · ×50', 'Structural analysis', 'IRC Class 70R crossing at crawl speed. Deflection is exaggerated ×50 so the response is visible.', [['Live load', 'IRC Class 70R'], ['Impact factor', '1.10'], ['SIDL', '20 kN/m + 5 kN/m²'], ['Distribution', 'Courbon'], ['Utilization', '0.78 ✓']], [['M_max', '6,840', 'kN·m'], ['V_max', '1,120', 'kN'], ['σ_bot', '−2.1', 'MPa'], ['δ mid-span', '18.4', 'mm']], 'Run analysis'),
+      S('prestress', '03', 'Prestressing', 'done', 'X-ray', 'Prestressing system', 'Three 19T13 cables per girder on parabolic profiles. The glass view shows the ducts inside the web.', [['Cables', '3 × 19T13'], ['Duct diameter', '90 mm'], ['Friction μ · K', '0.17 · 0.002/m'], ['Anchorage slip', '6 mm'], ['Pₑ < P₀', '✓']], [['P₀', '7,850', 'kN'], ['Total loss', '19.6', '%'], ['Pₑ', '6,310', 'kN'], ['Camber', '12', 'mm']], 'Edit cable profile'),
+      S('baseline', '04', 'Healthy baseline', 'done', 'Modes · scan', 'Healthy baseline', 'First three bending modes of the healthy model. This fingerprint is the reference for every later comparison.', [['Mode 1', '3.21 Hz'], ['Mode 2', '5.86 Hz'], ['Mode 3', '8.41 Hz'], ['UPV nominal', '4.30 km/s'], ['Rebound nominal', '38']], [['f₁', '3.21', 'Hz'], ['f₂', '5.86', 'Hz'], ['f₃', '8.41', 'Hz'], ['δ reference', '18.4', 'mm']], 'Re-establish baseline'),
+      S('inspection', '05', 'Visual inspection', 'done', 'Inspect · soffit', 'Visual inspection', 'Observations are pinned to components. Colour follows the condition scale.', [['Components', '11 / 11'], ['Observations', '14'], ['Worst', 'Bearing B5 · Deteriorated'], ['Photos', '23']], [['Visual index', '0.78', ''], ['Cracks', '5', ''], ['Spalling', '2', ''], ['Corrosion', '3', '']], 'Add observation'),
+      S('ndt', '06', 'NDT', 'done', 'Heat · UPV', 'Non-destructive testing', 'UPV readings painted on the girder faces. Bands follow IS 13311 Pt.1; verify against the current code.', [['UPV points', '48'], ['Rebound points', '36'], ['Cover meter', '12'], ['SonReb f_ck est.', '41.8 MPa']], [['UPV mean', '4.31', 'km/s'], ['UPV min', '3.28', 'km/s'], ['Rebound', '38', ''], ['Doubtful', '3', 'pts']], 'Plan tests'),
+      S('monitoring', '07', 'Monitoring', 'done', 'Sensors', 'Vibration monitoring', 'Accelerometers on girder soffits. The trace and spectrum update live from the selected sensor.', [], [], ''),
+      S('synthetic', '08', 'Synthetic data', 'done', 'Damage · ×100', 'Synthetic data studio', 'Scenario S-07: localized stiffness loss at G5 mid-span. Sag is exaggerated ×100.', [['Mechanism', 'Prestress loss + cracking'], ['Location', 'G5 · 0.50 L'], ['Extent', '6.0 m'], ['Label', 'Deteriorated'], ['Noise', '3 %']], [['Records', '2,400', ''], ['Classes', '4', ''], ['f₁', '2.94', 'Hz'], ['δ', '24.9', 'mm']], 'Generate dataset'),
+      S('features', '09', 'Features', 'done', 'Pins', 'Feature extraction', 'Ten features per record, from frequency, acceleration, deflection, strain and NDT.', [['Vector', '10 features'], ['Records', '2,400'], ['Strongest |r|', 'f₁ ↔ δ_max · −0.91'], ['Top preview', 'Δf₁']], [['Δf₁', '−8.4', '%'], ['a_RMS', '0.051', 'g'], ['δ_max', '24.9', 'mm'], ['Kurtosis', '3.4', '']], 'Export matrix'),
+      S('ml', '10', 'AI/ML assessment', 'progress', 'Condition', 'AI/ML condition assessment', 'Train a classifier on the synthetic dataset, then test it live with your own feature values.', [], [], '', true),
+      S('maintenance', '11', 'Maintenance', 'ready', 'Condition · actions', 'Maintenance decision', 'Evidence from inspection, NDT, monitoring and the model points to a detailed investigation of G5.', [['Path', 'Detailed investigation'], ['Actions', '4'], ['Reinspection', '6 months'], ['Risk tolerance', 'Moderate']], [['Priority', 'High', ''], ['Next action', 'G5 NDT', ''], ['Reinspect', '6', 'mo'], ['Actions', '4', '']], 'Confirm decision', true),
+      S('report', '12', 'Report', 'ready', 'Elevation', 'Integrated report', 'Compiles every stage into one document: the integrated story of one bridge.', [['Sections', '12'], ['Figures', '42'], ['Tables', '18'], ['Formats', 'PDF · LaTeX · Markdown']], [['Sections', '12', ''], ['Figures', '42', ''], ['Tables', '18', ''], ['Status', 'Locked', '']], 'Locked')
+    ];
+    return this._d;
+  }
+  componentDidMount() {
+    this.onKey = e => {
+      if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+      if (e.key === 'ArrowDown') { this.go(this.state.i + 1); e.preventDefault(); }
+      else if (e.key === 'ArrowUp') { this.go(this.state.i - 1); e.preventDefault(); }
+      else if (e.key === 't' || e.key === 'T') this.toggleTheme();
+    };
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    window.addEventListener('keydown', this.onKey);
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    if (window.ResizeObserver) { this.ro = new ResizeObserver(() => { const w = document.documentElement.clientWidth || window.innerWidth; if (w !== this.state.w) this.setState({ w }); }); this.ro.observe(document.documentElement); }
+    requestAnimationFrame(() => this.onResize()); setTimeout(() => this.onResize(), 300);
+    this.syncTour(); this.syncAnim();
+  }
+  componentDidUpdate() {
+    const k = this.state.i + '|' + this.state.paused;
+    if (k !== this._ak) { this._ak = k; this.syncAnim(); }
+    const t = !!this.props.tour;
+    if (t !== this._tour) { this._tour = t; this.syncTour(); }
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); window.removeEventListener('resize', this.onResize); this.ro && this.ro.disconnect(); clearInterval(this.tm); clearInterval(this.an); clearInterval(this.tr); }
+  syncTour() { clearInterval(this.tm); if (this.props.tour) this.tm = setInterval(() => this.go(this.state.i + 1), 8000); }
+  syncAnim() { clearInterval(this.an); if (this.data()[this.state.i].id === 'monitoring' && !this.state.paused) this.an = setInterval(() => this.setState(s => ({ tick: s.tick + 1 })), 70); }
+  go(i) { const n = this.data().length; this.setState({ i: (i + n) % n, tab: 'results' }); }
+  theme() { return this.state.theme || this.props.theme || 'light'; }
+  toggleTheme() { this.setState({ theme: this.theme() === 'light' ? 'dark' : 'light' }); }
+  setG(k, v) { this.setState(s => ({ g: Object.assign({}, s.g, { [k]: v }) })); }
+  setMon(k, v) { this.setState(s => ({ mon: Object.assign({}, s.mon, { [k]: v }) })); }
+  setML(k, v) { this.setState(s => ({ ml: Object.assign({}, s.ml, { [k]: v }) })); }
+  train() {
+    clearInterval(this.tr); this.setML('prog', 0);
+    this.tr = setInterval(() => {
+      const p = this.state.ml.prog;
+      if (p == null || p >= 100) { clearInterval(this.tr); this.setML('prog', null); return; }
+      this.setML('prog', Math.min(100, p + 2.5));
+    }, 50);
+  }
+  seg(k, opts, val, on) {
+    return { k, opts: opts.map(o => { const v = typeof o === 'object' ? o.v : o, label = typeof o === 'object' ? o.l : String(o), a = v === val; return { label, go: () => on(v), bg: a ? 'var(--ink)' : 'transparent', fg: a ? 'var(--inv)' : 'var(--ink)' }; }) };
+  }
+  sl(k, v, u, min, max, step, dec, on, err, col) {
+    return { k, v, vs: Number(v).toFixed(dec), u, min, max, step, on: e => on(parseFloat(e.target.value)), err: err || '', col: err ? '#e0442f' : 'var(--ink)' };
+  }
+  section(g) {
+    const { depth: D, web: tw, tfw: bt, tft: tt, bfw: bf, bft: tb, slab, sp } = g;
+    const pts = [[-bf / 2, 0], [bf / 2, 0], [bf / 2, tb], [tw / 2, tb + .15], [tw / 2, D - tt - .12], [bt / 2, D - tt], [bt / 2, D], [-bt / 2, D], [-bt / 2, D - tt], [-tw / 2, D - tt - .12], [-tw / 2, tb + .15], [-bf / 2, tb]];
+    let A = 0, Sy = 0, Ix = 0;
+    for (let i = 0; i < pts.length; i++) {
+      const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length], c = x0 * y1 - x1 * y0;
+      A += c; Sy += (y0 + y1) * c; Ix += (y0 * y0 + y0 * y1 + y1 * y1) * c;
+    }
+    A /= 2; const cy = Sy / (6 * A); const Ic = Ix / 12 - A * cy * cy;
+    const As = sp * slab, ys = D + slab / 2, Is = sp * slab ** 3 / 12, At = A + As;
+    const yb = (A * cy + As * ys) / At, I = Ic + A * (cy - yb) ** 2 + Is + As * (ys - yb) ** 2, H = D + slab;
+    return { pts, A, At, yb, I, Zb: I / yb, Zt: I / (H - yb), H, cy, Ic };
+  }
+  layout(ws) {
+    const w = this.state.w, mode = w >= 1280 ? 'wide' : w >= 960 ? 'mid' : 'narrow';
+    const narrow = mode === 'narrow', mid = mode === 'mid';
+    const railW = mode === 'wide' ? 220 : 64, inW = mode === 'wide' ? 280 : 256;
+    const resW = mode === 'wide' ? 'min(360px,28vw)' : '300px', resWpx = mode === 'wide' ? 'max(300px,min(360px,28vw))' : '300px';
+    const tab = this.state.tab;
+    return {
+      mode, brandText: w >= 640, lensPill: w >= 760, healthText: w >= 1100, exportLabel: w >= 640 ? 'Export report' : 'Export',
+      railTop: narrow ? '76px' : '84px', railBottom: narrow ? 'auto' : '16px', railRight: narrow ? '16px' : 'auto',
+      railW: narrow ? 'auto' : railW + 'px', railH: narrow ? '48px' : 'auto', railRadius: narrow ? '999px' : '20px', railPad: narrow ? '5px' : mid ? '10px 8px' : '10px',
+      railDir: narrow ? 'row' : 'column', railOX: narrow ? 'auto' : 'hidden', railOY: narrow ? 'hidden' : 'auto', railHead: mode === 'wide',
+      itemJustify: mid ? 'center' : 'flex-start', itemGap: mid ? '6px' : '10px', itemPad: mid ? '0 6px' : '0 12px',
+      nameDisp: mid ? 'none' : 'block', nameFlex: narrow ? 'none' : '1',
+      tabs: narrow && ws,
+      showInputs: ws && (!narrow || tab === 'inputs'), showResults: !narrow || !ws || tab === 'results',
+      inTop: narrow ? 'auto' : '84px', inLeft: narrow ? '16px' : (railW + 32) + 'px', inRight: narrow ? '16px' : 'auto', inW: narrow ? 'auto' : inW + 'px', inH: narrow ? '46vh' : 'auto',
+      resTop: narrow ? 'auto' : '84px', resLeft: narrow ? '16px' : 'auto', resW: narrow ? 'auto' : resW, resH: narrow ? '46vh' : 'auto',
+      bigInPanel: ws || narrow, strip: !ws && !narrow,
+      stripLeft: (railW + 32) + 'px', stripRight: 'calc(' + resWpx + ' + 32px)'
+    };
+  }
+  renderVals() {
+    const d = this.data(), i = this.state.i, s = d[i], id = s.id;
+    const isConfig = id === 'config', isMon = id === 'monitoring', isML = id === 'ml', isAna = id === 'analysis', isPre = id === 'prestress', isBase = id === 'baseline';
+    const isIns = id === 'inspection', isNdt = id === 'ndt', isSyn = id === 'synthetic';
+    const isFeat = id === 'features', isMaint = id === 'maintenance', isRep = id === 'report';
+    const ws = isConfig || isMon || isML || isAna || isPre || isBase || isIns || isNdt || isSyn || isFeat || isMaint || isRep;
+    const L = this.layout(ws);
+    const SL = { done: ['Complete', 'var(--ink)'], progress: ['In progress', 'var(--acc)'], ready: ['Ready', 'var(--faint)'], locked: ['Locked', 'var(--line)'] };
+    const stages = d.map((x, j) => {
+      const a = j === i;
+      return {
+        num: x.num, name: x.name, go: () => this.go(j),
+        bg: a ? 'var(--ink)' : 'transparent', fg: a ? 'var(--inv)' : 'var(--ink)', op: x.status === 'locked' && !a ? '.5' : '1',
+        dot: x.status === 'done' ? (a ? 'var(--inv)' : 'var(--ink)') : x.status === 'progress' ? 'var(--acc)' : 'transparent',
+        dotB: x.status === 'done' ? (a ? 'var(--inv)' : 'var(--ink)') : x.status === 'progress' ? 'var(--acc)' : x.status === 'ready' ? 'var(--faint)' : 'var(--line)'
+      };
+    });
+    const cur = Object.assign({}, s, { eyebrow: (s.num === '00' ? 'Overview' : 'Stage ' + s.num) + ' · ' + s.name, statusLabel: SL[s.status][0], statusCol: SL[s.status][1] });
+    const g = this.state.g, sec = this.section(g);
+    let big = s.big, segs = [], sliders = [], predSliders = [], inNote = '';
+    const out = { isConfig, isMon, isML, isAna, isPre, isBase, isIns, isNdt, isSyn, isFeat, isMaint, isRep, isGeneric: !ws, pickList: null, chipGroups: [], inAction: null, textFields: [] };
+    const COL = ['#4fae7f', '#d9b443', '#e6893c', '#e0442f'], SEVN = ['Healthy', 'Minor', 'Deteriorated', 'Severe'];
+    const chips = (k, opts, isOn, on) => ({ k, opts: opts.map(o => { const a = isOn(o); return { label: o, go: () => on(o), bg: a ? 'var(--ink)' : 'transparent', fg: a ? 'var(--inv)' : 'var(--ink)', bd: a ? 'var(--ink)' : 'var(--line)' }; }) });
+    const jobs = this.state.jobs, R = rows => rows.map(([k, v]) => ({ k, v })), f0 = n => Math.round(n).toLocaleString();
+    const an = this.calcAna(g, sec);
+    const mlm = this.state.ml, mlScore = Math.max(0, Math.min(.999, .45 * (-mlm.df / 15) + .35 * ((mlm.dmax - 18) / 14) + .2 * ((4.5 - mlm.upv) / 1.5))), mlClass = Math.min(3, Math.floor(mlScore * 4)), mlConf = .55 + .4 * (1 - Math.abs((mlScore * 4) % 1 - .5) * 2);
+
+    if (isFeat) {
+      const st = this.state.feat, set = (k, v) => this.setK('feat', k, v);
+      const F = [
+        ['f₁', -.9, 3.21, 'Hz', 2, 'First bending frequency. Falls as flexural stiffness is lost.'], ['f₂', -.85, 5.86, 'Hz', 2, 'Second mode. Its shift relative to f₁ hints at where along the span damage sits.'],
+        ['f₃', -.75, 8.41, 'Hz', 2, 'Third mode. More sensitive to local stiffness changes, also more affected by noise.'], ['a_RMS', .55, .042, 'g', 3, 'Overall vibration energy under traffic. Rises as the deck becomes more flexible.'],
+        ['a_max', .5, .18, 'g', 2, 'Peak acceleration. Captures impact-type response at joints and bearings.'], ['Kurt.', .35, 3.1, '', 1, 'Kurtosis of a(t). Values well above 3 indicate spiky, impulsive response such as loose bearings.'],
+        ['δ_max', .9, 18.4, 'mm', 1, 'Mid-span deflection under the reference load. Rises with stiffness or prestress loss.'], ['ε_max', .85, 182, 'µε', 0, 'Peak bottom-fibre strain. Tracks the same flexural loss as δ at the gauge location.'],
+        ['UPV', -.7, 4.31, 'km/s', 2, 'Pulse velocity through the web. Drops where concrete is cracked or poorly compacted.'], ['RH', -.6, 38, 'R', 0, 'Rebound number. A surface-hardness check that complements UPV in SonReb.']
+      ];
+      const act = F.filter(f => st.on[f[0]]), selF = F.find(f => f[0] === st.sel && st.on[f[0]]) || act[0] || F[0];
+      inNote = act.length + ' of 10 features';
+      out.chipGroups = [chips('Feature vector x', F.map(f => f[0]), o => !!st.on[o], o => set('on', Object.assign({}, st.on, { [o]: st.on[o] ? 0 : 1 }))), chips('Inspect feature', act.map(f => f[0]), o => o === selF[0], o => set('sel', o))];
+      segs = [this.seg('Normalisation', ['z-score', 'min-max'], st.norm, v => set('norm', v))];
+      out.inAction = { label: 'Export feature matrix', go: () => this.job('feat') };
+      const fam = (a, b) => (a < 3 && b < 3) ? .08 : (a > 2 && a < 6 && b > 2 && b < 6) ? .1 : 0;
+      const cm = act.map((a, ia) => { const i = F.indexOf(a); return { k: a[0], cells: act.map(b => { const j = F.indexOf(b), r = i === j ? 1 : Math.max(-1, Math.min(1, a[1] * b[1] + Math.sign(a[1] * b[1]) * fam(i, j))); return { v: r.toFixed(1), bg: r >= 0 ? 'color-mix(in oklab, var(--acc) ' + Math.round(Math.abs(r) * 85) + '%, transparent)' : 'color-mix(in oklab, var(--ink) ' + Math.round(Math.abs(r) * 70) + '%, transparent)', fg: Math.abs(r) > .6 ? 'var(--inv)' : 'var(--ink)' }; }) }; });
+      const mag = [0, .05, .12, .24], [k0, ld, h, u, dec] = selF;
+      const vals = mag.map((m, c) => h * (1 + Math.sign(ld) * m * Math.abs(ld)));
+      const sp = mag.map((_, c) => h * .02 * (1 + c * .6)), lo = Math.min(...vals.map((v, c) => v - 2 * sp[c])), hi = Math.max(...vals.map((v, c) => v + 2 * sp[c])), X = v => (40 + (v - lo) / (hi - lo) * 250).toFixed(1);
+      out.fe = {
+        cm, cols: 'repeat(' + (act.length + 1) + ',minmax(0,1fr))', heads: act.map(f => ({ k: f[0] })),
+        sel: k0, meaning: selF[5], dist: vals.map((v, c) => ({ y: 12 + c * 20, x0: X(v - 2 * sp[c]), x1: X(v + 2 * sp[c]), xm: X(v), c: COL[c], l: SEVN[c], ly: 16 + c * 20, t: v.toFixed(dec) })),
+        lo: lo.toFixed(dec) + ' ' + u, hi: hi.toFixed(dec) + ' ' + u,
+        imp: [['Δf₁', .24], ['δ_max', .17], ['f₂', .12], ['UPV', .11], ['a_RMS', .09]].map(([k, v]) => ({ k, v: v.toFixed(2), w: (v / .24 * 100).toFixed(0) + '%' }))
+      };
+      big = [{ k: 'Features', v: String(act.length), u: '' }, { k: 'Records', v: this.state.syn.n.toLocaleString(), u: '' }, { k: 'Strongest |r|', v: 'f₁ ↔ δ', u: '−0.81' }, { k: 'Top preview', v: 'Δf₁', u: '0.24' }];
+    }
+
+    if (isMaint) {
+      const st = this.state.mnt, set = (k, v) => this.setK('mnt', k, v);
+      inNote = 'Rule + evidence engine';
+      segs = [this.seg('Investigate at class ≥', [{ v: 1, l: 'Minor' }, { v: 2, l: 'Deteriorated' }, { v: 3, l: 'Severe' }], st.trig, v => set('trig', v)), this.seg('Risk tolerance', ['Low', 'Moderate', 'High'], st.risk, v => set('risk', v))];
+      sliders = [this.sl('Anomaly threshold', st.anom, '', .3, .9, .01, 2, v => set('anom', v))];
+      const inv = mlClass >= st.trig || mlScore > st.anom, repair = inv && mlClass >= 3, prev = inv && !repair;
+      const months = Math.max(1, ({ Low: 3, Moderate: 6, High: 12 })[st.risk] / (mlClass >= 2 ? 1 : .5) / (mlClass >= 3 ? 2 : 1));
+      const on = { a: 1, rm: !inv, di: inv, pm: prev, rp: repair, ri: 1 };
+      const N = (k, l, x, y, w) => ({ x: x - w / 2, y, w, tx: x, ty: y + 17, l, fill: on[k] ? 'var(--ink)' : 'transparent', fg: on[k] ? 'var(--inv)' : 'var(--mut)', bd: on[k] ? 'var(--ink)' : 'var(--line)' });
+      const E = (a, b, x1, y1, x2, y2) => ({ x1, y1, x2, y2, s: on[a] && on[b] ? 'var(--ink)' : 'var(--line)', w: on[a] && on[b] ? '1.5' : '1' });
+      out.mt = {
+        nodes: [N('a', 'Condition assessment', 160, 8, 150), N('rm', 'Routine monitoring', 72, 62, 128), N('di', 'Detailed investigation', 240, 62, 140), N('pm', 'Preventive maint.', 190, 116, 110), N('rp', 'Repair', 284, 116, 60), N('ri', 'Reinspection', 160, 170, 120)],
+        edges: [E('a', 'rm', 160, 34, 72, 62), E('a', 'di', 160, 34, 240, 62), E('di', 'pm', 240, 88, 190, 116), E('di', 'rp', 240, 88, 284, 116), E('rm', 'ri', 72, 88, 140, 170), E('pm', 'ri', 190, 142, 170, 170), E('rp', 'ri', 284, 142, 200, 170)],
+        actions: (inv ? [
+          { t: 'Detailed investigation · G5 mid-span', why: ['ML ' + SEVN[mlClass] + ' ' + mlConf.toFixed(2), 'Δf₁ −2.8 %', 'Crack 0.3 mm'], c: COL[Math.max(2, mlClass)] },
+          { t: 'Additional NDT · UPV grid on G5', why: ['UPV 3.28 km/s', 'Doubtful band'], c: COL[2] },
+          { t: repair ? 'Repair · strengthen G5' : 'Preventive · reseat bearing B5', why: repair ? ['Severe class'] : ['Corrosion staining', 'Grade 3'], c: COL[repair ? 3 : 1] }
+        ] : []).concat([{ t: 'Routine monitoring · all girders', why: ['6 accelerometers', 'f₁ trend'], c: COL[0] }]),
+        tl: [{ m: 0, l: 'Now' }].concat(inv ? [{ m: 1, l: 'Investigate' }, { m: 2, l: 'NDT' }, { m: 3, l: repair ? 'Repair' : 'Bearing' }] : []).concat([{ m: Math.min(24, Math.round(months)), l: 'Reinspect' }]).map((e, j) => ({ x: (16 + e.m / 24 * 268).toFixed(1), l: e.l, ly: j % 2 ? 44 : 20 }))
+      };
+      big = [{ k: 'Path', v: inv ? 'Investigate' : 'Monitor', u: '' }, { k: 'Priority', v: repair ? 'Critical' : inv ? 'High' : 'Normal', u: '' }, { k: 'Reinspect in', v: String(Math.round(months)), u: 'mo' }, { k: 'Actions', v: String(out.mt.actions.length), u: '' }];
+    }
+
+    if (isRep) {
+      const st = this.state.rep, set = (k, v) => this.setK('rep', k, v);
+      const SEC = ['Configuration', 'Analysis & design', 'Prestressing', 'Healthy baseline', 'Visual inspection', 'Non-destructive testing', 'Monitoring', 'Synthetic data', 'Feature extraction', 'AI/ML assessment', 'Maintenance decision', 'Assumptions & limitations'], PG = [3, 4, 4, 3, 4, 4, 4, 3, 3, 5, 3, 2];
+      inNote = 'Section per stage';
+      out.chipGroups = [chips('Include sections', SEC, o => !!st.on[SEC.indexOf(o)], o => { const a = st.on.slice(), j = SEC.indexOf(o); a[j] = a[j] ? 0 : 1; set('on', a); }), chips('Edit intro for', SEC.filter((_, j) => st.on[j]), o => SEC.indexOf(o) === st.sel, o => set('sel', SEC.indexOf(o)))];
+      segs = [this.seg('Format', ['PDF', 'LaTeX', 'Markdown'], st.fmt, v => set('fmt', v)), this.seg('3D figures', [{ v: 'yes', l: 'Frozen renders' }, { v: 'no', l: 'Charts only' }], st.figs, v => set('figs', v))];
+      const defIntro = j => 'This section records the ' + SEC[j].toLowerCase() + ' stage for the 33 m PSC I-girder bridge and the values passed to the next stage.';
+      out.textFields = [{ k: 'Intro · ' + SEC[st.sel], v: st.intro[st.sel] != null ? st.intro[st.sel] : defIntro(st.sel), on: e => { const v = e.target.value; this.setState(s => ({ rep: Object.assign({}, s.rep, { intro: Object.assign({}, s.rep.intro, { [s.rep.sel]: v }) }) })); } }];
+      out.inAction = { label: 'Compile ' + st.fmt, go: () => this.job('rep', () => set('ver', st.ver + 1)) };
+      let pg = 3; const toc = [];
+      SEC.forEach((s2, j) => { if (!st.on[j]) return; toc.push({ n: String(j + 1).padStart(2, '0'), l: s2, p: String(pg) }); pg += PG[j] - (st.figs === 'no' ? 1 : 0); });
+      out.rp = {
+        toc, pages: pg - 1, running: jobs.rep != null, progW: (jobs.rep || 0) + '%', progS: Math.round(jobs.rep || 0) + ' %', compiled: st.ver > 0, verS: 'Compiled v' + st.ver + ' · ' + (pg - 1) + ' pages · ' + st.fmt,
+        thumbs: toc.slice(0, 4).map(t => ({ n: t.n, l: t.l, fig: st.figs === 'yes' }))
+      };
+      big = [{ k: 'Sections', v: String(toc.length), u: '' }, { k: 'Pages', v: String(pg - 1), u: '' }, { k: 'Format', v: st.fmt, u: '' }, { k: 'Status', v: st.ver ? 'Compiled' : 'Draft', u: '' }];
+    }
+
+    if (isIns) {
+      const st = this.state.ins, set = (k, v) => this.setK('ins', k, v);
+      const comps = [['deck', 'Deck slab'], ['girders', 'Girders'], ['cross', 'Cross-girders'], ['fp', 'Footpaths'], ['barrier', 'Crash barriers'], ['bearings', 'Bearings'], ['ej', 'Expansion joints'], ['drain', 'Drainage'], ['abut', 'Abutments']];
+      const sevOf = c => st.obs.filter(o => o.c === c).reduce((m, o) => Math.max(m, o.s), 0), cnt = c => st.obs.filter(o => o.c === c).length;
+      inNote = 'Bridge → component → observation';
+      out.pickList = { k: 'Components · single span', items: comps.map(([c, l]) => ({ label: l, n: String(cnt(c)), dot: COL[sevOf(c)], go: () => set('sel', c), bg: st.sel === c ? 'var(--hover)' : 'transparent' })) };
+      out.chipGroups = [chips('Defect type', ['Cracking', 'Spalling', 'Corrosion staining', 'Leakage', 'Honeycombing', 'Surface deterioration'], o => o === st.defect, o => set('defect', o))];
+      segs = [this.seg('Severity', [{ v: 1, l: 'Minor' }, { v: 2, l: 'Deteriorated' }, { v: 3, l: 'Severe' }], st.sev, v => set('sev', v))];
+      sliders = [this.sl('Extent', st.ext, 'm²', 0.1, 5, 0.1, 1, v => set('ext', v))];
+      const selL = comps.find(x => x[0] === st.sel)[1];
+      out.inAction = { label: 'Add observation to ' + selL.toLowerCase(), go: () => this.setState(s => ({ ins: Object.assign({}, s.ins, { obs: [{ c: s.ins.sel, d: s.ins.defect, s: s.ins.sev, loc: 'New', e: s.ins.ext.toFixed(1) + ' m²' }].concat(s.ins.obs) }) })) };
+      const sum = comps.reduce((a, [c]) => a + sevOf(c), 0), vci = 1 - sum / (comps.length * 3);
+      const worst = comps.reduce((b, [c, l]) => sevOf(c) > b.s ? { s: sevOf(c), l } : b, { s: 0, l: '—' });
+      const P = (c, x, y, w, h) => ({ x, y, w, h, fill: COL[sevOf(c)], op: sevOf(c) ? '0.9' : '0.35', stroke: st.sel === c ? 'var(--ink)' : 'none', go: () => set('sel', c) });
+      out.ins = {
+        parts: [P('abut', 6, 52, 22, 58), P('abut', 272, 52, 22, 58), P('bearings', 24, 46, 8, 6), P('bearings', 268, 46, 8, 6), P('girders', 30, 30, 240, 16),
+          P('cross', 34, 31, 3, 14), P('cross', 92, 31, 3, 14), P('cross', 149, 31, 3, 14), P('cross', 206, 31, 3, 14), P('cross', 263, 31, 3, 14),
+          P('deck', 26, 22, 248, 8), P('fp', 26, 16, 248, 6), P('barrier', 26, 8, 248, 6), P('ej', 24, 8, 3, 22), P('ej', 273, 8, 3, 22), P('drain', 180, 46, 5, 12)],
+        legend: SEVN.map((l, j) => ({ l, c: COL[j] })),
+        log: st.obs.map(o => ({ comp: comps.find(x => x[0] === o.c)[1], d: o.d, loc: o.loc, e: o.e, sev: SEVN[o.s], col: COL[o.s] }))
+      };
+      big = [{ k: 'Visual index', v: vci.toFixed(2), u: '' }, { k: 'Observations', v: String(st.obs.length), u: '' }, { k: 'Worst', v: worst.l, u: '' }, { k: 'Components', v: comps.length + ' / ' + comps.length, u: '' }];
+    }
+
+    if (isNdt) {
+      const st = this.state.ndt, set = (k, v) => this.setK('ndt', k, v), gi = Math.min(st.g, g.nG - 1), o = g.nG - 1, sd = st.seed;
+      const T = {
+        UPV: { u: 'km/s', dec: 2, q: 'Is the concrete at G5 mid-span uniform, or is there internal cracking?', ref: 'IS 13311 Pt.1 bands', bands: [['Excellent', '> 4.5', 4.5, 99], ['Good', '3.5 – 4.5', 3.5, 4.5], ['Doubtful', '3.0 – 3.5', 3, 3.5], ['Poor', '< 3.0', -99, 3]], f: (s, r, i, G) => 4.45 - .08 * r + .06 * Math.sin(i * 1.7 + G * 2 + sd) - (G === o ? 1.25 * Math.exp(-(((s - .55) / .09) ** 2)) : 0) - (G === o - 1 ? .5 * Math.exp(-(((s - .22) / .08) ** 2)) : 0) },
+        Rebound: { u: 'R', dec: 0, q: 'Is surface hardness consistent with M45 along the girder?', ref: 'Rebound bands', bands: [['Sound', '> 35', 35, 99], ['Intermediate', '25 – 35', 25, 35], ['Poor', '< 25', -99, 25]], f: (s, r, i, G) => 39 + 2 * Math.sin(i * 1.3 + G + sd) - r - (G === o ? 13 * Math.exp(-(((s - .55) / .09) ** 2)) : 0) - (G === o - 1 ? 6 * Math.exp(-(((s - .22) / .08) ** 2)) : 0) },
+        Cover: { u: 'mm', dec: 0, q: 'Is cover adequate to protect strands and rebar near the ends?', ref: 'Verify against project cover', bands: [['Adequate', '≥ 45', 45, 999], ['Marginal', '35 – 45', 35, 45], ['Low', '< 35', -99, 35]], f: (s, r, i, G) => 52 + 4 * Math.sin(i * 2.1 + G + sd) - (G === o ? 19 * Math.exp(-(((s - .12) / .08) ** 2)) : 0) },
+        'Half-cell': { u: 'mV', dec: 0, q: 'Is reinforcement near the stained bearing B5 corroding?', ref: 'ASTM C876 bands', bands: [['Low risk', '> −200', -200, 999], ['Uncertain', '−200 – −350', -350, -200], ['High risk', '< −350', -9999, -350]], f: (s, r, i, G) => -150 - 20 * Math.sin(i * 1.1 + G + sd) - (G === o ? 270 * Math.exp(-(((s - .94) / .1) ** 2)) : 0) }
+      }, t = T[st.test], bc = t.bands.length === 4 ? COL : [COL[0], COL[2], COL[3]];
+      const grade = v => t.bands.findIndex(b => v > b[2] && v <= b[3]);
+      inNote = 'Observation → question → test';
+      segs = [this.seg('Test', ['UPV', 'Rebound', 'Cover', 'Half-cell'], st.test, v => set('test', v)), this.seg('Girder', [...Array(g.nG)].map((_, j) => ({ v: j, l: 'G' + (j + 1) })), gi, v => set('g', v))];
+      out.inAction = { label: 'Generate synthetic readings', go: () => this.job('ndt', () => set('seed', st.seed + 1)) };
+      const cells = [], vals = [], counts = t.bands.map(() => 0);
+      for (let r = 0; r < 3; r++) for (let i = 0; i < 14; i++) { const v = t.f((i + .5) / 14, r, i, gi), gr = Math.max(0, grade(v)); counts[gr]++; vals.push(v); cells.push({ x: 10 + i * 20, y: 22 + r * 20, fill: bc[gr] }); }
+      const mean = vals.reduce((a, b) => a + b, 0) / vals.length, mn = Math.min(...vals), mi = vals.indexOf(mn);
+      const avg = (k) => { let s = 0; for (let r = 0; r < 3; r++) for (let i = 0; i < 14; i++) s += T[k].f((i + .5) / 14, r, i, gi); return s / 42; };
+      const son = 0.0286 * Math.pow(avg('Rebound'), 1.246) * Math.pow(avg('UPV'), 1.85);
+      const flagged = counts.slice(t.bands.length === 4 ? 2 : 1).reduce((a, b) => a + b, 0);
+      out.nd = {
+        q: t.q, ref: t.ref, cells, minX: cells[mi].x + 9.5, minY: cells[mi].y + 9.5, gl: 'G' + (gi + 1), running: jobs.ndt != null, progW: (jobs.ndt || 0) + '%',
+        bands: t.bands.map((b, j) => ({ l: b[0], r: b[1] + ' ' + t.u, c: bc[j], n: counts[j] + ' pts' })),
+        rows: R([['Points on ' + 'G' + (gi + 1), '42'], ['Mean', mean.toFixed(t.dec) + ' ' + t.u], ['Min', mn.toFixed(t.dec) + ' ' + t.u], ['SonReb f_ck est.', son.toFixed(1) + ' MPa']])
+      };
+      big = [{ k: st.test + ' mean', v: mean.toFixed(t.dec), u: t.u }, { k: 'Min', v: mn.toFixed(t.dec), u: t.u }, { k: 'Flagged', v: String(flagged), u: 'pts' }, { k: 'SonReb', v: son.toFixed(1), u: 'MPa' }];
+    }
+
+    if (isSyn) {
+      const st = this.state.syn, set = (k, v) => this.setK('syn', k, v), L = g.span, M = st.mech;
+      inNote = 'Reruns FEM per scenario';
+      out.chipGroups = [chips('Mechanisms', ['Prestress loss', 'Stiffness reduction', 'Cracking', 'Corrosion', 'Bearing deterioration'], o => !!M[o], o => set('mech', Object.assign({}, M, { [o]: M[o] ? 0 : 1 })))];
+      sliders = [
+        this.sl('Location', st.loc, '× L', .05, .95, .01, 2, v => set('loc', v)), this.sl('Extent', st.ext, 'm', 1, 12, .5, 1, v => set('ext', v)),
+        this.sl('Severity (EI / P loss)', st.sev, '%', 0, 60, 1, 0, v => set('sev', v)), this.sl('Records', st.n, '', 400, 6000, 100, 0, v => set('n', v)), this.sl('Noise', st.noise, '%', 0, 10, .5, 1, v => set('noise', v))
+      ];
+      out.inAction = { label: 'Generate dataset', go: () => this.job('syn', () => set('ver', st.ver + 1)) };
+      const stiff = M['Cracking'] || M['Stiffness reduction'] || M['Corrosion'] ? 1 : .3;
+      let x = st.sev / 100 * (st.ext / L) * Math.sin(Math.PI * st.loc) * stiff * 2.533 + (M['Bearing deterioration'] ? .02 : 0);
+      x = Math.min(.6, x);
+      const fb = this.calcF1(g, sec, this.state.base, an).f1, db = an.dLL;
+      const f1s = fb * Math.sqrt(1 - x), ds = db / (1 - x) + (M['Prestress loss'] ? 3 * st.sev / 35 : 0), upv = 4.31 * (1 - (M['Cracking'] ? .4 * st.sev / 100 : 0));
+      const lab = x < .05 ? 0 : x < .12 ? 1 : x < .25 ? 2 : 3, xs = [0, .08, .18, .32];
+      const met = [
+        ['Δf₁', xs.map(v => (Math.sqrt(1 - v) - 1) * 100), (f1s / fb - 1) * 100],
+        ['Δδ', xs.map(v => (1 / (1 - v) - 1) * 100), (ds / db - 1) * 100],
+        ['ΔUPV', [0, -5, -12, -22], (upv / 4.31 - 1) * 100]
+      ].map(([k, arr, sc]) => {
+        const mx = Math.max(...arr.map(Math.abs), Math.abs(sc), 1), H = v => Math.abs(v) / mx * 38;
+        return { k, scS: 'scenario ' + sc.toFixed(1).replace('-', '−') + ' %', lineY: (50 - H(sc)).toFixed(1), bars: arr.map((v, j) => ({ x: 24 + j * 70, y: (50 - H(v)).toFixed(1), h: Math.max(1, H(v)).toFixed(1), c: COL[j], t: v.toFixed(1).replace('-', '−'), ty: (46 - H(v)).toFixed(1), tx: 44 + j * 70 })) };
+      });
+      const nz = st.noise / 100, rnd = j => Math.sin(j * 12.9898 + st.ver * 78.233) * .5;
+      const prev = [0, 1, 2, 3, 2, 1].map((c, j) => ({ id: 'R' + String(1000 + j * 37 + st.ver), l: SEVN[c], c: COL[c], f: (fb * Math.sqrt(1 - xs[c]) * (1 + nz * rnd(j))).toFixed(2), d: (db / (1 - xs[c]) * (1 + nz * rnd(j + 7))).toFixed(1), u: (4.31 * (1 + [0, -5, -12, -22][c] / 100) * (1 + nz * rnd(j + 3))).toFixed(2) }));
+      out.sy = {
+        met, prev, label: SEVN[lab], labCol: COL[lab], running: jobs.syn != null, progW: (jobs.syn || 0) + '%', progS: Math.round(jobs.syn || 0) + ' %',
+        dist: COL.map((c, j) => ({ c, w: '25%', l: SEVN[j] })), ver: 'Dataset v' + st.ver + ' · ' + st.n.toLocaleString() + ' records'
+      };
+      big = [{ k: 'Scenario label', v: SEVN[lab], u: '' }, { k: 'f₁', v: f1s.toFixed(2), u: 'Hz' }, { k: 'δ', v: ds.toFixed(1), u: 'mm' }, { k: 'Records', v: st.n.toLocaleString(), u: '' }];
+    }
+
+    if (isAna) {
+      const a = this.state.ana;
+      inNote = 'Per girder · outer';
+      segs = [this.seg('Live load', [{ v: '70R', l: '70R' }, { v: 'Class A', l: 'Class A' }, { v: '70R + A', l: '70R + A' }], a.load, v => this.setK('ana', 'load', v)), this.seg('Distribution', ['Courbon', 'Grillage'], a.dist, v => this.setK('ana', 'dist', v))];
+      sliders = [
+        this.sl('Vehicle position x', a.a, 'm', 0, g.span, .1, 1, v => this.setK('ana', 'a', v)),
+        this.sl('Impact factor', a.IF, '', 1, 1.25, .01, 2, v => this.setK('ana', 'IF', v)),
+        this.sl('Crash barrier', a.barrier, 'kN/m', 10, 25, .5, 1, v => this.setK('ana', 'barrier', v)),
+        this.sl('Footpath live load', a.fp, 'kN/m²', 3, 6, .1, 1, v => this.setK('ana', 'fp', v))
+      ];
+      const ok = an.dLL <= an.lim;
+      out.an = Object.assign({}, an, {
+        running: jobs.ana != null, progW: (jobs.ana || 0) + '%', progS: Math.round(jobs.ana || 0) + ' %',
+        MtS: 'M_max ' + f0(an.Mt) + ' kN·m', run: () => this.job('ana'),
+        rows: R([['w dead (self + deck)', an.wSelf.toFixed(1) + ' kN/m'], ['w SIDL', an.wSidl.toFixed(1) + ' kN/m'], ['M dead', f0(an.Mdl) + ' kN·m'], ['M live (incl. IF)', f0(an.Mll) + ' kN·m'], ['V_max', f0(an.V) + ' kN'], ['δ live', an.dLL.toFixed(1) + ' mm']]),
+        check: { k: 'δ live ≤ L/800', v: an.dLL.toFixed(1) + ' ≤ ' + an.lim.toFixed(1) + ' mm', col: ok ? '#4fae7f' : '#e0442f' }
+      });
+      big = [{ k: 'M_max', v: f0(an.Mt), u: 'kN·m' }, { k: 'V_max', v: f0(an.V), u: 'kN' }, { k: 'δ live', v: an.dLL.toFixed(1), u: 'mm' }, { k: 'δ / limit', v: (an.dLL / an.lim).toFixed(2), u: '' }];
+    }
+
+    if (isPre) {
+      const p = this.state.pre, L = g.span, D = g.depth;
+      inNote = 'Losses at mid-span';
+      segs = [this.seg('Cables per girder', [2, 3, 4], p.n, v => this.setK('pre', 'n', v))];
+      sliders = [
+        this.sl('Strands per cable', p.strands, '× 12.7 mm', 12, 22, 1, 0, v => this.setK('pre', 'strands', v)),
+        this.sl('Jacking stress', p.jack * 100, '% f_pu', 70, 80, .5, 1, v => this.setK('pre', 'jack', v / 100)),
+        this.sl('Friction μ', p.mu, '', .12, .25, .005, 3, v => this.setK('pre', 'mu', v)),
+        this.sl('Wobble K', p.K * 1000, '× 10⁻³/m', 1.5, 3, .1, 1, v => this.setK('pre', 'K', v / 1000)),
+        this.sl('Anchorage slip', p.slip, 'mm', 4, 8, .5, 1, v => this.setK('pre', 'slip', v))
+      ];
+      const { P0, L1, L2, L3, L4, L5, L6, tot, Pe, sT, sS, camber } = this.calcPre(g, sec, p, an);
+      const ky = 78 / D, X = x => (10 + x / L * 280).toFixed(1), Y = y => (16 + (D - y) * ky).toFixed(1);
+      const ends = [.27, .52, .76, .64], mids = [.08, .08, .18, .14], cab = [];
+      for (let c = 0; c < p.n; c++) { let q = ''; for (let j = 0; j <= 40; j++) { const s = j / 40, yv = (mids[c] + (ends[c] - mids[c]) * (2 * s - 1) ** 2) * D; q += (j ? 'L' : 'M') + X(s * L) + ' ' + Y(yv); } cab.push({ d: q }); }
+      const steps = [['P₀', P0, 0], ['Fric.', P0 * L1 / 100, 1], ['Slip', P0 * L2 / 100, 1], ['E.S.', P0 * L3 / 100, 1], ['Creep', P0 * L4 / 100, 1], ['Shr.', P0 * L5 / 100, 1], ['Relax.', P0 * L6 / 100, 1], ['Pₑ', Pe, 0]];
+      let run = P0; const ys = v => v / P0 * 92;
+      const bars = steps.map(([k, v, loss], j) => {
+        let top, hgt;
+        if (!loss) { hgt = ys(v); top = 104 - hgt; } else { top = 104 - ys(run); hgt = ys(v); run -= v; }
+        return { x: (6 + j * 36.5).toFixed(1), y: top.toFixed(1), h: Math.max(1, hgt).toFixed(1), fill: loss ? 'var(--faint)' : 'var(--ink)', k, lx: (6 + j * 36.5 + 13).toFixed(1) };
+      });
+      out.pr = {
+        cab, bars, girderY: Y(D), girderB: Y(0),
+        rows: R([['P₀ (jacking)', f0(P0) + ' kN'], ['Friction', L1.toFixed(1) + ' %'], ['Anchorage slip', L2.toFixed(1) + ' %'], ['Elastic shortening', L3.toFixed(1) + ' %'], ['Creep + shrinkage', (L4 + L5).toFixed(1) + ' %'], ['Relaxation', L6.toFixed(1) + ' %'], ['Pₑ (effective)', f0(Pe) + ' kN'], ['σ_bot transfer', sT.toFixed(1) + ' MPa'], ['σ_bot service', sS.toFixed(1) + ' MPa']]),
+        checks: [{ k: 'Pₑ < P₀', v: (Pe / P0).toFixed(3), col: '#4fae7f' }, { k: 'Service bottom fibre in compression', v: sS.toFixed(1) + ' MPa', col: sS >= 0 ? '#4fae7f' : '#e6893c' }]
+      };
+      big = [{ k: 'P₀', v: f0(P0), u: 'kN' }, { k: 'Total loss', v: tot.toFixed(1), u: '%' }, { k: 'Pₑ', v: f0(Pe), u: 'kN' }, { k: 'Net camber', v: camber.toFixed(0), u: 'mm' }];
+    }
+
+    if (isBase) {
+      const b = this.state.base, L = g.span;
+      inNote = 'Healthy model';
+      segs = [this.seg('Engine', [{ v: 'OpenSeesPy', l: 'OpenSeesPy' }, { v: 'Analytical', l: 'Analytical' }], b.engine, v => this.setK('base', 'engine', v)), this.seg('Mass', [{ v: 'incl', l: 'Incl. SIDL' }, { v: 'struct', l: 'Structure only' }], b.mass, v => this.setK('base', 'mass', v))];
+      sliders = [this.sl('Concrete modulus E_c', b.Ec, 'GPa', 30, 38, .1, 1, v => this.setK('base', 'Ec', v)), this.sl('Damping ζ', b.zeta, '%', 1, 5, .1, 1, v => this.setK('base', 'zeta', v))];
+      const { m, EI, f1 } = this.calcF1(g, sec, b, an);
+      const ratios = b.engine === 'Analytical' ? [1, 4, 9] : [1, 1.826, 2.62];
+      const fs = ratios.map(r => f1 * r);
+      const modes = [1, 2, 3].map((n, j) => { let q = ''; for (let i = 0; i <= 60; i++) { const x = i / 60; q += (i ? 'L' : 'M') + (x * 300).toFixed(1) + ' ' + (22 - 15 * Math.sin(n * Math.PI * x)).toFixed(1); } return { d: q, k: 'Mode ' + n, f: fs[j].toFixed(2) + ' Hz' }; });
+      out.bs = {
+        modes, running: jobs.base != null, progW: (jobs.base || 0) + '%', progS: Math.round(jobs.base || 0) + ' %',
+        ver: 'v' + b.ver, establish: () => { if (this.state.jobs.base == null) this.job('base', () => this.setK('base', 'ver', this.state.base.ver + 1)); },
+        rows: R([['Mass per girder', f0(m) + ' kg/m'], ['EI (composite)', (EI / 1e9).toFixed(1) + ' GN·m²'], ['δ live (reference)', an.dLL.toFixed(1) + ' mm'], ['UPV nominal', '4.30 km/s'], ['Rebound nominal', '38'], ['Damping', b.zeta.toFixed(1) + ' %']]),
+        note: b.engine === 'Analytical' ? 'Euler–Bernoulli simply supported beam: modes follow 1 : 4 : 9.' : 'Sample FE result. The backend replaces these with OpenSeesPy eigen analysis.'
+      };
+      big = fs.map((f, j) => ({ k: 'f' + '₁₂₃'[j], v: f.toFixed(2), u: 'Hz' })).concat([{ k: 'Baseline', v: 'v' + b.ver, u: '' }]);
+    }
+
+    if (isConfig) {
+      inNote = '3D rebuilds live';
+      segs = [this.seg('Span', [30, 33, 36].map(v => ({ v, l: v + ' m' })), g.span, v => this.setG('span', v)), this.seg('Girders', [4, 5, 6], g.nG, v => this.setG('nG', v))];
+      const webMin = 0.2, sd = g.span / g.depth;
+      sliders = [
+        this.sl('Girder spacing', g.sp, 'm', 2.6, 3.6, .05, 3, v => this.setG('sp', v)),
+        this.sl('Overall depth', g.depth, 'm', 1.2, 2.2, .01, 3, v => this.setG('depth', v), sd < 15 || sd > 25 ? 'Span/depth ' + sd.toFixed(1) + ' outside 15–25 guidance' : ''),
+        this.sl('Web thickness', g.web, 'm', .16, .4, .01, 3, v => this.setG('web', v), g.web < webMin ? 'Below duct 90 mm + 2 × 55 mm cover' : ''),
+        this.sl('Top flange width', g.tfw, 'm', .8, 1.4, .01, 3, v => this.setG('tfw', v)),
+        this.sl('Top flange thickness', g.tft, 'm', .12, .28, .01, 3, v => this.setG('tft', v)),
+        this.sl('Bottom flange width', g.bfw, 'm', .5, 1, .01, 3, v => this.setG('bfw', v)),
+        this.sl('Bottom flange thickness', g.bft, 'm', .15, .35, .01, 3, v => this.setG('bft', v)),
+        this.sl('Deck slab', g.slab, 'm', .18, .3, .01, 3, v => this.setG('slab', v))
+      ];
+      big = [{ k: 'Area (composite)', v: sec.At.toFixed(3), u: 'm²' }, { k: 'Ixx', v: sec.I.toFixed(3), u: 'm⁴' }, { k: 'Centroid y_b', v: sec.yb.toFixed(3), u: 'm' }, { k: 'Z_bot', v: sec.Zb.toFixed(3), u: 'm³' }];
+      out.secRows = [['Girder area', sec.A.toFixed(3) + ' m²'], ['Composite area', sec.At.toFixed(3) + ' m²'], ['Overall height', sec.H.toFixed(3) + ' m'], ['Ixx (composite)', sec.I.toFixed(4) + ' m⁴'], ['Z_top', sec.Zt.toFixed(3) + ' m³'], ['Z_bot', sec.Zb.toFixed(3) + ' m³']].map(([k, v]) => ({ k, v }));
+      out.checks = [
+        { k: 'Span / depth', v: sd.toFixed(1), col: sd >= 15 && sd <= 25 ? '#4fae7f' : '#e0442f' },
+        { k: 'Web ≥ duct + cover', v: (g.web * 1000).toFixed(0) + ' ≥ 200 mm', col: g.web >= webMin ? '#4fae7f' : '#e0442f' }
+      ];
+      const k = Math.min(250 / g.sp, 150 / sec.H), cx = 150, by = 180, X = x => +(cx + x * k).toFixed(1), Y = y => +(by - y * k).toFixed(1);
+      const top = Y(sec.H), dx = +(cx + g.sp * k / 2 + 12).toFixed(1);
+      out.xs = {
+        pts: sec.pts.map(([x, y]) => X(x) + ',' + Y(y)).join(' '),
+        slab: { x: X(-g.sp / 2), y: top, w: +(g.sp * k).toFixed(1), h: +(g.slab * k).toFixed(1) },
+        yb: Y(sec.yb), ybT: Y(sec.yb) - 4, ybS: sec.yb.toFixed(3), cx0: X(-g.sp / 2), cx1: X(g.sp / 2),
+        dx: Math.min(dx, 268), dx0: Math.min(dx, 268) - 4, dx1: Math.min(dx, 268) + 4, dxT: Math.min(dx, 268) - 34, top, bot: by, mid: +((top + by) / 2).toFixed(1), hS: sec.H.toFixed(3),
+        bf0: X(-g.bfw / 2), bf1: X(g.bfw / 2), bfS: (g.bfw * 1000).toFixed(0), spT: Math.max(12, top - 6), spS: 'b_eff ' + g.sp.toFixed(3),
+        twX: X(g.web / 2) + 6, twS: 't_w ' + (g.web * 1000).toFixed(0)
+      };
+    }
+
+    if (isMon) {
+      const m = this.state.mon;
+      inNote = 'Signal is synthetic';
+      segs = [this.seg('Sampling', [100, 200, 500].map(v => ({ v, l: v + ' Hz' })), m.fs, v => this.setMon('fs', v)), this.seg('Excitation', ['Ambient', 'Impact', 'Vehicle'], m.ex, v => this.setMon('ex', v))];
+      sliders = [this.sl('Accelerometers', m.sensors, '', 4, 12, 1, 0, v => this.setMon('sensors', v)), this.sl('Duration', m.dur, 's', 60, 1800, 30, 0, v => this.setMon('dur', v))];
+      const fM = [3.12, 5.71, 8.22], fB = [3.21, 5.86, 8.41], amp = [1, .45, .25];
+      const sig = t => {
+        let v = 0; for (let j = 0; j < 3; j++) v += amp[j] * Math.sin(2 * Math.PI * fM[j] * t + j * 1.3);
+        let env = 1; if (m.ex === 'Impact') env = 2.2 * Math.exp(-(t % 4) * 1.2); else if (m.ex === 'Vehicle') env = .5 + 1.2 * Math.exp(-((((t % 6) - 3) / 1.2) ** 2));
+        const n = (Math.sin(t * 91.7) * Math.sin(t * 53.3 + 1) + Math.sin(t * 137.1)) * .25;
+        return (v * env + n) * .018;
+      };
+      const t0 = this.state.tick * .07, N = 240; let p = '', sum = 0, mx = 0;
+      for (let j = 0; j < N; j++) { const v = sig(t0 + j / N * 4); sum += v * v; mx = Math.max(mx, Math.abs(v)); p += (j ? 'L' : 'M') + (j / (N - 1) * 300).toFixed(1) + ' ' + Math.max(2, Math.min(94, 48 - v / .08 * 46)).toFixed(1); }
+      const spec = fs => f => { let a = .03; for (let j = 0; j < 3; j++) a += amp[j] / (1 + ((f - fs[j]) / .14) ** 2); return a; };
+      const path = fn => { let q = ''; for (let j = 0; j <= 200; j++) { const f = j / 200 * 12; q += (j ? 'L' : 'M') + (j / 200 * 300).toFixed(1) + ' ' + (104 - fn(f) / 1.05 * 86).toFixed(1); } return q; };
+      const sm = spec(fM), fb = this.calcF1(g, sec, this.state.base, an).f1, df1 = ((3.12 - fb) / fb * 100).toFixed(1).replace('-', '−');
+      out.mon = {
+        at: p, fm: path(sm), fb: path(spec(fB)),
+        peaks: fM.map((f, j) => ({ x: +(f / 12 * 300).toFixed(1), y: +(104 - sm(f) / 1.05 * 86 - 6).toFixed(1), t: 'f' + '₁₂₃'[j] + ' ' + f.toFixed(2) })),
+        rows: [['Baseline f₁', fb.toFixed(2) + ' Hz'], ['Δf₁ vs baseline', df1 + ' %'], ['Records', Math.round(m.dur * m.fs).toLocaleString() + ' samples'], ['Modal ID', 'FDD + SSI']].map(([k, v]) => ({ k, v }))
+      };
+      const rms = Math.sqrt(sum / N);
+      big = [{ k: 'Measured f₁', v: '3.12', u: 'Hz' }, { k: 'a_RMS', v: rms.toFixed(3), u: 'g' }, { k: 'a_max', v: mx.toFixed(3), u: 'g' }, { k: 'Sensors', v: String(m.sensors), u: '' }];
+    }
+
+    if (isML) {
+      const m = this.state.ml, iso = m.model === 'IsoForest';
+      inNote = 'Async job';
+      segs = [this.seg('Model', [{ v: 'Random Forest', l: 'RF' }, { v: 'XGBoost', l: 'XGBoost' }, { v: 'IsoForest', l: 'IsoForest' }], m.model, v => this.setML('model', v))];
+      sliders = [this.sl('Train split', m.split * 100, '%', 60, 90, 5, 0, v => this.setML('split', v / 100)), this.sl(iso ? 'Estimators' : 'Trees', m.trees, '', 50, 500, 10, 0, v => this.setML('trees', v))];
+      predSliders = [this.sl('Δf₁', m.df, '%', -15, 0, .1, 1, v => this.setML('df', v)), this.sl('δ_max', m.dmax, 'mm', 15, 35, .1, 1, v => this.setML('dmax', v)), this.sl('UPV', m.upv, 'km/s', 2.8, 4.8, .01, 2, v => this.setML('upv', v))];
+      const sc = Math.max(0, Math.min(.999, .45 * (-m.df / 15) + .35 * ((m.dmax - 18) / 14) + .2 * ((4.5 - m.upv) / 1.5)));
+      const names = ['Healthy', 'Minor', 'Deteriorated', 'Severe'], cols = ['#4fae7f', '#d9b443', '#e6893c', '#e0442f'];
+      const ci = Math.min(3, Math.floor(sc * 4)), conf = .55 + .4 * (1 - Math.abs((sc * 4) % 1 - .5) * 2);
+      const nTest = Math.round(2400 * (1 - m.split));
+      const base = iso ? [[221, 19], [14, 226]] : m.model === 'XGBoost' ? [[119, 1, 0, 0], [3, 111, 5, 1], [0, 4, 114, 2], [0, 0, 7, 113]] : [[118, 2, 0, 0], [4, 109, 6, 1], [0, 5, 112, 3], [0, 0, 7, 113]];
+      const labels = iso ? ['Normal', 'Anomaly'] : ['Healthy', 'Minor', 'Det.', 'Severe'];
+      const tot = base.flat().reduce((a, b) => a + b, 0), corr = base.reduce((a, r, j) => a + r[j], 0), acc = corr / tot;
+      const cm = base.map((r, j) => {
+        const rs = r.reduce((a, b) => a + b, 0);
+        return { k: labels[j], cells: r.map((v, c) => { const f = v / rs, diag = c === j; return { v: Math.round(v * nTest / 480), bg: diag ? 'color-mix(in oklab, var(--acc) ' + Math.round(20 + f * 70) + '%, transparent)' : f > 0 ? 'color-mix(in oklab, #e0442f ' + Math.round(10 + f * 120) + '%, transparent)' : 'var(--hover)', fg: 'var(--ink)' }; }) };
+      });
+      const imp = [['Δf₁', .24], ['δ_max', .17], ['f₂', .12], ['UPV', .11], ['a_RMS', .09], ['ε_max', .08], ['f₃', .07], ['Rebound', .05], ['Kurtosis', .04], ['a_max', .03]];
+      out.ml = {
+        model: m.model, training: m.prog != null, progS: Math.round(m.prog || 0) + ' %', progW: (m.prog || 0) + '%',
+        pred: iso ? (sc > .45 ? 'Anomaly' : 'Normal') : names[ci], predCol: iso ? (sc > .45 ? '#e0442f' : '#4fae7f') : cols[ci], confS: iso ? 'score ' + sc.toFixed(2) : conf.toFixed(2),
+        nTest, cm, cmCols: '52px repeat(' + labels.length + ',minmax(0,1fr))',
+        imp: imp.map(([k, v]) => ({ k, v: v.toFixed(2), w: (v / .24 * 100).toFixed(0) + '%' }))
+      };
+      big = [{ k: 'Prediction', v: out.ml.pred, u: '' }, { k: iso ? 'Anomaly score' : 'Confidence', v: iso ? sc.toFixed(2) : conf.toFixed(2), u: '' }, { k: iso ? 'Detection' : 'Accuracy', v: (acc * 100).toFixed(1), u: '%' }, { k: 'Test records', v: String(nTest), u: '' }];
+      out.trainLabel = m.prog != null ? 'Training…' : 'Retrain ' + (iso ? 'IsoForest' : m.model);
+      out.train = () => { if (this.state.ml.prog == null) this.train(); };
+    }
+
+    const tabs = [['results', 'Results'], ['inputs', 'Inputs']].map(([k, l]) => ({ label: l, go: () => this.setState({ tab: k }), bg: this.state.tab === k ? 'var(--ink)' : 'transparent', fg: this.state.tab === k ? 'var(--inv)' : 'var(--ink)' }));
+
+    const wz = this.state.wz, setW = (k, v) => this.setK('wz', k, v), showW = this.state.welcome != null ? this.state.welcome : this.props.welcome !== false;
+    const wide = this.state.w >= 900;
+    out.wel = {
+      show: showW, dir: wide ? 'row' : 'column', pad: wide ? '96px 56px 40px' : '84px 16px 16px', colW: wide ? 'minmax(0,1fr)' : 'auto',
+      fields: [['Project name', 'name', 'NH-16 Mahananda Bridge'], ['Student name', 'student', 'Your name'], ['Roll no.', 'roll', 'e.g. 21CE10001']].map(([k, f, ph]) => ({ k, v: wz[f], ph, on: e => setW(f, e.target.value) })),
+      spans: [30, 33, 36].map(v => ({ label: v + ' m', go: () => setW('span', v), bg: wz.span === v ? 'var(--ink)' : 'transparent', fg: wz.span === v ? 'var(--inv)' : 'var(--ink)' })),
+      grades: ['M40', 'M45', 'M50'].map(v => ({ label: v, go: () => setW('grade', v), bg: wz.grade === v ? 'var(--ink)' : 'transparent', fg: wz.grade === v ? 'var(--inv)' : 'var(--ink)' })),
+      depth: (wz.span / 20).toFixed(3), recent: [['NH-16 Mahananda Bridge', '33 m · edited 4 min ago'], ['Kosi canal crossing', '30 m · 3 days ago'], ['Studio sample 36 m', '36 m · template']].map(([l, m]) => ({ l, m, go: () => this.setState({ welcome: false }) })),
+      create: () => this.setState(s => ({ welcome: false, i: 0, replay: s.replay + 1, g: Object.assign({}, s.g, { span: s.wz.span, depth: Math.round(s.wz.span / 20 * 100) / 100 }) })),
+      skip: () => this.setState({ welcome: false }),
+      bg: wide ? 'linear-gradient(90deg,var(--bg) 0%,var(--bg) 42%,color-mix(in oklab,var(--bg) 40%,transparent) 70%,transparent 100%)' : 'color-mix(in oklab,var(--bg) 92%,transparent)'
+    };
+    if (showW) Object.assign(L, { showInputs: false, showResults: false, strip: false, tabs: false, chrome: 'none' }); else L.chrome = 'flex';
+    out.twinStage = showW ? 'welcome' : id;
+    return Object.assign(out, {
+      theme: this.theme(), stages, cur, L, big, segs, sliders, predSliders, inNote, tabs,
+      openWelcome: () => this.setState({ welcome: true }),
+      geomStr: JSON.stringify(g), projLine: g.span + ' m · PSC I-girder · ' + g.nG + ' × G',
+      pausedStr: String(this.state.paused), pauseLabel: this.state.paused ? 'Play' : 'Pause',
+      replay: this.state.replay, themeLabel: this.theme() === 'light' ? 'Dark' : 'Light',
+      togglePause: () => this.setState(p => ({ paused: !p.paused })),
+      doReplay: () => this.setState(p => ({ replay: p.replay + 1 })),
+      toggleTheme: () => this.toggleTheme()
+    });
+  }
+}
+</script>
+</body>
+</html>

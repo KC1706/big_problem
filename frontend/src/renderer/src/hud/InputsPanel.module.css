@@ -1,0 +1,210 @@
+/* Ported from the Studio inputs panel (markup lines 94–171). Hover states use real
+   CSS :hover (the design's style-hover pseudo). Positioning is applied inline. */
+.wrap {
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+.panel {
+  pointer-events: auto;
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  border: 1px solid var(--glassB);
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: var(--shadow);
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+.panel::-webkit-scrollbar { display: none; }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+.note {
+  font-size: 11px;
+  color: var(--mut);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.groupLabel {
+  font-size: 12px;
+  color: var(--mut);
+}
+
+/* ---- pickList ---- */
+.pickItems {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pickItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.pickItem:hover { background: var(--hover); }
+.pickDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: none;
+}
+.pickLabel {
+  flex: 1;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pickN {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+}
+
+/* ---- chipGroups ---- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ---- segmented ---- */
+.seg {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--hover);
+  border: 1px solid var(--line);
+}
+.segBtn {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- sliders ---- */
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sliderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.sliderLabel {
+  font-size: 12px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sliderVal {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.sliderUnit {
+  font-size: 11px;
+  color: var(--mut);
+}
+.range {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--acc);
+  cursor: pointer;
+}
+.sliderErr {
+  font-size: 11px;
+  color: #e0442f;
+}
+
+/* ---- textarea (report intro) ---- */
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+  color: var(--ink);
+  font: 13px/1.5 var(--font-sans);
+  resize: vertical;
+}
+
+/* ---- ML live-predict section ---- */
+.mlSection {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.mlEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mut);
+}
+
+/* ---- inAction ---- */
+.inAction {
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--inv);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 16px;
+}

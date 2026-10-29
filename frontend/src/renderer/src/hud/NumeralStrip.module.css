@@ -1,0 +1,76 @@
+/* Ported from the Studio bottom numeral strip (markup lines 748–764). Shown when
+   L.strip (non-ws stage, not narrow) — e.g. the dashboard. */
+.wrap {
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.hint {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mut);
+}
+.hintText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.hintKeys {
+  flex: none;
+}
+.grid {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  border: 1px solid var(--glassB);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-left: 1px solid var(--line);
+  margin-left: -1px;
+  min-width: 0;
+}
+.tileKey {
+  font-size: 11px;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tileVal {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tileNum {
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.tileUnit {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--mut);
+}
