@@ -49,22 +49,23 @@ def dead_load_moment_shear(w_kN_m: float, span_m: float) -> Dict[str, float]:
 
 def live_load(
     kind: str, span_m: float, n_girders: int = 5, lanes: int = 3,
+    dist_factor: float = None,
 ) -> LiveLoadResult:
     """Representative per-girder live-load effect.
 
-    Uses a lumped lane load distributed across girders by a crude lateral
-    distribution factor (lanes/n_girders). Intended as an order-of-magnitude
-    design input for the study, not a code-accurate grillage distribution.
+    Uses a lumped lane load distributed across girders by a lateral distribution
+    factor. `dist_factor` overrides the crude lanes/n_girders default (e.g. a
+    Courbon/Grillage factor). Order-of-magnitude design input for the study.
     """
-    if kind == "70R":
-        total_kN = 1000.0          # 70R wheeled total (research value)
-        imp = impact_factor_70r(span_m)
-    else:  # Class A
+    if kind == "ClassA":
         total_kN = 554.0           # Class A train ~55.4 t (research value)
         imp = impact_factor_class_a(span_m)
-    # distribute to one girder
-    dist_factor = min(1.0, lanes / max(n_girders, 1))
-    per_girder = total_kN * dist_factor * (1.0 + imp)
+    else:  # 70R or 70R+A -> governed by 70R
+        total_kN = 1000.0 if kind == "70R" else 1180.0  # 70R, or 70R+A superposed
+        imp = impact_factor_70r(span_m)
+    # lateral distribution to the outer girder
+    df = dist_factor if dist_factor is not None else min(1.0, lanes / max(n_girders, 1))
+    per_girder = total_kN * df * (1.0 + imp)
     # represent as equivalent UDL over the span for simply-supported effects
     udl = per_girder / span_m
     M = udl * span_m ** 2 / 8.0

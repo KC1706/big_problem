@@ -13,7 +13,8 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
 import numpy as np
-from sklearn.ensemble import IsolationForest, RandomForestClassifier
+from sklearn.ensemble import (GradientBoostingClassifier, IsolationForest,
+                              RandomForestClassifier)
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -42,13 +43,19 @@ def train_classifier(
     n_estimators: int = 300,
     test_size: float = 0.25,
     seed: int = 0,
+    kind: str = "rf",
 ) -> Dict[str, object]:
     X = _matrix(rows, feature_order)
     y = np.asarray(labels)
     Xtr, Xte, ytr, yte = train_test_split(
         X, y, test_size=test_size, random_state=seed, stratify=y
     )
-    clf = RandomForestClassifier(n_estimators=n_estimators, random_state=seed)
+    if kind == "gb":  # gradient boosting (the "XGBoost" option, no extra dependency)
+        clf = GradientBoostingClassifier(n_estimators=n_estimators, random_state=seed)
+        model_kind = "GradientBoosting"
+    else:
+        clf = RandomForestClassifier(n_estimators=n_estimators, random_state=seed)
+        model_kind = "RandomForest"
     clf.fit(Xtr, ytr)
     acc = float(clf.score(Xte, yte))
     classes = list(clf.classes_)
@@ -56,7 +63,7 @@ def train_classifier(
     importance = {f: float(w) for f, w in zip(feature_order, clf.feature_importances_)}
     importance = dict(sorted(importance.items(), key=lambda kv: -kv[1]))
     result = TrainResult(
-        model_kind="RandomForest", accuracy=acc, classes=classes,
+        model_kind=model_kind, accuracy=acc, classes=classes,
         confusion=cm, feature_importance=importance,
         n_train=len(ytr), n_test=len(yte),
     )
