@@ -1,4 +1,5 @@
-import type { Ana, Base, Big, Geom, Mon, Pre, Ins, Ndt, Syn, Feat, Ml, Mnt, Rep } from '@/state/store'
+import type { Ana, Base, Big, Row, Geom, Mon, Pre, Ins, Ndt, Syn, Feat, Ml, Mnt, Rep, MlReal, Dataset } from '@/state/store'
+import { STAGES } from '@/state/store'
 import { section, calcAna, calcF1, calcPre } from '@/physics/physics'
 import { COL, SEVN, SUB, FEATURES, COMPS, SEC, SEC_PG, NDT_TESTS } from './data'
 
@@ -103,8 +104,11 @@ export interface RepRes {
 }
 
 export interface NoneRes { kind: 'none'; big: Big[] }
+/** Dashboard: a live cross-stage aggregate (span + real f₁/Pₑ·P₀/condition).
+ *  `twin` carries the real values for the 3D callouts (populated by verify.ts). */
+export interface DashRes { kind: 'dashboard'; big: Big[]; rows: Row[]; twin?: Record<string, string> }
 export type ResultsModel =
-  | ConfigRes | AnaRes | BaseRes | MonRes | PreRes | InsRes | NdtRes | SynRes | FeatRes | MlRes | MaintRes | RepRes | NoneRes
+  | ConfigRes | AnaRes | BaseRes | MonRes | PreRes | InsRes | NdtRes | SynRes | FeatRes | MlRes | MaintRes | RepRes | DashRes | NoneRes
 
 export interface ResultDeps {
   g: Geom; ana: Ana; base: Base; mon: Mon
@@ -112,13 +116,18 @@ export interface ResultDeps {
   tick: number
   jobs: Record<string, number | null>
   job: (key: string, done?: () => void) => void
+  bump: (key: string) => void
   setBase: <K extends keyof Base>(k: K, v: Base[K]) => void
   setK: (slice: 'pre' | 'ins' | 'ndt' | 'syn' | 'feat' | 'ml' | 'mnt' | 'rep' | 'wz', k: string, v: unknown) => void
+  mlReal: MlReal | null
+  dataset: Dataset | null
+  seen: Record<number, boolean>
+  lastSeen: number
   staticBig: Big[]
 }
 
-/** ML condition score — shared by ml + maintenance (port of renderVals line 972). */
-function mlScoreOf(ml: Ml) {
+/** ML condition score — shared by ml + maintenance + dashboard (port of renderVals line 972). */
+export function mlScoreOf(ml: Ml) {
   const sc = Math.max(0, Math.min(0.999, 0.45 * (-ml.df / 15) + 0.35 * ((ml.dmax - 18) / 14) + 0.2 * ((4.5 - ml.upv) / 1.5)))
   const cls = Math.min(3, Math.floor(sc * 4))
   const conf = 0.55 + 0.4 * (1 - Math.abs(((sc * 4) % 1) - 0.5) * 2)
@@ -172,7 +181,7 @@ export function buildResults(id: string, d: ResultDeps): ResultsModel {
         ['V_max', f0(an.V) + ' kN'], ['δ live', an.dLL.toFixed(1) + ' mm'],
       ]),
       check: { k: 'δ live ≤ L/800', v: an.dLL.toFixed(1) + ' ≤ ' + an.lim.toFixed(1) + ' mm', col: ok ? GREEN : RED },
-      running: d.jobs.ana != null, progW: (d.jobs.ana || 0) + '%', progS: Math.round(d.jobs.ana || 0) + ' %', run: () => d.job('ana'),
+      running: d.jobs.ana != null, progW: (d.jobs.ana || 0) + '%', progS: Math.round(d.jobs.ana || 0) + ' %', run: () => { d.bump('ana'); d.job('ana') },
     }
   }
 
@@ -191,7 +200,7 @@ export function buildResults(id: string, d: ResultDeps): ResultsModel {
       big: (fs.map((f, j) => ['f' + SUB[j], f.toFixed(2), 'Hz'] as Big)).concat([['Baseline', 'v' + b.ver, '']]),
       modes, ver: 'v' + b.ver,
       running: d.jobs.base != null, progW: (d.jobs.base || 0) + '%', progS: Math.round(d.jobs.base || 0) + ' %',
-      establish: () => { if (d.jobs.base == null) d.job('base', () => d.setBase('ver', b.ver + 1)) },
+      establish: () => { if (d.jobs.base == null) { d.bump('base'); d.job('base', () => d.setBase('ver', b.ver + 1)) } },
       rows: R([
         ['Mass per girder', f0(m) + ' kg/m'], ['EI (composite)', (EI / 1e9).toFixed(1) + ' GN·m²'],
         ['δ live (reference)', an.dLL.toFixed(1) + ' mm'], ['UPV nominal', '4.30 km/s'], ['Rebound nominal', '38'], ['Damping', b.zeta.toFixed(1) + ' %'],
@@ -379,7 +388,12 @@ export function buildResults(id: string, d: ResultDeps): ResultsModel {
 
   if (id === 'maintenance') {
     const st = d.mnt
-    const { sc, cls, conf } = mlScoreOf(d.ml)
+    // Prefer the REAL /ml/pipeline outcome (persisted when the ML stage ran); fall
+    // back to the slider heuristic only before the classifier has ever been run.
+    const r = d.mlReal
+    const { sc, cls, conf } = r
+      ? { sc: r.iso ? r.anom : r.cls / 3, cls: r.cls, conf: r.conf }
+      : mlScoreOf(d.ml)
     const inv = cls >= st.trig || sc > st.anom, repair = inv && cls >= 3, prev = inv && !repair
     const months = Math.max(1, (({ Low: 3, Moderate: 6, High: 12 } as Record<string, number>)[st.risk] / (cls >= 2 ? 1 : 0.5)) / (cls >= 3 ? 2 : 1))
     const on: Record<string, boolean> = { a: true, rm: !inv, di: inv, pm: prev, rp: repair, ri: true }
@@ -411,6 +425,34 @@ export function buildResults(id: string, d: ResultDeps): ResultsModel {
       thumbs: toc.slice(0, 4).map((t) => ({ n: t.n, l: t.l, fig: st.figs === 'yes' })),
       big: [['Sections', String(toc.length), ''], ['Pages', String(pg - 1), ''], ['Format', st.fmt, ''], ['Status', st.ver ? 'Compiled' : 'Draft', '']],
     }
+  }
+
+  if (id === 'dashboard') {
+    // Live cross-stage aggregate. Span/engine are exact; f₁ and Pₑ/P₀ are the
+    // local-physics preview (real approximation) that verify.ts overlays with the
+    // backend-true values; condition is the real persisted ML class (mlReal) or,
+    // before the classifier has run, the live evidence heuristic.
+    const an = calcAna(g, sec, d.ana)
+    const { f1 } = calcF1(g, sec, d.base, an)
+    const pr = calcPre(g, sec, d.pre, an)
+    const ratio = pr.P0 > 0 ? pr.Pe / pr.P0 : 0
+    const r = d.mlReal
+    const { cls, conf } = r ? { cls: r.cls, conf: r.conf } : mlScoreOf(d.ml)
+    const cond = r ? r.pred : SEVN[cls]
+    const wsSeen = Object.keys(d.seen).map(Number).filter((k) => k >= 1 && k <= 12 && d.seen[k]).length
+    const big: Big[] = [
+      ['Span', g.span.toFixed(1), 'm'],
+      ['Baseline f₁', f1.toFixed(2), 'Hz'],
+      ['Pₑ / P₀', ratio.toFixed(3), ''],
+      ['Condition · ' + conf.toFixed(2), cond, ''],
+    ]
+    const rows: Row[] = [
+      ['Stages complete', wsSeen + ' / 12'],
+      ['Last run', STAGES[d.lastSeen]?.name ?? '—'],
+      ['Engine', d.base.engine],
+      ['Span', g.span.toFixed(1) + ' m'],
+    ]
+    return { kind: 'dashboard', big, rows }
   }
 
   return { kind: 'none', big: d.staticBig }
