@@ -20,5 +20,6 @@ def build_section(cfg: SectionConfig) -> CompositeSection:
     )
     return CompositeSection(
         girder=g, deck_thickness=cfg.deck_thickness,
-        girder_spacing=cfg.girder_spacing, span=cfg.span, materials=mats,
+        girder_spacing=cfg.girder_spacing, span=cfg.span,
+        n_girders=cfg.n_girders, materials=mats,
     )
