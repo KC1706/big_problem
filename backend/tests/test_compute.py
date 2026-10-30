@@ -80,6 +80,23 @@ def test_fft_recovers_f1():
     assert any(abs(p - f1) < 0.3 for p in peaks)       # f1 present in spectrum
 
 
+def test_grillage_modes_are_closely_spaced():
+    """E3: the OpenSeesPy grillage must break the 1:4:9 beam ratio -- the first
+    modes come out closely spaced (bending/torsion/2nd bending), which is the whole
+    point of a multi-girder 3-D model vs a single beam."""
+    from app.compute.openseespy_engine import OpenSeesEngine
+    sec = section()
+    beam = AnalyticalEngine(sec).natural_frequencies(3)
+    assert abs(beam[1] / beam[0] - 4.0) < 0.05          # beam is 1:4:9
+    g = OpenSeesEngine(sec).natural_frequencies(3)
+    assert 2.0 < g[0] < 6.0                              # f1 in a sane range (Hz)
+    assert g[1] / g[0] < 4.0                             # NOT the beam ratio -> closely spaced
+    assert g[0] < g[1] <= g[2]                           # ordered
+    # damage lowers f1 (stiffness loss)
+    gd = OpenSeesEngine(sec).natural_frequencies(1, ei_factor=0.8)
+    assert gd[0] < g[0]
+
+
 def test_mesh_nodes_elements_and_modal_vectors():
     sec = section()
     eng = AnalyticalEngine(sec)

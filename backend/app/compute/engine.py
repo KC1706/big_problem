@@ -134,17 +134,20 @@ class AnalyticalEngine:
                 force[0] = 1.0
             else:
                 force = rng.standard_normal(n)
-            disp = np.zeros(n)
+            a_mode = np.zeros(n)
             vel = 0.0
             x_prev = 0.0
-            # explicit central-difference-ish integration of SDOF: x'' + 2 z wn x' + wn^2 x = F
-            for i in range(1, n):
-                acc = force[i - 1] - 2.0 * zeta * wn * vel - wn ** 2 * x_prev
+            # semi-implicit Euler integration of the SDOF: x'' + 2 z wn x' + wn^2 x = F.
+            # We record the pseudo-acceleration (wn^2 * x), proportional to the modal
+            # displacement: its spectrum shows a sharp resonance exactly at wn. Recording
+            # the raw x'' instead would inject the white-noise force term directly (a flat
+            # floor that buries the peak under a single rfft); numerically differentiating
+            # the displacement twice (the old path) amplifies integration drift + HF noise.
+            for i in range(n):
+                acc = force[i] - 2.0 * zeta * wn * vel - wn ** 2 * x_prev
                 vel += acc * dt
                 x_prev += vel * dt
-                disp[i] = x_prev
-            # acceleration contribution ~ second derivative; use wn^2 * disp scaled
-            a_mode = np.gradient(np.gradient(disp, dt), dt)
+                a_mode[i] = wn ** 2 * x_prev
             # normalise each mode to comparable energy, weight by mode shape
             if np.std(a_mode) > 0:
                 a_mode = a_mode / np.std(a_mode)
