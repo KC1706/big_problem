@@ -26,6 +26,7 @@ export default function StageRail() {
   const i = useStore((st) => st.i)
   const go = useStore((st) => st.go)
   const g = useStore((st) => st.g)
+  const projName = useStore((st) => st.wz.name)
   const L = useLayout()
 
   const projLine = `${g.span} m · PSC I-girder · ${g.nG} × G`
@@ -54,7 +55,7 @@ export default function StageRail() {
         {L.railHead && (
           <>
             <div className={s.head}>
-              <span className={s.projName}>NH-16 Mahananda Bridge</span>
+              <span className={s.projName}>{projName}</span>
               <span className={s.projSub}>{projLine}</span>
             </div>
             <div className={s.lifecycleRow}>

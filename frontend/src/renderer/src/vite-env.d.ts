@@ -18,6 +18,7 @@ interface BridgeTwinAttributes extends HTMLAttributes<HTMLElement> {
   paused?: string
   replay?: string
   geom?: string
+  data?: string
 }
 
 declare global {

@@ -105,11 +105,13 @@ def compute_prestress(
     creep_coeff: float = 1.6,     # ultimate creep coefficient (verify)
     shrinkage_strain: float = 2.0e-4,  # (verify vs IRC/EC2)
     relaxation_frac: float = 0.025,     # low-relaxation ~2.5% of initial (verify)
+    jack_fraction: float | None = None,  # jacking stress as fraction of fpk; None -> fp0
 ) -> PrestressResult:
     mats = materials or default_materials()
     tendon = mats.tendon
     Ap = profile.area(tendon.strand_area)
-    sigma_p0 = tendon.fp0                           # initial jacking stress (MPa)
+    # initial jacking stress (MPa): user fraction of fpk, else the code permissible fp0
+    sigma_p0 = jack_fraction * tendon.fpk if jack_fraction else tendon.fp0
     P0 = sigma_p0 * Ap / 1000.0                      # kN
 
     # --- friction + wobble (stress at mid-span relative to jack) ---

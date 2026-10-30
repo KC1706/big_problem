@@ -1,4 +1,7 @@
 import { create } from 'zustand'
+import { apiPost } from '@/api/client'
+import { gToSectionConfig } from '@/api/adapter'
+import type { SyntheticDatasetResponse } from '@/api/types'
 
 /** Theme ids match the design's `data-theme` values. */
 export type Theme = 'light' | 'dark'
@@ -195,6 +198,15 @@ export interface Mnt { trig: number; anom: number; risk: string }
 export interface Rep { on: number[]; fmt: string; figs: string; sel: number; intro: Record<number, string>; ver: number }
 export interface Wz { name: string; student: string; roll: string; span: number; grade: string }
 
+/** Real ML outcome persisted from the /ml/pipeline call so the Maintenance stage
+ *  (and any cross-stage view) can act on the ACTUAL classifier result instead of a
+ *  slider heuristic. `cls` = 0..3 severity index; iso stages carry the anomaly score. */
+export interface MlReal { pred: string; conf: number; anom: number; iso: boolean; cls: number }
+
+/** Summary of a generated synthetic dataset (the real rows live only transiently;
+ *  we keep the counts so the stage can show an honest "Records" figure). */
+export interface Dataset { n: number; conditions: string[]; perClass: Record<string, number> }
+
 export const DEFAULT_PRE: Pre = { n: 3, strands: 19, jack: 0.75, mu: 0.17, K: 0.002, slip: 6 }
 export const DEFAULT_INS: Ins = {
   sel: 'girders', defect: 'Cracking', sev: 1, ext: 0.5,
@@ -238,6 +250,13 @@ interface AppState {
   wz: Wz
   jobs: Record<string, number | null> // async job progress 0..100 or null
   tick: number // monitoring animation counter
+  twinData: string // JSON of the current stage's verified callout values, fed to <bridge-twin> (E4)
+  mlReal: MlReal | null // real /ml/pipeline outcome, persisted for the Maintenance stage
+  dataset: Dataset | null // summary of the last generated synthetic dataset
+  seen: Record<number, boolean> // stage indices the user has opened (drives the real "stages complete" count)
+  lastSeen: number // index of the most recently opened stage (drives "last run")
+  dashBig: Big[] // the dashboard's live aggregate numerals, published by ResultsPanel for the NumeralStrip to read (one backend call, not two)
+  recompute: Record<string, number> // per-stage nonce; bumping it forces the stage's backend call to re-run (the "Run/Establish/Retrain" buttons)
   go: (i: number) => void // design go(): wraps + resets tab to 'results'
   next: () => void
   prev: () => void
@@ -256,7 +275,14 @@ interface AppState {
   createProject: () => void
   skipWelcome: () => void
   job: (key: string, done?: () => void) => void
+  bump: (key: string) => void // force a stage's backend call to re-run
   bumpTick: () => void
+  setTwinData: (v: string) => void
+  setDashBig: (v: Big[]) => void
+  setMlReal: (v: MlReal | null) => void
+  genDataset: () => void // real: POST /synthetic/generate (preview_only:false) → store counts
+  exportJSON: () => void // download the full project (inputs + available results) as .json
+  importJSON: (obj: unknown) => void // hydrate the store from a previously exported project .json
 }
 
 type SliceName = 'pre' | 'ins' | 'ndt' | 'syn' | 'feat' | 'ml' | 'mnt' | 'rep' | 'wz'
@@ -287,10 +313,17 @@ export const useStore = create<AppState>((set, get) => ({
   wz: DEFAULT_WZ,
   jobs: {},
   tick: 0,
+  twinData: '{}',
+  mlReal: null,
+  dataset: null,
+  seen: { 0: true },
+  lastSeen: 0,
+  dashBig: [],
+  recompute: {},
   // go() wraps around and resets the tab, matching the design's go().
-  go: (i) => set({ i: ((i % N) + N) % N, tab: 'results' }),
-  next: () => set((s) => ({ i: (s.i + 1) % N, tab: 'results' })),
-  prev: () => set((s) => ({ i: (s.i - 1 + N) % N, tab: 'results' })),
+  go: (i) => set((s) => { const j = ((i % N) + N) % N; return { i: j, tab: 'results', seen: { ...s.seen, [j]: true }, lastSeen: j } }),
+  next: () => set((s) => { const j = (s.i + 1) % N; return { i: j, tab: 'results', seen: { ...s.seen, [j]: true }, lastSeen: j } }),
+  prev: () => set((s) => { const j = (s.i - 1 + N) % N; return { i: j, tab: 'results', seen: { ...s.seen, [j]: true }, lastSeen: j } }),
   setW: (w) => set((s) => (w === s.w ? s : { w })),
   setTab: (tab) => set({ tab }),
   openWelcome: () => set({ welcome: true }),
@@ -337,5 +370,89 @@ export const useStore = create<AppState>((set, get) => ({
       set((s) => ({ jobs: { ...s.jobs, [key]: Math.min(100, (s.jobs[key] ?? 0) + 3) } }))
     }, 50)
   },
+  bump: (key) => set((s) => ({ recompute: { ...s.recompute, [key]: (s.recompute[key] ?? 0) + 1 } })),
   bumpTick: () => set((s) => ({ tick: s.tick + 1 })),
+  setTwinData: (v) => set((s) => (v === s.twinData ? s : { twinData: v })),
+  setDashBig: (v) => set({ dashBig: v }),
+  setMlReal: (v) => set({ mlReal: v }),
+  // Generate the FULL labelled ML dataset on the real backend (not a fake counter).
+  // Drives the existing progress bar to ~90 % while the request runs, then stores the
+  // true record counts and bumps syn.ver (which the preview/charts react to).
+  genDataset: () => {
+    if (get().jobs.syn != null) return
+    set((s) => ({ jobs: { ...s.jobs, syn: 4 } }))
+    timers.synGen = setInterval(() => {
+      const p = get().jobs.syn
+      if (p == null) { clearInterval(timers.synGen); return }
+      if (p < 90) set((s) => ({ jobs: { ...s.jobs, syn: Math.min(90, (s.jobs.syn ?? 0) + 6) } }))
+    }, 120)
+    const s = get()
+    const body = {
+      section: gToSectionConfig(s.g),
+      mechanisms: Object.keys(s.syn.mech).filter((k) => s.syn.mech[k]),
+      location: s.syn.loc, extent_m: s.syn.ext, severity_pct: s.syn.sev,
+      noise_frac: s.syn.noise / 100, preview_only: false,
+      n_per_condition: Math.max(1, Math.round(s.syn.n / 4)),
+      engine: s.base.engine === 'OpenSeesPy' ? 'openseespy' : 'analytical',
+    }
+    apiPost<SyntheticDatasetResponse>('/synthetic/generate', body)
+      .then((res) => {
+        const perClass: Record<string, number> = {}
+        res.conditions.forEach((c) => { perClass[c] = res.labels.filter((l) => l === c).length })
+        set((st) => ({
+          dataset: { n: res.rows.length, conditions: res.conditions, perClass },
+          syn: { ...st.syn, ver: st.syn.ver + 1, n: res.rows.length },
+        }))
+      })
+      .catch(() => { /* offline/backend down: leave the live preview as-is */ })
+      .finally(() => { clearInterval(timers.synGen); set((st) => ({ jobs: { ...st.jobs, syn: null } })) })
+  },
+  // Offline, client-side project export: a .json of every input slice plus the
+  // computed results we actually hold (real ML outcome + dataset summary).
+  exportJSON: () => {
+    const s = get()
+    const payload = {
+      meta: {
+        app: 'BridgeLife Studio',
+        exported_at: new Date().toISOString(),
+        project: s.wz.name,
+        note: 'Project configuration + available computed results. Re-open the app and load these inputs to reproduce every stage.',
+      },
+      inputs: {
+        geometry: s.g, analysis: s.ana, baseline: s.base, monitoring: s.mon,
+        prestress: s.pre, inspection: s.ins, ndt: s.ndt, synthetic: s.syn,
+        features: s.feat, ml: s.ml, maintenance: s.mnt, report: s.rep, project: s.wz,
+      },
+      results: { ml: s.mlReal, dataset: s.dataset },
+    }
+    try {
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      const safe = (s.wz.name || 'bridgelife').replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase()
+      a.href = url
+      a.download = 'bridgelife-' + (safe || 'project') + '.json'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 0)
+    } catch {
+      /* no DOM (SSR/thumbnail) — export is a no-op in that context */
+    }
+  },
+  // Hydrate from a project .json produced by exportJSON. Only known slices are
+  // applied (each falls back to the current value), so a partial/old file is safe.
+  importJSON: (obj) => {
+    const o = obj as { inputs?: Record<string, unknown>; results?: { ml?: MlReal | null; dataset?: Dataset | null } }
+    const inp = o?.inputs ?? {}
+    const pick = <T,>(cur: T, next: unknown): T => (next && typeof next === 'object' ? { ...cur, ...(next as object) } : cur)
+    set((s) => ({
+      g: pick(s.g, inp.geometry), ana: pick(s.ana, inp.analysis), base: pick(s.base, inp.baseline),
+      mon: pick(s.mon, inp.monitoring), pre: pick(s.pre, inp.prestress), ins: pick(s.ins, inp.inspection),
+      ndt: pick(s.ndt, inp.ndt), syn: pick(s.syn, inp.synthetic), feat: pick(s.feat, inp.features),
+      ml: pick(s.ml, inp.ml), mnt: pick(s.mnt, inp.maintenance), rep: pick(s.rep, inp.report), wz: pick(s.wz, inp.project),
+      mlReal: o?.results?.ml ?? s.mlReal, dataset: o?.results?.dataset ?? s.dataset,
+      welcome: false, i: 0, replay: s.replay + 1,
+    }))
+  },
 }))

@@ -63,7 +63,10 @@ export interface InputDeps {
   setMon: <K extends keyof Mon>(k: K, v: Mon[K]) => void
   setK: (slice: 'pre' | 'ins' | 'ndt' | 'syn' | 'feat' | 'ml' | 'mnt' | 'rep' | 'wz', k: string, v: unknown) => void
   job: (key: string, done?: () => void) => void
+  bump: (key: string) => void
   train: () => void
+  genDataset: () => void
+  exportJSON: () => void
 }
 
 const EMPTY: InputsModel = {
@@ -199,7 +202,7 @@ export function buildInputs(id: string, d: InputDeps): InputsModel {
       sl('Records', st.n, '', 400, 6000, 100, 0, (v) => d.setK('syn', 'n', v)),
       sl('Noise', st.noise, '%', 0, 10, 0.5, 1, (v) => d.setK('syn', 'noise', v)),
     ]
-    o.inAction = { label: 'Generate dataset', go: () => d.job('syn', () => d.setK('syn', 'ver', st.ver + 1)) }
+    o.inAction = { label: 'Generate dataset', go: () => d.genDataset() }
     return o
   }
 
@@ -213,7 +216,7 @@ export function buildInputs(id: string, d: InputDeps): InputsModel {
       chips('Inspect feature', act.map((f) => f[0]), (x) => x === selF[0], (x) => d.setK('feat', 'sel', x)),
     ]
     o.segs = [seg('Normalisation', ['z-score', 'min-max'], st.norm, (v: string) => d.setK('feat', 'norm', v))]
-    o.inAction = { label: 'Export feature matrix', go: () => d.job('feat') }
+    o.inAction = { label: 'Export feature matrix', go: () => d.job('feat', () => d.exportJSON()) }
     return o
   }
 
@@ -232,7 +235,7 @@ export function buildInputs(id: string, d: InputDeps): InputsModel {
     ]
     o.isML = true
     o.trainLabel = st.prog != null ? 'Training…' : 'Retrain ' + (iso ? 'IsoForest' : st.model)
-    o.train = () => d.train()
+    o.train = () => { d.bump('ml'); d.train() }
     return o
   }
 

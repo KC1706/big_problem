@@ -90,6 +90,28 @@ class SectionProps:
     Z_bot: float        # section modulus bottom, mm^3
     Z_top: float        # section modulus top, mm^3
     depth: float        # total depth, mm
+    # --- E3 grillage additions (mm^4) ---
+    J: float = 0.0      # St-Venant torsional constant (thin-walled open-section est.)
+    Iy: float = 0.0     # second moment about the VERTICAL centroidal axis (lateral)
+    Ip: float = 0.0     # polar second moment about the centroid (= I + Iy)
+
+
+def _trapezoid_Iy(b1: float, b2: float, h: float) -> float:
+    """Second moment about the vertical centroidal axis of a trapezoid symmetric
+    about x=0 (width varies linearly b1->b2 over height h). Iy = h(b1+b2)(b1^2+b2^2)/48."""
+    return h * (b1 + b2) * (b1 ** 2 + b2 ** 2) / 48.0
+
+
+def girder_torsion_J(g: GirderSection) -> float:
+    """Thin-walled OPEN-section St-Venant constant: J ~= sum(b*t^3)/3 over the
+    rectangular plates (bottom flange, web, top flange). Fillets are short/chunky
+    and contribute negligibly to the t^3 sum, so they are omitted (standard for an
+    I-girder J estimate)."""
+    return (
+        g.bf_bot * g.tf_bot ** 3
+        + g.hw * g.tw ** 3
+        + g.bf_top * g.tf_top ** 3
+    ) / 3.0
 
 
 def girder_properties(g: GirderSection) -> SectionProps:
@@ -107,12 +129,15 @@ def girder_properties(g: GirderSection) -> SectionProps:
         base += s.h
     y_cen = Ay / A  # from bottom
     I = 0.0
+    Iy = 0.0
     for s, yc in seg_data:
         I += s.I_own + s.area * (yc - y_cen) ** 2
+        Iy += _trapezoid_Iy(s.b1, s.b2, s.h)  # symmetric about x=0 -> no parallel-axis term
     depth = g.depth
     y_bot = y_cen
     y_top = depth - y_cen
-    return SectionProps(A, y_bot, y_top, I, I / y_bot, I / y_top, depth)
+    J = girder_torsion_J(g)
+    return SectionProps(A, y_bot, y_top, I, I / y_bot, I / y_top, depth, J, Iy, I + Iy)
 
 
 @dataclass
@@ -123,6 +148,7 @@ class CompositeSection:
     deck_thickness: float = 230.0          # mm
     girder_spacing: float = 2500.0         # c/c spacing (mm)
     span: float = 33000.0                  # mm (for effective width)
+    n_girders: int = 5                     # number of girder lines (grillage, E3)
     materials: MaterialSet = field(default_factory=default_materials)
 
     def effective_width(self) -> float:
@@ -153,7 +179,12 @@ class CompositeSection:
         depth = self.girder.depth + self.deck_thickness
         y_bot = y_cen
         y_top = depth - y_cen
-        return SectionProps(A, y_bot, y_top, I, I / y_bot, I / y_top, depth)
+        # --- E3: torsion / lateral / polar for the composite section ---
+        # Deck strip (transformed width b_tr) adds an open thin plate for J and a
+        # wide lateral member for Iy. Both are about the composite centroid.
+        J = gp.J + b_tr * self.deck_thickness ** 3 / 3.0
+        Iy = gp.Iy + self.deck_thickness * b_tr ** 3 / 12.0
+        return SectionProps(A, y_bot, y_top, I, I / y_bot, I / y_top, depth, J, Iy, I + Iy)
 
     def self_weight_per_m(self) -> float:
         """Self-weight of girder + its tributary deck slab, kN/m.

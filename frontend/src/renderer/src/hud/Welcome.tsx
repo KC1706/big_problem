@@ -1,10 +1,12 @@
+import { useRef } from 'react'
 import { useStore } from '@/state/store'
 import s from './Welcome.module.css'
 
-const RECENT: Array<[string, string]> = [
-  ['NH-16 Mahananda Bridge', '33 m · edited 4 min ago'],
-  ['Kosi canal crossing', '30 m · 3 days ago'],
-  ['Studio sample 36 m', '36 m · template'],
+// Starting templates (not fake "recent/edited" projects): each loads a real span.
+const TEMPLATES: Array<{ name: string; span: number }> = [
+  { name: 'NH-16 Mahananda Bridge', span: 33 },
+  { name: 'Kosi canal crossing', span: 30 },
+  { name: 'Studio sample 36 m', span: 36 },
 ]
 const FIELDS: Array<[string, 'name' | 'student' | 'roll', string]> = [
   ['Project name', 'name', 'NH-16 Mahananda Bridge'],
@@ -20,6 +22,21 @@ export default function Welcome() {
   const setK = useStore((st) => st.setK)
   const createProject = useStore((st) => st.createProject)
   const skipWelcome = useStore((st) => st.skipWelcome)
+  const importJSON = useStore((st) => st.importJSON)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const loadTemplate = (name: string, span: number) => {
+    setK('wz', 'name', name)
+    setK('wz', 'span', span)
+    createProject() // reads wz.span → sets geometry and enters the studio
+  }
+
+  const onOpenFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0]
+    e.target.value = '' // allow re-selecting the same file
+    if (!f) return
+    f.text().then((t) => { try { importJSON(JSON.parse(t)) } catch { /* not a valid project file */ } })
+  }
 
   const wide = w >= 900
   const bg = wide
@@ -36,16 +53,17 @@ export default function Welcome() {
             <p className={s.lede}>Configure, analyse and prestress the girder, establish a healthy baseline, then inspect, monitor and assess it with AI/ML through to a maintenance decision and an integrated report.</p>
           </div>
           <div className={s.recentBlock}>
-            <span className={s.eyebrow} style={{ fontSize: 11 }}>RECENT</span>
-            {RECENT.map(([l, m]) => (
-              <div className={s.recent} key={l} onClick={skipWelcome}>
-                <span className={s.recentL}>{l}</span>
-                <span className={s.recentM}>{m}</span>
+            <span className={s.eyebrow} style={{ fontSize: 11 }}>TEMPLATES</span>
+            {TEMPLATES.map((t) => (
+              <div className={s.recent} key={t.name} onClick={() => loadTemplate(t.name, t.span)}>
+                <span className={s.recentL}>{t.name}</span>
+                <span className={s.recentM}>{t.span} m · template</span>
               </div>
             ))}
             <div className={s.recentBtns}>
-              <button className={s.openBtn}>Open .bridgeproj</button>
+              <button className={s.openBtn} onClick={() => fileRef.current?.click()}>Open project</button>
               <button className={s.skipBtn} onClick={skipWelcome}>Skip to dashboard</button>
+              <input ref={fileRef} type="file" accept=".json,application/json" onChange={onOpenFile} style={{ display: 'none' }} />
             </div>
           </div>
         </div>
