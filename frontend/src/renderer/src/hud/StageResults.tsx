@@ -1,4 +1,6 @@
 import type { ResultsModel } from '@/stage/results'
+import { useStore } from '@/state/store'
+import { downloadText, toCsv } from '@/stage/download'
 import c from './StageResults.module.css'
 
 const MONO = 'Geist Mono, monospace'
@@ -6,6 +8,7 @@ const MONO = 'Geist Mono, monospace'
 /** Renders the per-stage result content below the panel header + big grid.
  *  One branch per F3 stage; other ws stages render nothing here yet (F4). */
 export default function StageResults({ r }: { r: ResultsModel }) {
+  const exportJSON = useStore((s) => s.exportJSON)
   if (r.kind === 'config') {
     const { xs } = r
     return (
@@ -269,7 +272,7 @@ export default function StageResults({ r }: { r: ResultsModel }) {
         </div>
         {r.running && <Progress label="Generating · FEM reruns" s={r.progS} w={r.progW} />}
         <div className={c.block}>
-          <div className={c.head} style={{ alignItems: 'center' }}><span>PREVIEW</span><button className={c.csvBtn}>Export CSV</button></div>
+          <div className={c.head} style={{ alignItems: 'center' }}><span>PREVIEW</span><button className={c.csvBtn} onClick={() => downloadText('bridgelife-synthetic-preview.csv', toCsv(r.prev.map((row) => ({ id: row.id, label: row.l, f1: row.f, delta_max: row.d, upv: row.u }))), 'text/csv')}>Export CSV</button></div>
           <div className={c.prevTable}>
             <div className={c.prevHead}><span>id</span><span>label</span><span>f₁</span><span>δ</span><span>UPV</span></div>
             {r.prev.map((row) => (
@@ -397,7 +400,7 @@ export default function StageResults({ r }: { r: ResultsModel }) {
             ))}
           </svg>
         </div>
-        <button className={c.primaryBtn}>Confirm decision</button>
+        <button className={c.primaryBtn} onClick={exportJSON}>Confirm decision</button>
       </>
     )
   }
@@ -433,7 +436,7 @@ export default function StageResults({ r }: { r: ResultsModel }) {
         {r.compiled && (
           <div className={c.downloadRow}>
             <span style={{ fontSize: 12 }}>{r.verS}</span>
-            <button className={c.downloadBtn}>Download</button>
+            <button className={c.downloadBtn} onClick={exportJSON}>Download</button>
           </div>
         )}
         <span className={c.note}>Every value flagged for code verification is listed in Assumptions &amp; limitations.</span>

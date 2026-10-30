@@ -45,15 +45,23 @@ svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflo
 
 class BridgeTwin extends HTMLElement{
 constructor(){super();this._p={stage:'dashboard',theme:'light',replay:'0',paused:'false',geom:''}}
-static get observedAttributes(){return['stage','theme','replay','paused','geom']}
+static get observedAttributes(){return['stage','theme','replay','paused','geom','data']}
 attributeChangedCallback(n,o,v){this._set(n,v)}
 get stage(){return this._p.stage}set stage(v){this._set('stage',v)}
 get theme(){return this._p.theme}set theme(v){this._set('theme',v)}
 get replay(){return this._p.replay}set replay(v){this._set('replay',v)}
 get paused(){return this._p.paused}set paused(v){this._set('paused',v)}
 get geom(){return this._p.geom}set geom(v){this._set('geom',v)}
-_set(n,v){if(v==null)return;v=String(v);if(this._p[n]===v)return;this._p[n]=v;if(!this.ok)return;
- if(n==='stage')this._enterStage();else if(n==='theme')this._theme();else if(n==='replay')this._intro();else if(n==='geom'){clearTimeout(this._gt);this._gt=setTimeout(()=>this._rebuild(),120)}}
+_set(n,v){if(v==null)return;v=String(v);if(this._p[n]===v)return;this._p[n]=v;
+ if(n==='data'){try{this._data=JSON.parse(v)}catch(e){this._data={}}}
+ if(!this.ok)return;
+ if(n==='stage')this._enterStage();else if(n==='theme')this._theme();else if(n==='replay')this._intro();else if(n==='geom'){clearTimeout(this._gt);this._gt=setTimeout(()=>this._rebuild(),120)}else if(n==='data')this._refreshLabelValues()}
+// Update static callout values in place (no DOM rebuild / re-animation) when the
+// real `data` channel changes. Live (fn-driven) labels read this._data per frame.
+_refreshLabelValues(){if(!this.lbs)return;const defs=this._labelDefs(this._p.stage);
+ for(let i=0;i<this.lbs.length;i++){const o=this.lbs[i],d=defs[i];if(!d||d.t==='dim'||d.live)continue;
+  o.d.v=d.v;o.d.u=d.u;const b=o.el.querySelector('.v b');if(b&&b.textContent!==String(d.v))b.textContent=d.v;
+  const s=o.el.querySelector('.v span');if(s)s.textContent=d.u||''}}
 connectedCallback(){
  if(!this.shadowRoot){const s=this.attachShadow({mode:'open'});s.innerHTML=`<style>${CSS}</style><canvas></canvas><svg></svg><div class="L"></div>`}
  this._alive=true;
@@ -218,19 +226,20 @@ defl(x){const L=this.L,u=x+L/2;if(u<=0||u>=L)return 0;const c=this.c,s=u/L;let d
 _labelDefs(st){const{L,W,yT,y0,yB,D,gz}=this,G5=gz[gz.length-1],G4=gz[gz.length-2];
  const P=(k,v,u,x,z,h,sev)=>({t:'pin',a:[x,yT,z],h,k,v,u,sev});
  const C=(k,v,u,a,dx,dy,sev,live)=>({t:'call',a,dx,dy,k,v,u,sev,live});
+ const V=(k,f)=>(this._data&&this._data[k]!=null?String(this._data[k]):f); // real value from the data channel, else design default
  const acc=i=>function(){return(.028+.006*i+.02*Math.abs(Math.sin(this.time*5.3+i*1.7))*Math.abs(Math.sin(this.time*1.1+i))).toFixed(3)};
  switch(st){
- case'dashboard':return[P('Baseline f₁','3.21','Hz',-11,-3,6.5),P('Pₑ per girder','6,310','kN',-3.5,3,4.8),P('Mid-span δ','18.4','mm',4,-2.5,7.2),P('UPV mean','4.31','km/s',11.5,3.5,5.4),P('Condition','Minor','0.82',0,6,9,1)];
+ case'dashboard':return[P('Baseline f₁',V('f1','3.21'),'Hz',-11,-3,6.5),P('Pₑ per girder',V('peGirder','6,310'),'kN',-3.5,3,4.8),P('Mid-span δ',V('delta','18.4'),'mm',4,-2.5,7.2),P('UPV mean',V('upv','4.31'),'km/s',11.5,3.5,5.4),P('Condition',V('cond','Minor'),V('conf','0.82'),0,6,9,1)];
  case'config':return[{t:'dim',a:[0,y0-.4,W/2+2.2],v:'SPAN '+L.toFixed(3),fix:1},{t:'dim',a:[-L/2-.8,y0+D/2,G5],v:'D '+D.toFixed(3),fix:1},{t:'dim',a:[L/2+.9,y0-1.1,0],v:(gz.length-1)+' × '+this.P.sp.toFixed(3),fix:1},C('I-girder · M45',(this.P.web*1000).toFixed(0),'mm web',[L/2-.5,y0+D*.6,G5+.4],60,-50),C('Deck slab',(this.P.slab*1000).toFixed(0),'mm',[L/2-6,yT+3.2,0],70,-60)];
- case'analysis':return[C('IRC Class 70R','700','kN',()=>{const v=this.veh[0];return this._tmp.set(v.x,yT+this.dAt(v.x)+3.4,v.z)},50,-60),C('Mid-span δ','18.4','mm',[0,y0,G5+.4],60,50,null,function(){return Math.max(0,-this.dAt(0)/Math.max(.01,this.c.tAmp)*18.4).toFixed(1)}),C('M_max','6,840','kN·m',[-6,y0+.2,G5+.4],-70,50),{t:'dim',a:[L/2-4,yT+1.8,W/2],v:'δ ×50'}];
- case'prestress':return[C('Cable C1 · 19T13','2,616','kN',[-6,y0+.2,G5],-70,60),C('Pₑ / P₀','0.804','✓',[4,y0+.3,G5],70,60,0),C('Anchorage slip','6','mm',[L/2-.2,y0+.85,G5],60,-60),C('Camber at transfer','12','mm',[-2,yT,G5],-60,-70)];
- case'baseline':return[C('Healthy fingerprint','Mode 1 · 3.21','Hz',[0,y0,W/2],70,70,0,function(){const n=this.modeN||1;return'Mode '+n+' · '+['3.21','5.86','8.41'][n-1]}),{t:'dim',a:[-L/2+3,yT+2.2,W/2],v:'AMPLITUDE EXAGGERATED'}];
+ case'analysis':return[C('IRC Class 70R','700','kN',()=>{const v=this.veh[0];return this._tmp.set(v.x,yT+this.dAt(v.x)+3.4,v.z)},50,-60),C('Mid-span δ','18.4','mm',[0,y0,G5+.4],60,50,null,function(){return Math.max(0,-this.dAt(0)/Math.max(.01,this.c.tAmp)*18.4).toFixed(1)}),C('M_max',V('M_max','6,840'),'kN·m',[-6,y0+.2,G5+.4],-70,50),{t:'dim',a:[L/2-4,yT+1.8,W/2],v:'δ ×50'}];
+ case'prestress':return[C('Cable C1 · 19T13',V('cableF','2,616'),'kN',[-6,y0+.2,G5],-70,60),C('Pₑ / P₀',V('pe_p0','0.804'),'✓',[4,y0+.3,G5],70,60,0),C('Anchorage slip','6','mm',[L/2-.2,y0+.85,G5],60,-60),C('Camber at transfer',V('camber','12'),'mm',[-2,yT,G5],-60,-70)];
+ case'baseline':return[C('Healthy fingerprint','Mode 1 · 3.21','Hz',[0,y0,W/2],70,70,0,function(){const n=this.modeN||1;const m=(this._data&&this._data.modes)?String(this._data.modes).split(','):['3.21','5.86','8.41'];return'Mode '+n+' · '+(m[n-1]!=null?m[n-1]:m[0])}),{t:'dim',a:[-L/2+3,yT+2.2,W/2],v:'AMPLITUDE EXAGGERATED'}];
  case'inspection':return[C('G5 · flexural crack','0.3','mm',[2,y0+.35,G5+.4],-80,60,1),C('Bearing B5 · corrosion','Grade 3','',[L/2-.3,yB+.12,G5],70,40,2),C('Deck soffit · leakage','0.6','m²',[-5,y0+D,G4+1.6],-70,-40,1)];
  case'ndt':return[C('UPV · Doubtful','3.28','km/s',[1.6,y0+.9,G5+.16],70,-50,2),C('UPV · Excellent','4.62','km/s',[-10,y0+.9,G5+.16],-70,-60,0),C('Rebound · Intermediate','27','R',[9,y0+.5,G5+.16],70,50,1),C('Rebound · Sound','38','R',[-4,y0+.5,G5+.16],-60,60,0)];
  case'monitoring':return[C('A4 · L/4','0.041','g',[-L/4,y0-.12,G4],-60,50,null,acc(0)),C('A5 · L/2','0.052','g',[0,y0-.12,G4],50,60,null,acc(1)),C('A6 · 3L/4','0.038','g',[L/4,y0-.12,G4],70,40,null,acc(2))];
- case'synthetic':return[C('Scenario S-07 · EI','−35','%',[0,y0+.2,G5+.4],70,60,2),C('Damage extent','6.0','m',[-3,y0,G5+.4],-80,50,2),C('f₁ shift','3.21 → 2.94','Hz',[0,yT,G5],-60,-70),{t:'dim',a:[L/2-3,yT+1.6,W/2],v:'SAG ×100'}];
+ case'synthetic':return[C('Scenario · EI',V('ei','−35'),'%',[0,y0+.2,G5+.4],70,60,2),C('Damage extent',V('ext','6.0'),'m',[-3,y0,G5+.4],-80,50,2),C('f₁ scenario',V('f1shift','2.94'),'Hz',[0,yT,G5],-60,-70),{t:'dim',a:[L/2-3,yT+1.6,W/2],v:'SAG ×100'}];
  case'features':return[P('Δf₁','−8.4','%',-10,-2,6),P('a_RMS','0.051','g',-2,3,7.5),P('δ_max','24.9','mm',6,-3,5.5),P('Kurtosis','3.4','',13,2,6.8)];
- case'ml':return[C('Predicted · G5 mid-span','Deteriorated','0.81',[0,y0+.4,G5+.4],70,-60,2),C('Anomaly score','0.67','IsoForest',[-8,yT,4],-70,-60),C('Top SHAP feature','Δf₁','0.31',[10,yT,-3],60,-60)];
+ case'ml':return[C('Predicted · G5 mid-span',V('pred','Deteriorated'),V('conf','0.81'),[0,y0+.4,G5+.4],70,-60,2),C('Anomaly score',V('anom','0.67'),'IsoForest',[-8,yT,4],-70,-60),C('Top feature',V('topf','Δf₁'),V('topfv','0.31'),[10,yT,-3],60,-60)];
  case'maintenance':return[C('Detailed investigation','G5','mid-span',[0,y0+.4,G5+.4],70,50,2),C('Additional NDT','UPV grid','24 pts',[-6,y0+.9,G5+.4],-80,40,1),C('Preventive · bearing','B5','reseat',[L/2-.3,yB+.2,G5],70,-40,1),C('Routine monitoring','All spans','6 mo',[-10,yT,0],-70,-70,0)];
  case'report':return[{t:'dim',a:[0,y0-1.2,W/2],v:'FIG 1 · ELEVATION · 1:200'}];
  }return[]}

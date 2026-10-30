@@ -17,6 +17,7 @@ export default function BridgeTwin() {
   const replay = useStore((s) => s.replay)
   const g = useStore((s) => s.g)
   const welcome = useStore((s) => s.welcome)
+  const twinData = useStore((s) => s.twinData)
 
   const stage = welcome ? 'welcome' : (STAGES[i]?.id ?? 'dashboard')
 
@@ -27,6 +28,7 @@ export default function BridgeTwin() {
       paused={String(paused)}
       replay={String(replay)}
       geom={JSON.stringify(g)}
+      data={twinData}
       style={{ position: 'absolute', inset: 0 }}
     />
   )
