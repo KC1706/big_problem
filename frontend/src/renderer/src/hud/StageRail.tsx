@@ -60,7 +60,7 @@ export default function StageRail() {
             </div>
             <div className={s.lifecycleRow}>
               <span className={s.lcEyebrow}>LIFECYCLE</span>
-              <span className={s.lcValue}>9 / 12</span>
+              <span className={s.lcValue}>12 / 12</span>
             </div>
           </>
         )}

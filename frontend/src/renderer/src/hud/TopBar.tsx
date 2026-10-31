@@ -20,7 +20,7 @@ export default function TopBar() {
   const togglePause = useStore((st) => st.togglePause)
   const doReplay = useStore((st) => st.doReplay)
   const toggleTheme = useStore((st) => st.toggleTheme)
-  const exportJSON = useStore((st) => st.exportJSON)
+  const downloadReport = useStore((st) => st.downloadReport)
   const ml = useStore((st) => st.ml)
   const mlReal = useStore((st) => st.mlReal)
   const L = useLayout()
@@ -71,7 +71,7 @@ export default function TopBar() {
           )}
         </div>
         <button className={s.themeBtn} onClick={toggleTheme}>{themeLabel}</button>
-        <button className={s.exportBtn} onClick={exportJSON}>{L.exportLabel}</button>
+        <button className={s.exportBtn} onClick={downloadReport}>{L.exportLabel}</button>
       </div>
     </div>
   )

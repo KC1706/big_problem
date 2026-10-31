@@ -434,12 +434,12 @@ export default function StageResults({ r }: { r: ResultsModel }) {
           </div>
         </div>
         {r.running && <Progress label="Compiling figures and tables" s={r.progS} w={r.progW} />}
-        {r.compiled && (
-          <div className={c.downloadRow}>
-            <span style={{ fontSize: 12 }}>{r.verS}</span>
-            <button className={c.downloadBtn} onClick={downloadReport}>Download</button>
-          </div>
-        )}
+        <div className={c.downloadRow}>
+          <span style={{ fontSize: 12 }}>{r.compiled ? r.verS : 'Report document · ready to compile'}</span>
+          <button className={c.downloadBtn} onClick={downloadReport}>
+            {r.compiled ? 'Download Report' : 'Compile & Download'}
+          </button>
+        </div>
         <span className={c.note}>Every value flagged for code verification is listed in Assumptions &amp; limitations.</span>
       </>
     )

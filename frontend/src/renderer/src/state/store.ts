@@ -142,13 +142,13 @@ export const STAGES: StageDef[] = [
     action: 'Export matrix',
   },
   {
-    id: 'ml', num: '10', name: 'AI/ML assessment', status: 'progress', lens: 'Condition', ws: true,
+    id: 'ml', num: '10', name: 'AI/ML assessment', status: 'done', lens: 'Condition', ws: true,
     title: 'AI/ML condition assessment',
     desc: 'Train a classifier on the synthetic dataset, then test it live with your own feature values.',
     rows: [], big: [], action: '', ai: true,
   },
   {
-    id: 'maintenance', num: '11', name: 'Maintenance', status: 'ready', lens: 'Condition · actions', ws: true,
+    id: 'maintenance', num: '11', name: 'Maintenance', status: 'done', lens: 'Condition · actions', ws: true,
     title: 'Maintenance decision',
     desc: 'Evidence from inspection, NDT, monitoring and the model points to a detailed investigation of G5.',
     rows: [['Path', 'Detailed investigation'], ['Actions', '4'], ['Reinspection', '6 months'], ['Risk tolerance', 'Moderate']],
@@ -156,12 +156,12 @@ export const STAGES: StageDef[] = [
     action: 'Confirm decision', ai: true,
   },
   {
-    id: 'report', num: '12', name: 'Report', status: 'ready', lens: 'Elevation', ws: true,
+    id: 'report', num: '12', name: 'Report', status: 'done', lens: 'Elevation', ws: true,
     title: 'Integrated report',
     desc: 'Compiles every stage into one document: the integrated story of one bridge.',
     rows: [['Sections', '12'], ['Figures', '42'], ['Tables', '18'], ['Formats', 'PDF · LaTeX · Markdown']],
-    big: [['Sections', '12', ''], ['Figures', '42', ''], ['Tables', '18', ''], ['Status', 'Locked', '']],
-    action: 'Locked',
+    big: [['Sections', '12', ''], ['Figures', '42', ''], ['Tables', '18', ''], ['Status', 'Complete', '']],
+    action: 'Compile',
   },
 ]
 
@@ -287,8 +287,8 @@ interface AppState {
   exportJSON: () => void // download the full project (inputs + available results) as .json
   importJSON: (obj: unknown) => void // hydrate the store from a previously exported project .json
   reportHtml: string | null // generated HTML string from compileReport
-  compileReport: () => void // fetch live backend data across all stages and build standalone report HTML
-  downloadReport: () => void // download or open the compiled HTML report
+  compileReport: (onDone?: (html: string) => void) => void // fetch live backend data across all stages and build standalone report HTML
+  downloadReport: () => void // download or open the compiled HTML report (auto-compiles if not yet built)
 }
 
 type SliceName = 'pre' | 'ins' | 'ndt' | 'syn' | 'feat' | 'ml' | 'mnt' | 'rep' | 'wz'
@@ -462,7 +462,7 @@ export const useStore = create<AppState>((set, get) => ({
       welcome: false, i: 0, replay: s.replay + 1,
     }))
   },
-  compileReport: () => {
+  compileReport: (onDone?: (html: string) => void) => {
     if (get().jobs.rep != null) return
     const s = get()
     set((st) => ({ jobs: { ...st.jobs, rep: 8 } }))
@@ -489,6 +489,7 @@ export const useStore = create<AppState>((set, get) => ({
           reportHtml: html,
           rep: { ...st.rep, ver: st.rep.ver + 1 },
         }))
+        onDone?.(html)
       })
       .catch((err) => {
         console.error('Failed to compile live report:', err)
@@ -502,17 +503,23 @@ export const useStore = create<AppState>((set, get) => ({
     const s = get()
     const html = s.reportHtml
     const safe = (s.wz.name || 'bridgelife').replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase()
-    if (html) {
+    const trigger = (content: string) => {
       if (s.rep.fmt === 'PDF') {
         try {
-          const blob = new Blob([html], { type: 'text/html' })
+          const blob = new Blob([content], { type: 'text/html' })
           const url = URL.createObjectURL(blob)
           window.open(url, '_blank')
         } catch { /* ignore */ }
       }
-      downloadText('bridgelife-report-' + (safe || 'report') + '.html', html, 'text/html')
+      downloadText('bridgelife-report-' + (safe || 'report') + '.html', content, 'text/html')
+    }
+
+    if (html) {
+      trigger(html)
     } else {
-      s.exportJSON()
+      s.compileReport((freshHtml) => {
+        trigger(freshHtml)
+      })
     }
   },
 }))
