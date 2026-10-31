@@ -67,6 +67,7 @@ export interface InputDeps {
   train: () => void
   genDataset: () => void
   exportJSON: () => void
+  compileReport: () => void
 }
 
 const EMPTY: InputsModel = {
@@ -267,7 +268,7 @@ export function buildInputs(id: string, d: InputDeps): InputsModel {
       v: st.intro[st.sel] != null ? st.intro[st.sel] : defIntro(st.sel),
       on: (v: string) => d.setK('rep', 'intro', { ...st.intro, [st.sel]: v }),
     }]
-    o.inAction = { label: 'Compile ' + st.fmt, go: () => d.job('rep', () => d.setK('rep', 'ver', st.ver + 1)) }
+    o.inAction = { label: 'Compile ' + st.fmt, go: () => d.compileReport() }
     return o
   }
 

@@ -9,6 +9,7 @@ const MONO = 'Geist Mono, monospace'
  *  One branch per F3 stage; other ws stages render nothing here yet (F4). */
 export default function StageResults({ r }: { r: ResultsModel }) {
   const exportJSON = useStore((s) => s.exportJSON)
+  const downloadReport = useStore((s) => s.downloadReport)
   if (r.kind === 'config') {
     const { xs } = r
     return (
@@ -436,7 +437,7 @@ export default function StageResults({ r }: { r: ResultsModel }) {
         {r.compiled && (
           <div className={c.downloadRow}>
             <span style={{ fontSize: 12 }}>{r.verS}</span>
-            <button className={c.downloadBtn} onClick={exportJSON}>Download</button>
+            <button className={c.downloadBtn} onClick={downloadReport}>Download</button>
           </div>
         )}
         <span className={c.note}>Every value flagged for code verification is listed in Assumptions &amp; limitations.</span>

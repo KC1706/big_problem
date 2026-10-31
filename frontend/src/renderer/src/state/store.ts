@@ -2,6 +2,9 @@ import { create } from 'zustand'
 import { apiPost } from '@/api/client'
 import { gToSectionConfig } from '@/api/adapter'
 import type { SyntheticDatasetResponse } from '@/api/types'
+import { fetchReportData } from '@/api/reportData'
+import { buildReportHtml } from '@/stage/reportDoc'
+import { downloadText } from '@/stage/download'
 
 /** Theme ids match the design's `data-theme` values. */
 export type Theme = 'light' | 'dark'
@@ -283,6 +286,9 @@ interface AppState {
   genDataset: () => void // real: POST /synthetic/generate (preview_only:false) → store counts
   exportJSON: () => void // download the full project (inputs + available results) as .json
   importJSON: (obj: unknown) => void // hydrate the store from a previously exported project .json
+  reportHtml: string | null // generated HTML string from compileReport
+  compileReport: () => void // fetch live backend data across all stages and build standalone report HTML
+  downloadReport: () => void // download or open the compiled HTML report
 }
 
 type SliceName = 'pre' | 'ins' | 'ndt' | 'syn' | 'feat' | 'ml' | 'mnt' | 'rep' | 'wz'
@@ -320,6 +326,7 @@ export const useStore = create<AppState>((set, get) => ({
   lastSeen: 0,
   dashBig: [],
   recompute: {},
+  reportHtml: null,
   // go() wraps around and resets the tab, matching the design's go().
   go: (i) => set((s) => { const j = ((i % N) + N) % N; return { i: j, tab: 'results', seen: { ...s.seen, [j]: true }, lastSeen: j } }),
   next: () => set((s) => { const j = (s.i + 1) % N; return { i: j, tab: 'results', seen: { ...s.seen, [j]: true }, lastSeen: j } }),
@@ -454,5 +461,58 @@ export const useStore = create<AppState>((set, get) => ({
       mlReal: o?.results?.ml ?? s.mlReal, dataset: o?.results?.dataset ?? s.dataset,
       welcome: false, i: 0, replay: s.replay + 1,
     }))
+  },
+  compileReport: () => {
+    if (get().jobs.rep != null) return
+    const s = get()
+    set((st) => ({ jobs: { ...st.jobs, rep: 8 } }))
+    timers.repJob = setInterval(() => {
+      const p = get().jobs.rep
+      if (p == null) { clearInterval(timers.repJob); return }
+      if (p < 90) set((st) => ({ jobs: { ...st.jobs, rep: Math.min(90, (st.jobs.rep ?? 0) + 12) } }))
+    }, 120)
+
+    fetchReportData({ g: s.g, ana: s.ana, base: s.base, pre: s.pre, syn: s.syn, ml: s.ml })
+      .then((data) => {
+        const meta = {
+          name: s.wz.name,
+          span: s.wz.span,
+          engine: s.base.engine,
+          fmt: s.rep.fmt,
+          figs: s.rep.figs,
+          on: s.rep.on,
+          student: s.wz.student,
+          roll: s.wz.roll,
+        }
+        const html = buildReportHtml(data, meta)
+        set((st) => ({
+          reportHtml: html,
+          rep: { ...st.rep, ver: st.rep.ver + 1 },
+        }))
+      })
+      .catch((err) => {
+        console.error('Failed to compile live report:', err)
+      })
+      .finally(() => {
+        clearInterval(timers.repJob)
+        set((st) => ({ jobs: { ...st.jobs, rep: null } }))
+      })
+  },
+  downloadReport: () => {
+    const s = get()
+    const html = s.reportHtml
+    const safe = (s.wz.name || 'bridgelife').replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase()
+    if (html) {
+      if (s.rep.fmt === 'PDF') {
+        try {
+          const blob = new Blob([html], { type: 'text/html' })
+          const url = URL.createObjectURL(blob)
+          window.open(url, '_blank')
+        } catch { /* ignore */ }
+      }
+      downloadText('bridgelife-report-' + (safe || 'report') + '.html', html, 'text/html')
+    } else {
+      s.exportJSON()
+    }
   },
 }))

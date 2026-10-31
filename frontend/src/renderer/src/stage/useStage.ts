@@ -35,11 +35,12 @@ export function useStage(): { inputs: InputsModel; results: ResultsModel; verify
   const train = useStore((s) => s.train)
   const genDataset = useStore((s) => s.genDataset)
   const exportJSON = useStore((s) => s.exportJSON)
+  const compileReport = useStore((s) => s.compileReport)
 
   const verify = useVerify(STAGES[i].id, g, base, ana, pre, mon, syn, feat, ml)
 
   const stage = STAGES[i]
-  const inputs = buildInputs(stage.id, { g, ana, base, mon, pre, ins, ndt, syn, feat, ml, mnt, rep, setG, setAna, setBase, setMon, setK, job, bump, train, genDataset, exportJSON })
+  const inputs = buildInputs(stage.id, { g, ana, base, mon, pre, ins, ndt, syn, feat, ml, mnt, rep, setG, setAna, setBase, setMon, setK, job, bump, train, genDataset, exportJSON, compileReport })
   const local = buildResults(stage.id, { g, ana, base, mon, pre, ins, ndt, syn, feat, ml, mnt, rep, tick, jobs, job, bump, setBase, setK, mlReal, dataset, seen, lastSeen, staticBig: [...stage.big] })
   // Preview → verified: overlay the backend-verified fields onto the local model.
   const results = verify.patch ? ({ ...local, ...verify.patch } as ResultsModel) : local
