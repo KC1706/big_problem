@@ -237,6 +237,23 @@ The field layer (pages 5 & 7) is produced by **`tools/field_layer.py`**, which i
 
 ## 7. How to regenerate the numbers (change the input → new report)
 
+**Fastest path — one command.** `tools/report_values.py` recomputes EVERY value the report
+needs (core physics + the field-survey layer) from the validated compute core and prints it
+grouped by report page, plus a machine-readable JSON block:
+
+```bash
+cd backend
+PYTHONPATH=. ../.venv/bin/python ../BridgeLife-Report-handoff/tools/report_values.py   # ~2-3 min
+```
+
+Edit `CFG` (and the per-stage requests) at the top of that script to change the input. It is
+deterministic (seed 42), so it is the source of truth — if a printed value differs from what is
+baked in the `.dc.html`, update the HTML to match it. Then follow the manual steps below to copy
+the values in and regenerate the two computed charts. (`report_values.py` reuses
+`field_layer.py`, so you do not need to run `field_layer.py` separately.)
+
+The longer manual route, if you want to call the stages yourself:
+
 1. Activate the backend venv and run the compute for your input:
    ```bash
    cd /Users/apple/big_prob/backend
