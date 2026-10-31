@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="./BridgeLife-handoff/fonts/fonts.css">
+<script src="./doc-page.js"></script>
+<style>
+doc-page:not(:defined){visibility:hidden}
+doc-page{font-family:'Geist',system-ui,sans-serif}
+body{margin:0;font-family:'Geist',system-ui,sans-serif;color:#16181a;-webkit-font-smoothing:antialiased}
+a{color:#127f94;text-decoration:none}a:hover{color:#16181a;text-decoration:underline}
+</style>
+</helmet>
+<doc-page size="a4">
+
+<section class="page" data-screen-label="01 Cover">
+  <div style="height:100%;box-sizing:border-box;padding:48px 52px 40px;display:flex;flex-direction:column;background:#0a0b0c;color:#eef1f3">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:28px;height:28px;border-radius:999px;background:#eef1f3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px">
+          <div style="width:15px;height:3px;background:#0a0b0c;border-radius:1px"></div>
+          <div style="width:9px;height:6px;background:#0a0b0c;border-radius:1px"></div>
+        </div>
+        <span style="font-size:14px;font-weight:600;letter-spacing:-.01em">BridgeLife Studio</span>
+      </div>
+      <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:#9aa3a9">INTEGRATED REPORT · REV A</span>
+    </div>
+
+    <div style="margin-top:104px;display:flex;flex-direction:column;gap:18px">
+      <span style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;color:#9aa3a9">PSC I-GIRDER BRIDGE · 33.0 M SIMPLY SUPPORTED</span>
+      <h1 style="margin:0;font-size:60px;font-weight:300;letter-spacing:-.045em;line-height:.98">NH-16 Mahananda Bridge</h1>
+      <p style="margin:0;font-size:17px;line-height:1.5;color:#9aa3a9;max-width:460px;text-wrap:pretty">Lifecycle assessment from design check to maintenance decision, compiled from one digital twin.</p>
+    </div>
+
+    <div style="margin-top:auto">
+      <svg viewBox="0 0 690 250" style="width:100%;display:block;overflow:visible" fill="none">
+        <g stroke="rgba(238,241,243,.18)" stroke-width="1">
+          <path d="M0 200H690"></path>
+          <path d="M6 200l-8 10M26 200l-8 10M46 200l-8 10M66 200l-8 10M626 200l-8 10M646 200l-8 10M666 200l-8 10M686 200l-8 10"></path>
+        </g>
+        <path d="M30 140H70L62 200H38Z M620 140H660L652 200H628Z" stroke="#eef1f3" stroke-width="1"></path>
+        <rect x="40" y="96" width="610" height="10" stroke="#eef1f3" stroke-width="1"></rect>
+        <rect x="45" y="106" width="600" height="30" stroke="#eef1f3" stroke-width="1"></rect>
+        <path d="M45 112H645M45 130H645" stroke="rgba(238,241,243,.25)" stroke-dasharray="3 4"></path>
+        <path d="M45 114Q345 162 645 114" stroke="#3fc1d9" stroke-width="1.2" stroke-dasharray="6 4"></path>
+        <rect x="40" y="136" width="20" height="4" fill="#eef1f3"></rect>
+        <rect x="630" y="136" width="20" height="4" fill="#eef1f3"></rect>
+        <g fill="#3fc1d9"><circle cx="195" cy="136" r="3.5"></circle><circle cx="345" cy="136" r="3.5"></circle><circle cx="495" cy="136" r="3.5"></circle></g>
+        <circle cx="345" cy="121" r="16" stroke="#E0442F" stroke-width="1"></circle>
+        <circle cx="345" cy="121" r="4" fill="#E0442F"></circle>
+        <path d="M345 105V44H400" stroke="#E0442F" stroke-width="1"></path>
+        <text x="408" y="40" fill="#eef1f3" font-family="Geist Mono" font-size="12">G5 · 0.50 L</text>
+        <text x="408" y="56" fill="#9aa3a9" font-family="Geist Mono" font-size="11">INVESTIGATE</text>
+        <g stroke="#9aa3a9" stroke-width="1"><path d="M50 232H640M50 224V240M640 224V240"></path><path d="M45 237l10-10M635 237l10-10"></path></g>
+        <text x="345" y="228" fill="#eef1f3" font-family="Geist Mono" font-size="12" text-anchor="middle" style="paint-order:stroke" stroke="#0a0b0c" stroke-width="8">33 000</text>
+      </svg>
+    </div>
+
+    <div style="margin-top:40px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(255,255,255,.14);border-left:1px solid rgba(255,255,255,.14)">
+      <div style="padding:12px 14px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#9aa3a9">CONDITION</span><span style="font-size:15px;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:999px;background:#D9B443"></span>Minor · 0.82</span></div>
+      <div style="padding:12px 14px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#9aa3a9">PRIORITY</span><span style="font-size:15px">High</span></div>
+      <div style="padding:12px 14px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#9aa3a9">ISSUED</span><span style="font-size:15px">31 Oct 2026</span></div>
+      <div style="padding:12px 14px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#9aa3a9">ENGINE</span><span style="font-size:15px">OpenSeesPy</span></div>
+      <div style="grid-column:span 2;padding:12px 14px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#9aa3a9">PREPARED BY</span><span style="font-size:15px">Structural Assessment Team</span></div>
+      <div style="grid-column:span 2;padding:12px 14px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#9aa3a9">DOCUMENT</span><span style="font-family:'Geist Mono',monospace;font-size:14px">BL-MAH-RPT-001 · 7 pp</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" data-screen-label="02 Summary">
+  <div style="height:100%;box-sizing:border-box;padding:44px 52px 32px;display:flex;flex-direction:column;background:#f7f7f5">
+    <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#8b9196;padding-bottom:12px;border-bottom:1px solid rgba(22,24,26,.12)"><span>NH-16 MAHANANDA BRIDGE</span><span>EXECUTIVE SUMMARY</span></div>
+
+    <div style="margin-top:36px;display:flex;flex-direction:column;gap:14px">
+      <span style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5d6368">00 · SUMMARY</span>
+      <h2 style="margin:0;font-size:34px;font-weight:400;letter-spacing:-.035em;line-height:1.08;text-wrap:balance">Minor deterioration at G5 mid-span. A detailed investigation is recommended within six months.</h2>
+      <p style="margin:0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">The superstructure passes its serviceability checks: live-load deflection 10.8 mm sits well inside the L/800 = 41.2 mm limit, on an effective prestress of 0.68 P₀ after 32.4 % total loss. Inspection, NDT and the frequency fingerprint each point to the same location: the soffit of outer girder G5 near mid-span, with bearing B5 the worst-rated component.</p>
+    </div>
+
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #16181a">
+      <div style="padding:14px 12px 0 0;display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">CONDITION INDEX</span><span style="font-size:44px;font-weight:300;letter-spacing:-.03em;line-height:1">0.82</span><span style="font-size:13px;color:#5d6368">Minor</span></div>
+      <div style="padding:14px 12px 0;border-left:1px solid rgba(22,24,26,.12);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">δ / L∕800</span><span style="font-size:44px;font-weight:300;letter-spacing:-.03em;line-height:1">0.26</span><span style="font-size:13px;color:#5d6368">10.8 / 41.2 mm</span></div>
+      <div style="padding:14px 12px 0;border-left:1px solid rgba(22,24,26,.12);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">Pₑ / P₀</span><span style="font-size:44px;font-weight:300;letter-spacing:-.03em;line-height:1">0.677</span><span style="font-size:13px;color:#5d6368">32.4 % total loss</span></div>
+      <div style="padding:14px 0 0 12px;border-left:1px solid rgba(22,24,26,.12);display:flex;flex-direction:column;gap:6px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">Δf₁ VS BASELINE</span><span style="font-size:44px;font-weight:300;letter-spacing:-.03em;line-height:1;color:#c9361f">−8.3<span style="font-size:20px"> %</span></span><span style="font-size:13px;color:#5d6368">2.87 → 2.63 Hz</span></div>
+    </div>
+
+    <div style="margin-top:28px;display:flex;flex-direction:column;gap:8px">
+      <div style="position:relative;display:grid;grid-template-columns:50fr 20fr 15fr 15fr;height:10px;border-radius:999px;overflow:visible">
+        <div style="background:#E0442F;border-radius:999px 0 0 999px"></div><div style="background:#E6893C"></div><div style="background:#D9B443"></div><div style="background:#4FAE7F;border-radius:0 999px 999px 0"></div>
+        <div style="position:absolute;left:82%;top:-6px;width:2px;height:22px;background:#16181a;margin-left:-1px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:50fr 20fr 15fr 15fr;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#5d6368"><span>SEVERE &lt; 0.50</span><span>DETERIORATED</span><span>MINOR</span><span style="text-align:right">HEALTHY ≥ 0.85</span></div>
+    </div>
+
+    <div style="margin-top:32px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:#5d6368">KEY FINDINGS</span>
+        <div style="display:grid;grid-template-columns:22px 1fr;gap:6px 8px;font-size:14px;line-height:1.5"><span style="font-family:'Geist Mono',monospace;color:#8b9196">1</span><span>Design checks pass; live-load deflection 10.8 mm is within the L/800 = 41.2 mm limit.</span></div>
+        <div style="display:grid;grid-template-columns:22px 1fr;gap:6px 8px;font-size:14px;line-height:1.5"><span style="font-family:'Geist Mono',monospace;color:#8b9196">2</span><span>Five soffit cracks and three corrosion stains logged; bearing B5 rated Deteriorated.</span></div>
+        <div style="display:grid;grid-template-columns:22px 1fr;gap:6px 8px;font-size:14px;line-height:1.5"><span style="font-family:'Geist Mono',monospace;color:#8b9196">3</span><span>Four UPV points on G5 fall into the IS 13311 Doubtful band, 3.0–3.5 km/s (minimum 3.27 km/s).</span></div>
+        <div style="display:grid;grid-template-columns:22px 1fr;gap:6px 8px;font-size:14px;line-height:1.5"><span style="font-family:'Geist Mono',monospace;color:#8b9196">4</span><span>Scenario S-07 (prestress loss + cracking at G5) reproduces the observed frequency drop.</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:#5d6368">RECOMMENDED ACTIONS</span>
+        <div style="display:flex;flex-direction:column;border-top:1px solid rgba(22,24,26,.12)">
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(22,24,26,.12);font-size:14px"><span>Detailed NDT of G5</span><span style="font-family:'Geist Mono',monospace;font-size:12px;color:#c9361f">HIGH</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(22,24,26,.12);font-size:14px"><span>Reset bearing B5</span><span style="font-family:'Geist Mono',monospace;font-size:12px;color:#b8641f">MEDIUM</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(22,24,26,.12);font-size:14px"><span>Seal soffit cracks</span><span style="font-family:'Geist Mono',monospace;font-size:12px;color:#b8641f">MEDIUM</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(22,24,26,.12);font-size:14px"><span>Continuous monitoring on G5</span><span style="font-family:'Geist Mono',monospace;font-size:12px;color:#5d6368">ONGOING</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px">
+      <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:#5d6368">LIFECYCLE · 12 STAGES</span>
+      <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px">
+        <div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#16181a;border-radius:2px"></div><div style="height:6px;background:#127f94;border-radius:2px"></div><div style="height:6px;background:rgba(22,24,26,.15);border-radius:2px"></div><div style="height:6px;background:rgba(22,24,26,.15);border-radius:2px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px;font-family:'Geist Mono',monospace;font-size:9px;color:#5d6368">
+        <span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span style="color:#127f94">10</span><span>11</span><span>12</span>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding-top:10px;border-top:1px solid rgba(22,24,26,.12);display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:#8b9196"><span>BL-MAH-RPT-001 · REV A</span><span>02 / 07</span></div>
+  </div>
+</section>
+
+<section class="page" data-screen-label="03 Configuration & Analysis">
+  <div style="height:100%;box-sizing:border-box;padding:44px 52px 32px;display:flex;flex-direction:column;background:#f7f7f5">
+    <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#8b9196;padding-bottom:12px;border-bottom:1px solid rgba(22,24,26,.12)"><span>NH-16 MAHANANDA BRIDGE</span><span>DESIGN</span></div>
+
+    <div style="margin-top:32px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">01</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Configuration</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">Five precast I-girders at 2.5 m centres carry a 230 mm cast-in-situ deck. The parametric model is generated from these inputs.</p>
+
+    <div style="margin-top:20px;padding:20px 18px 14px;background:#fff;border:1px solid rgba(22,24,26,.1);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+      <svg viewBox="0 0 640 200" style="width:100%;display:block" fill="none">
+        <g stroke="#8b9196" stroke-width=".8"><path d="M20 14H620M20 8V20M620 8V20"></path><path d="M70 170H570M70 164V176M195 164V176M320 164V176M445 164V176M570 164V176"></path><path d="M612 42V142M606 42H618M606 142H618"></path></g>
+        <g font-family="Geist Mono" font-size="10" fill="#5d6368" text-anchor="middle">
+          <text x="320" y="10" style="paint-order:stroke" stroke="#fff" stroke-width="6">12 000</text>
+          <text x="132" y="186">2 500</text><text x="257" y="186">2 500</text><text x="382" y="186">2 500</text><text x="507" y="186">2 500</text>
+          <text x="632" y="95" transform="rotate(-90 632 95)">1 930</text>
+        </g>
+        <rect x="20" y="30" width="600" height="12" fill="rgba(22,24,26,.05)" stroke="#16181a" stroke-width="1"></rect>
+        <g fill="rgba(22,24,26,.05)" stroke="#16181a" stroke-width="1">
+          <path transform="translate(70 0)" d="M-25 42H25V52L7.5 60V112L18.75 122V142H-18.75V122L-7.5 112V60L-25 52Z"></path>
+          <path transform="translate(195 0)" d="M-25 42H25V52L7.5 60V112L18.75 122V142H-18.75V122L-7.5 112V60L-25 52Z"></path>
+          <path transform="translate(320 0)" d="M-25 42H25V52L7.5 60V112L18.75 122V142H-18.75V122L-7.5 112V60L-25 52Z"></path>
+          <path transform="translate(445 0)" d="M-25 42H25V52L7.5 60V112L18.75 122V142H-18.75V122L-7.5 112V60L-25 52Z"></path>
+          <path transform="translate(570 0)" d="M-25 42H25V52L7.5 60V112L18.75 122V142H-18.75V122L-7.5 112V60L-25 52Z"></path>
+        </g>
+        <g fill="#127f94"><circle cx="66" cy="130" r="2.5"></circle><circle cx="74" cy="130" r="2.5"></circle><circle cx="70" cy="122" r="2.5"></circle><circle cx="191" cy="130" r="2.5"></circle><circle cx="199" cy="130" r="2.5"></circle><circle cx="195" cy="122" r="2.5"></circle><circle cx="316" cy="130" r="2.5"></circle><circle cx="324" cy="130" r="2.5"></circle><circle cx="320" cy="122" r="2.5"></circle><circle cx="441" cy="130" r="2.5"></circle><circle cx="449" cy="130" r="2.5"></circle><circle cx="445" cy="122" r="2.5"></circle><circle cx="566" cy="130" r="2.5"></circle><circle cx="574" cy="130" r="2.5"></circle><circle cx="570" cy="122" r="2.5"></circle></g>
+        <g font-family="Geist Mono" font-size="10" fill="#16181a" text-anchor="middle"><text x="70" y="157">G1</text><text x="195" y="157">G2</text><text x="320" y="157">G3</text><text x="445" y="157">G4</text><text x="570" y="157">G5</text></g>
+      </svg>
+      <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8b9196">FIG 1.1 · CROSS-SECTION AT MID-SPAN · DIMENSIONS IN MM · DUCTS SHOWN IN CYAN</span>
+    </div>
+
+    <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 24px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(22,24,26,.12)"><span style="color:#5d6368">Span</span><span style="font-family:'Geist Mono',monospace">33.0 m</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(22,24,26,.12)"><span style="color:#5d6368">Girders</span><span style="font-family:'Geist Mono',monospace">5 @ 2.5 m</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(22,24,26,.12)"><span style="color:#5d6368">Concrete</span><span style="font-family:'Geist Mono',monospace">M45</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(22,24,26,.12)"><span style="color:#5d6368">Girder depth</span><span style="font-family:'Geist Mono',monospace">1 700 mm</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(22,24,26,.12)"><span style="color:#5d6368">Deck slab</span><span style="font-family:'Geist Mono',monospace">230 mm</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(22,24,26,.12)"><span style="color:#5d6368">Web</span><span style="font-family:'Geist Mono',monospace">200 mm</span></div>
+    </div>
+
+    <div style="margin-top:36px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">02</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Analysis &amp; design</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">IRC Class 70R tracked vehicle (impact factor 1.25) with superimposed dead load 14.6 kN/m on self-weight 28.2 kN/m. Load distributed to girders by Courbon's method (factor 0.32).</p>
+
+    <div style="margin-top:20px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <svg viewBox="0 0 400 170" style="width:100%;display:block" fill="none">
+          <path d="M10 20H390" stroke="#16181a" stroke-width="1.2"></path>
+          <path d="M10 20Q200 180 390 20Z" fill="rgba(18,127,148,.08)" stroke="#127f94" stroke-width="1.2"></path>
+          <g stroke="rgba(18,127,148,.35)" stroke-width=".8"><path d="M48 20V44M86 20V64M124 20V79M162 20V88M200 20V100M238 20V88M276 20V79M314 20V64M352 20V44"></path></g>
+          <path d="M10 26l-6 8h12z M390 26l-6 8h12z" fill="#16181a"></path>
+          <path d="M200 100V136" stroke="#16181a" stroke-width=".8"></path>
+          <text x="200" y="150" font-family="Geist Mono" font-size="11" fill="#16181a" text-anchor="middle">M_max 7 479 kN·m</text>
+          <text x="10" y="14" font-family="Geist Mono" font-size="9" fill="#8b9196">0</text><text x="390" y="14" font-family="Geist Mono" font-size="9" fill="#8b9196" text-anchor="end">33.0 m</text>
+        </svg>
+        <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8b9196">FIG 2.1 · BENDING MOMENT ENVELOPE · INNER GIRDER</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 12px">
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">M_MAX</span><span style="font-size:26px;font-weight:300;letter-spacing:-.03em">7,479 <span style="font-size:12px;color:#5d6368">kN·m</span></span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">V_MAX</span><span style="font-size:26px;font-weight:300;letter-spacing:-.03em">907 <span style="font-size:12px;color:#5d6368">kN</span></span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">σ_BOT SERVICE</span><span style="font-size:26px;font-weight:300;letter-spacing:-.03em">+5.4 <span style="font-size:12px;color:#5d6368">MPa</span></span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">δ LIVE</span><span style="font-size:26px;font-weight:300;letter-spacing:-.03em">10.8 <span style="font-size:12px;color:#5d6368">mm</span></span></div>
+        <div style="grid-column:span 2;display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px solid rgba(22,24,26,.12)">
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#5d6368">δ live / L∕800</span><span style="font-family:'Geist Mono',monospace">0.26 ✓</span></div>
+          <div style="height:6px;border-radius:999px;background:rgba(22,24,26,.08)"><div style="width:26%;height:100%;border-radius:999px;background:#16181a"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:auto;padding-top:10px;border-top:1px solid rgba(22,24,26,.12);display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:#8b9196"><span>BL-MAH-RPT-001 · REV A</span><span>03 / 07</span></div>
+  </div>
+</section>
+
+<section class="page" data-screen-label="04 Prestress & Baseline">
+  <div style="height:100%;box-sizing:border-box;padding:44px 52px 32px;display:flex;flex-direction:column;background:#f7f7f5">
+    <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#8b9196;padding-bottom:12px;border-bottom:1px solid rgba(22,24,26,.12)"><span>NH-16 MAHANANDA BRIDGE</span><span>DESIGN · REFERENCE</span></div>
+
+    <div style="margin-top:32px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">03</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Prestressing</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">Six 12-strand cables per girder (A_p 10 080 mm²) on parabolic profiles in 90 mm ducts, e 650 mm at mid-span. Friction μ 0.17, wobble K 0.002/m, anchorage slip 6 mm.</p>
+
+    <div style="margin-top:20px;padding:18px 18px 14px;background:#fff;border:1px solid rgba(22,24,26,.1);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+      <svg viewBox="0 0 640 150" style="width:100%;display:block" fill="none">
+        <rect x="20" y="16" width="600" height="104" fill="rgba(22,24,26,.03)" stroke="#16181a" stroke-width="1"></rect>
+        <path d="M20 28H620" stroke="#16181a" stroke-width=".6"></path>
+        <g stroke="#127f94" stroke-width="1.4"><path d="M20 42Q320 174 620 42"></path><path d="M20 66Q320 158 620 66"></path><path d="M20 90Q320 142 620 90"></path></g>
+        <path d="M320 16V120" stroke="#8b9196" stroke-width=".6" stroke-dasharray="3 3"></path>
+        <g font-family="Geist Mono" font-size="10" fill="#5d6368"><text x="26" y="138">ANCHORAGE</text><text x="614" y="138" text-anchor="end">ANCHORAGE</text><text x="326" y="138">℄ MID-SPAN</text></g>
+        <g font-family="Geist Mono" font-size="10" fill="#127f94"><text x="474" y="76">C1</text><text x="474" y="96">C2</text><text x="474" y="114">C3</text></g>
+      </svg>
+      <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8b9196">FIG 3.1 · CABLE PROFILE ELEVATION · VERTICAL SCALE ×4</span>
+    </div>
+
+    <div style="margin-top:18px;display:flex;flex-direction:column;gap:7px">
+      <span style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:#5d6368;margin-bottom:4px">PRESTRESS LOSS · kN</span>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px"><span>Jacking P₀</span><div style="position:relative;height:14px"><div style="position:absolute;left:0;width:95.4%;height:100%;background:#16181a;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right">14,249</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px"><span style="color:#5d6368">Friction</span><div style="position:relative;height:14px"><div style="position:absolute;left:83.7%;width:11.7%;height:100%;background:#E6893C;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right;color:#5d6368">−646</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px"><span style="color:#5d6368">Anchorage slip</span><div style="position:relative;height:14px"><div style="position:absolute;left:77.2%;width:6.5%;height:100%;background:#E6893C;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right;color:#5d6368">−357</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px"><span style="color:#5d6368">Elastic shortening</span><div style="position:relative;height:14px"><div style="position:absolute;left:64.7%;width:12.5%;height:100%;background:#E6893C;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right;color:#5d6368">−690</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px"><span style="color:#5d6368">Creep</span><div style="position:relative;height:14px"><div style="position:absolute;left:24.5%;width:40.2%;height:100%;background:#D9B443;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right;color:#5d6368">−2,208</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px"><span style="color:#5d6368">Shrinkage</span><div style="position:relative;height:14px"><div style="position:absolute;left:17.4%;width:7.1%;height:100%;background:#D9B443;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right;color:#5d6368">−393</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px"><span style="color:#5d6368">Relaxation</span><div style="position:relative;height:14px"><div style="position:absolute;left:11.7%;width:5.7%;height:100%;background:#D9B443;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right;color:#5d6368">−314</span></div>
+      <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 64px;align-items:center;gap:12px;font-size:13px;padding-top:7px;border-top:1px solid rgba(22,24,26,.12)"><span style="font-weight:500">Effective Pₑ</span><div style="position:relative;height:14px"><div style="position:absolute;left:0;width:11.6%;height:100%;background:#127f94;border-radius:2px"></div></div><span style="font-family:'Geist Mono',monospace;text-align:right;font-weight:500">9,640</span></div>
+      <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8b9196;margin-top:4px">FIG 3.2 · AXIS STARTS AT 9,000 kN · TOTAL LOSS 32.4 % · CAMBER AT TRANSFER 16 MM</span>
+    </div>
+
+    <div style="margin-top:34px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">04</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Healthy baseline</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">The first three modes of the as-designed OpenSeesPy grillage form the reference fingerprint. Unlike a single beam (1 : 4 : 9), the multi-girder grillage gives closely-spaced bending and torsion modes.</p>
+
+    <div style="margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+      <div style="padding:14px;background:#fff;border:1px solid rgba(22,24,26,.1);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+        <svg viewBox="0 0 200 72" style="width:100%;display:block" fill="none"><path d="M0 36H200" stroke="rgba(22,24,26,.2)" stroke-dasharray="2 3"></path><path d="M0 36Q100 72 200 36" stroke="rgba(22,24,26,.25)"></path><path d="M0 36Q100 0 200 36" stroke="#16181a" stroke-width="1.4"></path></svg>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">MODE 1</span><span style="font-size:22px;font-weight:300;letter-spacing:-.03em">2.87 <span style="font-size:11px;color:#5d6368">Hz</span></span></div>
+      </div>
+      <div style="padding:14px;background:#fff;border:1px solid rgba(22,24,26,.1);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+        <svg viewBox="0 0 200 72" style="width:100%;display:block" fill="none"><path d="M0 36H200" stroke="rgba(22,24,26,.2)" stroke-dasharray="2 3"></path><path d="M0 36Q50 72 100 36T200 36" stroke="rgba(22,24,26,.25)"></path><path d="M0 36Q50 0 100 36T200 36" stroke="#16181a" stroke-width="1.4"></path></svg>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">MODE 2</span><span style="font-size:22px;font-weight:300;letter-spacing:-.03em">3.05 <span style="font-size:11px;color:#5d6368">Hz</span></span></div>
+      </div>
+      <div style="padding:14px;background:#fff;border:1px solid rgba(22,24,26,.1);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+        <svg viewBox="0 0 200 72" style="width:100%;display:block" fill="none"><path d="M0 36H200" stroke="rgba(22,24,26,.2)" stroke-dasharray="2 3"></path><path d="M0 36Q33.33 72 66.67 36T133.33 36T200 36" stroke="rgba(22,24,26,.25)"></path><path d="M0 36Q33.33 0 66.67 36T133.33 36T200 36" stroke="#16181a" stroke-width="1.4"></path></svg>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">MODE 3</span><span style="font-size:22px;font-weight:300;letter-spacing:-.03em">4.68 <span style="font-size:11px;color:#5d6368">Hz</span></span></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:28px;font-size:13px;color:#5d6368"><span>UPV nominal <span style="font-family:'Geist Mono',monospace;color:#16181a">4.30 km/s</span></span><span>Rebound nominal <span style="font-family:'Geist Mono',monospace;color:#16181a">38</span></span><span>δ live (reference) <span style="font-family:'Geist Mono',monospace;color:#16181a">10.8 mm</span></span></div>
+
+    <div style="margin-top:auto;padding-top:10px;border-top:1px solid rgba(22,24,26,.12);display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:#8b9196"><span>BL-MAH-RPT-001 · REV A</span><span>04 / 07</span></div>
+  </div>
+</section>
+
+<section class="page" data-screen-label="05 Inspection & NDT">
+  <div style="height:100%;box-sizing:border-box;padding:44px 52px 32px;display:flex;flex-direction:column;background:#f7f7f5">
+    <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#8b9196;padding-bottom:12px;border-bottom:1px solid rgba(22,24,26,.12)"><span>NH-16 MAHANANDA BRIDGE</span><span>CONDITION</span></div>
+
+    <div style="margin-top:32px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">05</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Visual inspection</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">All 9 components inspected. 20 observations and 29 photographs are pinned to the model. Girder conditions follow the AI/ML class; bearings and joints are visual ratings.</p>
+
+    <div style="margin-top:18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+      <div style="padding:12px 14px;border:1px solid rgba(22,24,26,.12);border-radius:12px;display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:#5d6368">Cracks</span><span style="font-size:24px;font-weight:300">5</span></div>
+      <div style="padding:12px 14px;border:1px solid rgba(22,24,26,.12);border-radius:12px;display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:#5d6368">Spalling</span><span style="font-size:24px;font-weight:300">2</span></div>
+      <div style="padding:12px 14px;border:1px solid rgba(22,24,26,.12);border-radius:12px;display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:#5d6368">Corrosion</span><span style="font-size:24px;font-weight:300">3</span></div>
+      <div style="padding:12px 14px;border:1px solid rgba(22,24,26,.12);border-radius:12px;display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:#5d6368">Other</span><span style="font-size:24px;font-weight:300">4</span></div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;flex-direction:column;font-size:13px">
+      <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,2fr) 120px;gap:12px;padding:0 0 8px;border-bottom:1px solid #16181a;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368"><span>COMPONENT</span><span>OBSERVATION</span><span>CONDITION</span></div>
+      <sc-for list="{{ components }}" as="c" hint-placeholder-count="9">
+        <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,2fr) 120px;gap:12px;padding:7px 0;border-bottom:1px solid rgba(22,24,26,.1);align-items:center"><span>{{ c.name }}</span><span style="color:#5d6368">{{ c.note }}</span><span style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:999px;background:{{ c.col }}"></span>{{ c.cond }}</span></div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:32px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">06</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Non-destructive testing</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">48 UPV and 36 rebound points. UPV mean 4.06 km/s, rebound 38. Grading follows IS 13311 Pt.1; a SonReb strength estimate is deferred until site cores calibrate the correlation (IS 516 Pt.5).</p>
+
+    <div style="margin-top:16px;padding:16px 18px 14px;background:#fff;border:1px solid rgba(22,24,26,.1);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px">
+        <sc-for list="{{ upv }}" as="u" hint-placeholder-count="48">
+          <div style="height:30px;border-radius:3px;background:{{ u.bg }};color:{{ u.fg }};display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:10px">{{ u.v }}</div>
+        </sc-for>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8b9196">FIG 6.1 · UPV ON G5 WEST FACE · km/s · TOP ROW = TOP FLANGE</span>
+        <div style="display:flex;gap:12px;font-family:'Geist Mono',monospace;font-size:10px;color:#5d6368">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#4FAE7F"></span>≥ 4.5 EXCELLENT</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#b9dcc5"></span>3.5–4.5 GOOD</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#D9B443"></span>3.0–3.5 DOUBTFUL</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#E0442F"></span>&lt; 3.0 POOR</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:auto;padding-top:10px;border-top:1px solid rgba(22,24,26,.12);display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:#8b9196"><span>BL-MAH-RPT-001 · REV A</span><span>05 / 07</span></div>
+  </div>
+</section>
+
+<section class="page" data-screen-label="06 Monitoring & Data">
+  <div style="height:100%;box-sizing:border-box;padding:44px 52px 32px;display:flex;flex-direction:column;background:#f7f7f5">
+    <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#8b9196;padding-bottom:12px;border-bottom:1px solid rgba(22,24,26,.12)"><span>NH-16 MAHANANDA BRIDGE</span><span>MONITORING · DATA</span></div>
+
+    <div style="margin-top:32px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">07–08</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Monitoring &amp; synthetic data</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">Accelerometers on the girder soffits record ambient vibration. Scenario S-07, a localized stiffness loss over 6.0 m at G5 mid-span, shifts every mode downward and matches the field spectrum.</p>
+
+    <div style="margin-top:20px;padding:18px 18px 14px;background:#0a0b0c;border-radius:16px;display:flex;flex-direction:column;gap:10px">
+      <svg viewBox="0 0 640 190" style="width:100%;display:block" fill="none">
+        <g stroke="rgba(255,255,255,.08)"><path d="M30 20H630M30 60H630M30 100H630M30 140H630"></path></g>
+        <path d="M30 160H630" stroke="rgba(255,255,255,.3)"></path>
+        <path d="M30.0 157.0L32.5 157.0L35.0 157.0L37.5 156.9L40.0 156.9L42.5 156.9L45.0 156.9L47.5 156.8L50.0 156.8L52.5 156.8L55.0 156.7L57.5 156.7L60.0 156.6L62.5 156.6L65.0 156.6L67.5 156.5L70.0 156.5L72.5 156.4L75.0 156.3L77.5 156.3L80.0 156.2L82.5 156.1L85.0 156.0L87.5 156.0L90.0 155.9L92.5 155.8L95.0 155.6L97.5 155.5L100.0 155.4L102.5 155.2L105.0 155.1L107.5 154.9L110.0 154.7L112.5 154.4L115.0 154.2L117.5 153.9L120.0 153.5L122.5 153.2L125.0 152.7L127.5 152.2L130.0 151.7L132.5 151.0L135.0 150.2L137.5 149.2L140.0 148.1L142.5 146.7L145.0 145.0L147.5 142.8L150.0 140.0L152.5 136.5L155.0 131.7L157.5 125.3L160.0 116.6L162.5 104.3L165.0 87.1L167.5 64.3L170.0 37.8L172.5 16.2L175.0 16.0L177.5 16.9L180.0 28.5L182.5 42.7L185.0 61.3L187.5 81.6L190.0 99.3L192.5 112.8L195.0 122.5L197.5 129.6L200.0 134.8L202.5 138.7L205.0 141.6L207.5 143.9L210.0 145.6L212.5 147.0L215.0 148.1L217.5 149.0L220.0 149.8L222.5 150.3L225.0 150.7L227.5 151.1L230.0 151.3L232.5 151.3L235.0 151.3L237.5 151.1L240.0 150.8L242.5 150.2L245.0 149.4L247.5 148.2L250.0 146.4L252.5 143.8L255.0 140.0L257.5 134.8L260.0 128.8L262.5 123.9L265.0 123.4L267.5 127.8L270.0 134.1L272.5 139.7L275.0 144.0L277.5 147.0L280.0 149.2L282.5 150.7L285.0 151.9L287.5 152.8L290.0 153.5L292.5 154.0L295.0 154.4L297.5 154.8L300.0 155.1L302.5 155.3L305.0 155.5L307.5 155.7L310.0 155.8L312.5 156.0L315.0 156.1L317.5 156.2L320.0 156.3L322.5 156.4L325.0 156.4L327.5 156.5L330.0 156.6L332.5 156.6L335.0 156.7L337.5 156.7L340.0 156.8L342.5 156.8L345.0 156.8L347.5 156.9L350.0 156.9L352.5 156.9L355.0 157.0L357.5 157.0L360.0 157.0L362.5 157.0L365.0 157.0L367.5 157.1L370.0 157.1L372.5 157.1L375.0 157.1L377.5 157.1L380.0 157.2L382.5 157.2L385.0 157.2L387.5 157.2L390.0 157.2L392.5 157.2L395.0 157.2L397.5 157.2L400.0 157.3L402.5 157.3L405.0 157.3L407.5 157.3L410.0 157.3L412.5 157.3L415.0 157.3L417.5 157.3L420.0 157.3L422.5 157.3L425.0 157.3L427.5 157.3L430.0 157.4L432.5 157.4L435.0 157.4L437.5 157.4L440.0 157.4L442.5 157.4L445.0 157.4L447.5 157.4L450.0 157.4L452.5 157.4L455.0 157.4L457.5 157.4L460.0 157.4L462.5 157.4L465.0 157.4L467.5 157.4L470.0 157.4L472.5 157.4L475.0 157.4L477.5 157.4L480.0 157.5L482.5 157.5L485.0 157.5L487.5 157.5L490.0 157.5L492.5 157.5L495.0 157.5L497.5 157.5L500.0 157.5L502.5 157.5L505.0 157.5L507.5 157.5L510.0 157.5L512.5 157.5L515.0 157.5L517.5 157.5L520.0 157.5L522.5 157.5L525.0 157.5L527.5 157.5L530.0 157.5L532.5 157.5L535.0 157.5L537.5 157.5L540.0 157.5L542.5 157.5L545.0 157.5L547.5 157.5L550.0 157.5L552.5 157.5L555.0 157.5L557.5 157.5L560.0 157.5L562.5 157.5L565.0 157.5L567.5 157.5L570.0 157.5L572.5 157.5L575.0 157.5L577.5 157.5L580.0 157.5L582.5 157.5L585.0 157.5L587.5 157.5L590.0 157.5L592.5 157.5L595.0 157.5L597.5 157.5L600.0 157.5L602.5 157.5L605.0 157.5L607.5 157.6L610.0 157.6L612.5 157.6L615.0 157.6L617.5 157.6L620.0 157.6L622.5 157.6L625.0 157.6L627.5 157.6L630.0 157.6" stroke="rgba(238,241,243,.45)" stroke-width="1.2" stroke-dasharray="4 3"></path>
+        <path d="M30.0 156.8L32.5 156.8L35.0 156.8L37.5 156.7L40.0 156.7L42.5 156.6L45.0 156.6L47.5 156.6L50.0 156.5L52.5 156.5L55.0 156.4L57.5 156.4L60.0 156.3L62.5 156.2L65.0 156.2L67.5 156.1L70.0 156.0L72.5 155.9L75.0 155.8L77.5 155.7L80.0 155.6L82.5 155.5L85.0 155.3L87.5 155.2L90.0 155.0L92.5 154.9L95.0 154.7L97.5 154.4L100.0 154.2L102.5 153.9L105.0 153.6L107.5 153.2L110.0 152.8L112.5 152.4L115.0 151.9L117.5 151.2L120.0 150.5L122.5 149.7L125.0 148.7L127.5 147.5L130.0 146.0L132.5 144.2L135.0 141.9L137.5 139.1L140.0 135.4L142.5 130.5L145.0 123.9L147.5 114.9L150.0 102.4L152.5 84.9L155.0 61.1L157.5 32.4L160.0 16.0L162.5 16.0L165.0 16.0L167.5 16.0L170.0 28.6L172.5 49.8L175.0 72.7L177.5 92.5L180.0 107.6L182.5 118.5L185.0 126.4L187.5 132.2L190.0 136.5L192.5 139.7L195.0 142.2L197.5 144.1L200.0 145.6L202.5 146.8L205.0 147.8L207.5 148.5L210.0 149.0L212.5 149.4L215.0 149.6L217.5 149.6L220.0 149.4L222.5 149.0L225.0 148.2L227.5 147.1L230.0 145.4L232.5 142.8L235.0 139.1L237.5 134.0L240.0 127.6L242.5 121.8L245.0 120.2L247.5 124.2L250.0 130.8L252.5 137.1L255.0 141.9L257.5 145.4L260.0 147.9L262.5 149.7L265.0 151.1L267.5 152.1L270.0 152.9L272.5 153.5L275.0 154.0L277.5 154.4L280.0 154.7L282.5 155.0L285.0 155.2L287.5 155.4L290.0 155.6L292.5 155.7L295.0 155.9L297.5 156.0L300.0 156.1L302.5 156.2L305.0 156.3L307.5 156.3L310.0 156.4L312.5 156.5L315.0 156.5L317.5 156.6L320.0 156.6L322.5 156.7L325.0 156.7L327.5 156.8L330.0 156.8L332.5 156.8L335.0 156.9L337.5 156.9L340.0 156.9L342.5 156.9L345.0 157.0L347.5 157.0L350.0 157.0L352.5 157.0L355.0 157.0L357.5 157.1L360.0 157.1L362.5 157.1L365.0 157.1L367.5 157.1L370.0 157.1L372.5 157.2L375.0 157.2L377.5 157.2L380.0 157.2L382.5 157.2L385.0 157.2L387.5 157.2L390.0 157.2L392.5 157.3L395.0 157.3L397.5 157.3L400.0 157.3L402.5 157.3L405.0 157.3L407.5 157.3L410.0 157.3L412.5 157.3L415.0 157.3L417.5 157.3L420.0 157.3L422.5 157.4L425.0 157.4L427.5 157.4L430.0 157.4L432.5 157.4L435.0 157.4L437.5 157.4L440.0 157.4L442.5 157.4L445.0 157.4L447.5 157.4L450.0 157.4L452.5 157.4L455.0 157.4L457.5 157.4L460.0 157.4L462.5 157.4L465.0 157.4L467.5 157.4L470.0 157.4L472.5 157.4L475.0 157.4L477.5 157.5L480.0 157.5L482.5 157.5L485.0 157.5L487.5 157.5L490.0 157.5L492.5 157.5L495.0 157.5L497.5 157.5L500.0 157.5L502.5 157.5L505.0 157.5L507.5 157.5L510.0 157.5L512.5 157.5L515.0 157.5L517.5 157.5L520.0 157.5L522.5 157.5L525.0 157.5L527.5 157.5L530.0 157.5L532.5 157.5L535.0 157.5L537.5 157.5L540.0 157.5L542.5 157.5L545.0 157.5L547.5 157.5L550.0 157.5L552.5 157.5L555.0 157.5L557.5 157.5L560.0 157.5L562.5 157.5L565.0 157.5L567.5 157.5L570.0 157.5L572.5 157.5L575.0 157.5L577.5 157.5L580.0 157.5L582.5 157.5L585.0 157.5L587.5 157.5L590.0 157.5L592.5 157.5L595.0 157.5L597.5 157.5L600.0 157.5L602.5 157.5L605.0 157.5L607.5 157.5L610.0 157.6L612.5 157.6L615.0 157.6L617.5 157.6L620.0 157.6L622.5 157.6L625.0 157.6L627.5 157.6L630.0 157.6" stroke="#3fc1d9" stroke-width="1.6"></path>
+        <g font-family="Geist Mono" font-size="10" fill="#9aa3a9" text-anchor="middle"><text x="30" y="176">0</text><text x="130" y="176">2</text><text x="230" y="176">4</text><text x="330" y="176">6</text><text x="430" y="176">8</text><text x="530" y="176">10</text><text x="630" y="176" text-anchor="end">Hz</text></g>
+        <g font-family="Geist Mono" font-size="10"><text x="150" y="26" fill="#3fc1d9" text-anchor="middle">2.63</text><text x="188" y="40" fill="#9aa3a9">2.87</text><text x="238" y="110" fill="#3fc1d9" text-anchor="middle">4.29</text><text x="276" y="118" fill="#9aa3a9">4.68</text></g>
+      </svg>
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#9aa3a9">FIG 7.1 · FFT OF VERTICAL ACCELERATION</span>
+        <div style="display:flex;gap:16px;font-family:'Geist Mono',monospace;font-size:10px;color:#9aa3a9"><span style="display:flex;align-items:center;gap:6px"><span style="width:16px;height:2px;background:#3fc1d9"></span>S-07 / FIELD</span><span style="display:flex;align-items:center;gap:6px"><span style="width:16px;border-top:1.5px dashed rgba(238,241,243,.6)"></span>BASELINE</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #16181a">
+      <div style="padding:12px 12px 0 0;display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">RECORDS</span><span style="font-size:28px;font-weight:300;letter-spacing:-.03em">600</span></div>
+      <div style="padding:12px 12px 0;border-left:1px solid rgba(22,24,26,.12);display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">CLASSES</span><span style="font-size:28px;font-weight:300;letter-spacing:-.03em">4</span></div>
+      <div style="padding:12px 12px 0;border-left:1px solid rgba(22,24,26,.12);display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">f₁ · S-07</span><span style="font-size:28px;font-weight:300;letter-spacing:-.03em">2.63 <span style="font-size:12px;color:#5d6368">Hz</span></span></div>
+      <div style="padding:12px 0 0 12px;border-left:1px solid rgba(22,24,26,.12);display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">δ · S-07</span><span style="font-size:28px;font-weight:300;letter-spacing:-.03em">47.9 <span style="font-size:12px;color:#5d6368">mm</span></span></div>
+    </div>
+
+    <div style="margin-top:34px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">09</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Features</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">Ten features per record from frequency, acceleration, deflection, strain and NDT. NDT and deflection dominate the importance; f₁ and δ_max are strongly anti-correlated, r = −0.93.</p>
+
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+      <sc-for list="{{ features }}" as="f" hint-placeholder-count="6">
+        <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 84px;gap:12px;align-items:center;font-size:13px">
+          <span style="font-family:'Geist Mono',monospace">{{ f.k }}</span>
+          <div style="height:10px;border-radius:999px;background:rgba(22,24,26,.07)"><div style="width:{{ f.w }};height:100%;border-radius:999px;background:#16181a"></div></div>
+          <span style="font-family:'Geist Mono',monospace;text-align:right;color:#5d6368">{{ f.v }}</span>
+        </div>
+      </sc-for>
+      <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8b9196;margin-top:6px">FIG 9.1 · FEATURE IMPORTANCE · VALUES FOR S-07</span>
+    </div>
+
+    <div style="margin-top:auto;padding-top:10px;border-top:1px solid rgba(22,24,26,.12);display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:#8b9196"><span>BL-MAH-RPT-001 · REV A</span><span>06 / 07</span></div>
+  </div>
+</section>
+
+<section class="page" data-screen-label="07 Assessment & Decision">
+  <div style="height:100%;box-sizing:border-box;padding:44px 52px 32px;display:flex;flex-direction:column;background:#f7f7f5">
+    <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#8b9196;padding-bottom:12px;border-bottom:1px solid rgba(22,24,26,.12)"><span>NH-16 MAHANANDA BRIDGE</span><span>ASSESSMENT · DECISION</span></div>
+
+    <div style="margin-top:32px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">10</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">AI/ML condition assessment</h2></div>
+
+    <div style="margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:grid;grid-template-columns:28px repeat(4,minmax(0,1fr));gap:3px">
+          <span></span><span style="font-family:'Geist Mono',monospace;font-size:10px;color:#5d6368;text-align:center">H</span><span style="font-family:'Geist Mono',monospace;font-size:10px;color:#5d6368;text-align:center">MI</span><span style="font-family:'Geist Mono',monospace;font-size:10px;color:#5d6368;text-align:center">D</span><span style="font-family:'Geist Mono',monospace;font-size:10px;color:#5d6368;text-align:center">S</span>
+          <sc-for list="{{ cm }}" as="r" hint-placeholder-count="4">
+            <span style="font-family:'Geist Mono',monospace;font-size:10px;color:#5d6368;display:flex;align-items:center">{{ r.k }}</span>
+            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4">
+              <div style="height:40px;border-radius:4px;background:{{ c.bg }};color:{{ c.fg }};display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:12px">{{ c.v }}</div>
+            </sc-for>
+          </sc-for>
+        </div>
+        <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;color:#8b9196">FIG 10.1 · CONFUSION MATRIX · 150 TEST RECORDS</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">TEST ACCURACY</span><span style="font-size:40px;font-weight:300;letter-spacing:-.03em;line-height:1">98.0 <span style="font-size:16px;color:#5d6368">%</span></span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid rgba(22,24,26,.12)">
+          <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">FIELD PREDICTION · G5</span>
+          <span style="font-size:20px;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:999px;background:#D9B443"></span>Minor · p 0.48</span>
+          <span style="font-size:13px;color:#5d6368;line-height:1.5">Borderline: Deteriorated p 0.41 is close behind. UPV, rebound and δ_max drive the prediction.</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:10px 14px;border:1px solid rgba(22,24,26,.18);border-radius:10px;font-size:12px;line-height:1.5;color:#5d6368">AI-generated assessment. Not a verified engineering result; confirm by detailed investigation.</div>
+
+    <div style="margin-top:32px;display:flex;align-items:baseline;gap:16px"><span style="font-family:'Geist Mono',monospace;font-size:13px;color:#8b9196">11</span><h2 style="margin:0;font-size:28px;font-weight:400;letter-spacing:-.03em">Maintenance decision</h2></div>
+    <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#5d6368;text-wrap:pretty">Evidence from inspection, NDT, monitoring and the model points to a detailed investigation of G5. Risk tolerance: moderate. Reinspection in six months.</p>
+
+    <div style="margin-top:20px;position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px">
+      <div style="position:absolute;left:0;right:0;top:5px;height:1px;background:rgba(22,24,26,.2)"></div>
+      <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="5">
+        <div style="position:relative;display:flex;flex-direction:column;gap:6px">
+          <span style="width:11px;height:11px;border-radius:999px;background:{{ t.col }};box-shadow:0 0 0 3px #f7f7f5"></span>
+          <span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368;margin-top:4px">{{ t.d }}</span>
+          <span style="font-size:13px;line-height:1.4">{{ t.a }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-bottom:1px solid #16181a"></div><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">PREPARED BY</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-bottom:1px solid #16181a"></div><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">CHECKED BY</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><div style="height:44px;border-bottom:1px solid #16181a"></div><span style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.08em;color:#5d6368">APPROVED BY</span></div>
+    </div>
+
+    <div style="margin-top:24px;padding-top:10px;border-top:1px solid rgba(22,24,26,.12);display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:#8b9196"><span>BL-MAH-RPT-001 · REV A</span><span>07 / 07</span></div>
+  </div>
+</section>
+
+</doc-page>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const C = { Healthy: '#4FAE7F', Minor: '#D9B443', Deteriorated: '#E6893C', Severe: '#E0442F' };
+    const comp = [
+      ['Deck slab', 'Hairline cracking near expansion joint', 'Minor'],
+      ['G1 – G3', 'No defects observed', 'Healthy'],
+      ['G4', 'No defects observed', 'Healthy'],
+      ['G5', 'Flexural cracks and rust stain at mid-span', 'Minor'],
+      ['Cross-girders', 'No defects observed', 'Healthy'],
+      ['Bearing B5', 'Bulging and lateral displacement', 'Deteriorated'],
+      ['Bearings B1 – B4', 'Minor ageing of elastomer', 'Minor'],
+      ['Expansion joints', 'Debris and seal wear', 'Minor'],
+      ['Abutments A1, A2', 'Spalling at A2 bearing shelf', 'Minor']
+    ].map(([name, note, cond]) => ({ name, note, cond, col: C[cond] }));
+    // UPV field on the G5 west face (4 rows top→soffit × 12 stations along span),
+    // generated by tools/field_layer.py from the S-07 scenario (localized cracking at
+    // mid-span soffit) anchored to the backend nominal UPV 4.30; grid mean 4.06, min 3.27.
+    const rows = [
+      [4.31,4.26,4.31,4.32,4.22,4.24,4.28,4.28,4.30,4.28,4.34,4.34],
+      [4.28,4.29,4.24,4.15,4.14,4.07,4.12,4.13,4.18,4.22,4.31,4.30],
+      [4.23,4.16,4.06,3.90,3.73,3.63,3.69,3.72,3.88,4.03,4.20,4.30],
+      [4.21,4.08,3.90,3.70,3.46,3.31,3.27,3.46,3.70,3.94,4.15,4.24]
+    ];
+    // IS 13311 Pt.1 grading bands (backend app/compute/ndt.py UPV_BANDS):
+    //   ≥4.5 Excellent · 3.5–4.5 Good · 3.0–3.5 Doubtful · <3.0 Poor
+    const upv = rows.flat().map(v => {
+      const bg = v >= 4.5 ? '#4FAE7F' : v >= 3.5 ? '#b9dcc5' : v >= 3.0 ? '#D9B443' : '#E0442F';
+      return { v: v.toFixed(2), bg, fg: v >= 4.5 || v < 3.0 ? '#fff' : '#16181a' };
+    });
+    // Real RandomForest confusion on 150 held-out records (backend /ml/train, acc 98.0 %).
+    // Reordered from sklearn class order [D,H,Mi,S] to the display order H,MI,D,S.
+    const cmRaw = [[38,0,0,0],[0,36,1,0],[0,0,37,1],[0,0,1,36]];
+    const cm = ['H','MI','D','S'].map((k, i) => ({ k, cells: cmRaw[i].map((v, j) => {
+      const a = v / 38;
+      return { v, bg: i === j ? `rgba(22,24,26,${0.25 + a * 0.7})` : v ? `rgba(224,68,47,${0.12 + a * 3})` : 'rgba(22,24,26,.04)', fg: i === j ? '#fff' : '#16181a' };
+    }) }));
+    // Real RandomForest feature importances (backend /features/matrix), normalised to the top feature (UPV).
+    const features = [['UPV_min', '100%', '3.27 km/s'], ['Rebound', '96%', '38'], ['ε_max', '69%', '1,157 µε'], ['δ_max', '65%', '47.9 mm'], ['Δf₁', '26%', '−8.3 %'], ['f₃', '25%', '4.29 Hz']].map(([k, w, v]) => ({ k, w, v }));
+    const timeline = [
+      ['NOV 2026', 'Detailed NDT of G5: cores, cover, carbonation', '#E0442F'],
+      ['DEC 2026', 'Reset bearing B5', '#E6893C'],
+      ['JAN 2027', 'Seal soffit cracks on G4, G5', '#E6893C'],
+      ['ONGOING', 'Continuous monitoring on G5', '#127f94'],
+      ['APR 2027', 'Reinspection', '#16181a']
+    ].map(([d, a, col]) => ({ d, a, col }));
+    return { components: comp, upv, cm, features, timeline };
+  }
+}
+</script>
+</body>
+</html>

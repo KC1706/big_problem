@@ -362,10 +362,10 @@ geom], `theme/` [tokens.css + fonts.css + 6 Geist woff2, copied from `design_exp
     4. **Reactive-stage action buttons now genuinely re-fire the backend** (were cosmetic job bars only). New store
        `recompute: Record<string,number>` + `bump(key)`; the nonce is in the `anl`/`bsl`/`mlp` useBackend deps in
        `verify.ts`; "Run full FE analysis" → `bump('ana')`, "Establish baseline" → `bump('base')`, "Retrain" →
-       `bump('ml')` (each still shows its progress bar). **⚠️ NOT yet verified in Chrome** — the browser test was
-       interrupted by a page reload before I confirmed the `/analysis/run` re-fire. Logic is simple (nonce in deps →
-       useBackend effect re-runs) and typecheck+build pass; **re-verify this one in-browser next session** (go to
-       Analysis, clear network, click "Run full FE analysis", expect a fresh `POST /api/analysis/run`).
+       `bump('ml')` (each still shows its progress bar). **✅ VERIFIED in Chrome (2026-10-30):** all three re-fire the
+       backend — cleared the network panel on each stage, clicked the button, and saw a fresh `POST` resolve 200:
+       "Run full FE analysis" → `/api/analysis/run` 200, "Establish baseline" → `/api/baseline/establish` 200,
+       "Retrain Random Forest" → `/api/ml/pipeline` 200. Zero console errors.
     - Files touched (FE): `canvas/bridge-twin.js`, `api/verify.ts`, `stage/results.ts`, `stage/twinData.ts`,
       `stage/inputs.ts`, `stage/useStage.ts`, `state/store.ts`, `hud/Welcome.tsx`, `hud/StageRail.tsx`.
     - **Remaining known-static (acceptable):** the New-project form defaults; nothing else fake found in the HUD.
@@ -428,3 +428,41 @@ Verdict (maintenance) · Report Terminal. Every visual is driven by real backend
   **interpretation**, not the number (the assignment rewards reasoning).
 - Every engineering value must be verified against **paywalled IRC/IS codes** — no invented clause
   numbers anywhere in the code.
+
+---
+
+## NEW (2026-10-31): Integrated Report — designed + wired to REAL backend numbers (DONE)
+Package: **`BridgeLife-Report-handoff/`** (7-page A4 engineering report, `BL-MAH-RPT-001`).
+- **`src/BridgeLife Report.dc.html`** = the report (Claude Design `.dc.html`; static paged doc via
+  `doc-page.js` + `support.js`, inline SVG charts, `renderVals()` holds table/heatmap/matrix/timeline
+  data). Local Geist fonts; works offline; no three.js.
+- **What was done this session:** replaced the design's placeholder numbers (3.21 Hz / 0.804 / 6840 /
+  18.4 — these were `store.ts`/`bridge-twin.js` static fallbacks, NOT backend output) with REAL values
+  from the validated compute core, run against default `SectionConfig()` (OpenSeesPy grillage, seed 42).
+- **Real values now in the report:** Pe/P0 **0.677** (32.4% loss), M_max **7,479 kN·m**, V **907 kN**,
+  δ live **10.8 mm** (/L800=0.26), baseline grillage modes **2.87/3.05/4.68 Hz** (closely-spaced, incl
+  SIDL mass; struct-only f1=3.536), Δf1 **−8.3%** (2.87→2.63 at ei=0.84), ML **98.0%** on 150 test / 600
+  records (real confusion, reordered to H/MI/D/S), feature importances UPV>rebound>ε>δ, f1↔δ r=**−0.93**,
+  field ML prediction **Minor p 0.48** (Deteriorated 0.41 borderline) → health **0.82**.
+- **Honesty corrections forced by real data:** web **200mm** (not 300), girder depth **1700** (not 2000),
+  deck **230** (not 240), prestress **6×12-strand** cables (not 3×19T13), UPV regraded to real **IS 13311**
+  bands, dropped fake SonReb MPa (formula is uncalibrated). Loss waterfall + FFT charts were regenerated
+  programmatically to match real values.
+- **Field layer WIRED to backend** via **`BridgeLife-Report-handoff/tools/field_layer.py`** (run:
+  `cd backend && PYTHONPATH=. ../.venv/bin/python ../BridgeLife-Report-handoff/tools/field_layer.py`, ~2min).
+  Generates UPV grid (mean 4.06, min 3.27), inspection conditions (from ML class), defect counts
+  (5/2/3/4), maintenance dates (NOV/DEC/JAN/APR 2027) — all keyed to the canonical ML class (Minor).
+  ONLY non-computed data left = bearing/joint/abutment **visual** conditions (no bearing element in the
+  grillage) — flagged, not faked.
+- **Full provenance:** **`BridgeLife-Report-handoff/REPORT_EXPLAINED.md`** = every chart/number traced to
+  its backend source + formula + value, tagged [C]omputed / [D]erived / [G]enerated / [V]isual. Read this
+  first to understand/defend any figure.
+- **Verified:** rendered all 7 pages in Chrome, zero console errors; backend 9/9 tests still pass.
+- **Report is STATIC** (values baked in) — change the input ⇒ re-run backend + field_layer.py, then copy
+  values back into the `.dc.html` (`renderVals()` + inline text + chart SVGs). Not auto-wired to live API.
+- Scratchpad driver scripts used: `report_numbers.py`, `scenario.py`, `final.py` (session scratchpad —
+  gone after clear; logic is re-derivable from REPORT_EXPLAINED.md §4/§7 and field_layer.py).
+
+### Caveat update (supersedes the 1:4:9 note below)
+- OpenSeesPy grillage modes ARE now used/verified in the report: **2.87/3.05/4.68 Hz** closely-spaced
+  (the realistic multi-girder triplet; E3 confirmed). Analytical 1:4:9 remains the transparent fallback.
