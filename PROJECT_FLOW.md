@@ -70,8 +70,9 @@ in the grillage) — flagged `[V]`, not faked.
 
 Every chart and number is traced to its source formula, input and value in
 `BridgeLife-Report-handoff/REPORT_EXPLAINED.md`, tagged `[C]`omputed / `[D]`erived / `[G]`enerated /
-`[V]`isual. The report is **static** — change the input ⇒ re-run the backend + `field_layer.py`,
-then copy the new values back in.
+`[V]`isual. In addition to the static handoff document, Stage 12 now features a **live dynamic compiler**
+(`stage/reportDoc.ts` + `api/reportData.ts`): clicking "Compile" in the HUD fetches live results from all
+compute stages for the current bridge and renders an on-demand, print-ready HTML report.
 
 ## Verification
 - Backend compute core: **9/9** tests pass (`cd backend && PYTHONPATH=. pytest -q`).

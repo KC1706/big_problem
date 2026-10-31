@@ -459,7 +459,12 @@ Package: **`BridgeLife-Report-handoff/`** (7-page A4 engineering report, `BL-MAH
   first to understand/defend any figure.
 - **Verified:** rendered all 7 pages in Chrome, zero console errors; backend 9/9 tests still pass.
 - **Report is STATIC** (values baked in) — change the input ⇒ re-run backend + field_layer.py, then copy
-  values back into the `.dc.html` (`renderVals()` + inline text + chart SVGs). Not auto-wired to live API.
+  values back into the `.dc.html` (`renderVals()` + inline text + chart SVGs).
+- **✅ DYNAMIC IN-STUDIO REPORT COMPILER WIRED (2026-10-31):** for arbitrary loaded bridges, Stage 12 now has
+  a live generator: clicking "Compile" (`stage/inputs.ts` `inAction`) invokes `fetchReportData()`
+  (`api/reportData.ts`, parallel fetch of all 7 compute stages) and `buildReportHtml()` (`stage/reportDoc.ts`,
+  paged A4 report with executive KPIs, cross-section, prestress waterfall, baseline modes, confusion matrix,
+  and limitations). Clicking "Download" opens the printable view and triggers an HTML download.
 - Scratchpad driver scripts used: `report_numbers.py`, `scenario.py`, `final.py` (session scratchpad —
   gone after clear; logic is re-derivable from REPORT_EXPLAINED.md §4/§7 and field_layer.py).
 
