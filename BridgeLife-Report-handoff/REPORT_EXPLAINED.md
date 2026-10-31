@@ -139,11 +139,11 @@ Produced by `SectionConfig()` through the endpoints (OpenSeesPy engine, mass "in
 
 **Dataset:** **600 records**, 4 classes × 150.
 
-**ML:** **98.0 %** test accuracy · 450 train / 150 test · confusion (H/MI/D/S) [[38,0,0,0],[0,36,1,0],[0,0,37,1],[0,0,1,36]].
+**ML:** **97.3 %** test accuracy · 450 train / 150 test · confusion (H/MI/D/S) [[38,0,0,0],[0,35,2,0],[0,0,37,1],[0,0,1,36]].
 
-**Features:** importance UPV 0.243 > rebound 0.233 > ε_max 0.169 > δ_max 0.159 > f₁ 0.062 > f₃ 0.061 … · f₁↔δ_max correlation **−0.93**.
+**Features:** importance UPV 0.222 > rebound 0.179 > ε_max 0.158 > δ_max 0.155 > f₃ 0.132 > f₂ 0.068 > f₁ 0.061 … · f₁↔δ_max correlation **−0.94**.
 
-**Field ML prediction (scenario → classifier):** **Minor, p 0.48** (Deteriorated p 0.41 close behind) ⇒ health score **0.82**.
+**Field ML prediction (scenario → classifier):** **Minor, p 0.54** (Deteriorated p 0.29 next) ⇒ health score **0.82**. _(All ML/feature figures are the deterministic output of `tools/report_values.py`, seed 42.)_
 
 **NDT grid:** mean **4.23 km/s**, min **3.28 km/s**.
 
@@ -153,7 +153,7 @@ Produced by `SectionConfig()` through the endpoints (OpenSeesPy engine, mass "in
 
 Legend: **[C] computed** by the backend from the input · **[D] derived** (simple arithmetic on computed values) · **[G] generated** by `tools/field_layer.py` from the backend models + the S-07 scenario (deterministic, re-runnable) · **[V] visual input** (a genuine visual-inspection rating the backend cannot compute — bearings/joints/abutments).
 
-The field layer (pages 5 & 7) is produced by **`tools/field_layer.py`**, which imports the backend compute core, classifies the S-07 scenario with the real ML pipeline (→ **Minor, p 0.48**, health 0.82 — the same call as page 7), and derives the UPV grid, inspection conditions, defect counts and maintenance dates from that. Re-run it to regenerate.
+The field layer (pages 5 & 7) is produced by **`tools/field_layer.py`**, which imports the backend compute core, classifies the S-07 scenario with the real ML pipeline (→ **Minor, p 0.54**, health 0.82 — the same call as page 7), and derives the UPV grid, inspection conditions, defect counts and maintenance dates from that. Re-run it to regenerate.
 
 ### Page 1 — Cover
 | Element | Type | Source / note |
@@ -215,18 +215,18 @@ The field layer (pages 5 & 7) is produced by **`tools/field_layer.py`**, which i
 ### Page 6 — Monitoring & Features
 | Element | Type | Source |
 |---|---|---|
-| Monitoring text (S-07, EI loss over 6 m at G5) | [C] | scenario |
+| Monitoring text (S-07, EI loss over 6 m at G5) | [C] | scenario — page 6 figures (Δf₁ −8.3 %, f₁ 2.63, δ 47.9) are the **EI→0.84 worst-case bound**, a conservative direct stiffness reduction. The field mechanism model (28 % severity) gives a milder −6.7 %; the ML diagnosis of it is Minor. Both are the one S-07 damage event, parameterized two ways. |
 | **FFT chart** (baseline dashed vs S-07 cyan, peaks 2.63/2.87, 4.29/4.68) | [C] | Both spectrum paths **regenerated programmatically** as Lorentzian peaks at the real grillage modal frequencies (baseline 2.87/3.05/4.68, damaged 2.63/2.80/4.29); x-axis 0–12 Hz, x = 30 + f·50 |
 | Stats RECORDS 600 / CLASSES 4 / f₁·S-07 2.63 / δ·S-07 47.9 | [C] | synthetic + scenario |
-| Features text (r = −0.93) | [C] | f₁↔δ_max correlation |
+| Features text (r = −0.94) | [C] | f₁↔δ_max correlation |
 | **Feature-importance bars** | [C] | Real RandomForest importances, normalised to the top feature (UPV); values are the representative S-07 feature vector |
 
 ### Page 7 — AI/ML & Maintenance
 | Element | Type | Source |
 |---|---|---|
-| **Confusion matrix** (150 test, diag 38/36/37/36) | [C] | `ml_train`, reordered from sklearn's [D,H,Mi,S] to display order H/MI/D/S |
-| Test accuracy 98.0 % | [C] | `ml_train` |
-| Field prediction "Minor p 0.48, Deteriorated p 0.41" | [C] | `ml_pipeline` on the scenario feature vector |
+| **Confusion matrix** (150 test, diag 38/35/37/36) | [C] | `ml_train`, reordered from sklearn's [D,H,Mi,S] to display order H/MI/D/S |
+| Test accuracy 97.3 % | [C] | `ml_train` |
+| Field prediction "Minor p 0.54, Deteriorated p 0.29" | [C] | `ml_pipeline` on the scenario feature vector |
 | AI disclaimer box | fact | Required caveat — the ML result is advisory |
 | Maintenance timeline (NOV 2026 → APR 2027) | [G] | Dates = issue date + interval table keyed to the ML class (Minor ⇒ NDT +1 / bearing +2 / seal +3 / reinspect +6 months); `field_layer.py` `maintenance` |
 | Signature lines | template | — |
@@ -281,7 +281,7 @@ PYTHONPATH=. ../.venv/bin/python ../BridgeLife-Report-handoff/tools/field_layer.
 
 It imports the backend compute core and, for the one canonical **S-07 scenario** (`[Cracking, Prestress loss]`, mid-span, 6 m, 28 % severity):
 
-1. **Classifies it with the real ML pipeline** → `Minor, p 0.48` (Deteriorated 0.41 close behind), health 0.82 — the *same* call that produces page 7. This one class drives the whole field layer, so every page agrees.
+1. **Classifies it with the real ML pipeline** → `Minor, p 0.54` (Deteriorated 0.29 next), health 0.82 — the *same* call that produces page 7. This one class drives the whole field layer, so every page agrees.
 2. **UPV grid (48 cells)** — a physical localized-damage field: UPV dips from the backend nominal 4.30 km/s to a cracked-soffit minimum at the damage location, graded by the real IS 13311 bands. Output: mean 4.06, min 3.27, four Doubtful cells (the page-2 finding and page-5 caption read these back).
 3. **Inspection** — girder conditions from the ML class (G5 = Minor, G4 one step milder = Healthy, …); defect counts scaled from scenario severity (cracks 5 / spalling 2 / corrosion 3 / other 4).
 4. **Maintenance** — action dates = issue date + an interval table keyed to the predicted class.
@@ -297,5 +297,5 @@ To regenerate the report for a different scenario or input, edit the constants a
 - Engineering values stay **IRC/IS-consistent**; no clause numbers are invented (the codes are paywalled — the code comments say so explicitly and flag every coefficient as "verify against the current code").
 - The **SonReb strength** is not printed because its formula is uncalibrated.
 - The **grillage modes are closely spaced** (2.87/3.05/4.68), not the textbook 1:4:9 — that is the real multi-girder result, kept even though 1:4:9 would look "cleaner".
-- The **field prediction is reported as borderline** (Minor 0.48 vs Deteriorated 0.41), not rounded up to a confident-looking number.
+- The **field prediction is reported as low-confidence** (Minor 0.54 vs Deteriorated 0.29), not rounded up to a confident-looking number.
 - The **loss is 32.4 %** and **Pₑ/P₀ 0.68** — the real computed values, not the rounder placeholder figures the design mock-up originally showed.

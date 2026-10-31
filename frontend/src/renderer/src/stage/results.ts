@@ -303,8 +303,8 @@ export function buildResults(id: string, d: ResultDeps): ResultsModel {
       kind: 'ndt', q: t.q, ref: t.ref, gl: 'G' + (gi + 1), cells, minX: cells[mi].x + 9.5, minY: cells[mi].y + 9.5,
       running: d.jobs.ndt != null, progW: (d.jobs.ndt || 0) + '%',
       bands: t.bands.map((b, j) => ({ l: b[0], r: b[1] + ' ' + t.u, c: bc[j], n: counts[j] + ' pts' })),
-      rows: R([['Points on G' + (gi + 1), '42'], ['Mean', mean.toFixed(t.dec) + ' ' + t.u], ['Min', mn.toFixed(t.dec) + ' ' + t.u], ['SonReb f_ck est.', son.toFixed(1) + ' MPa']]),
-      big: [[st.test + ' mean', mean.toFixed(t.dec), t.u], ['Min', mn.toFixed(t.dec), t.u], ['Flagged', String(flagged), 'pts'], ['SonReb', son.toFixed(1), 'MPa']],
+      rows: R([['Points on G' + (gi + 1), '42'], ['Mean', mean.toFixed(t.dec) + ' ' + t.u], ['Min', mn.toFixed(t.dec) + ' ' + t.u], ['SonReb f_ck (indicative)', son.toFixed(1) + ' MPa — uncalibrated']]),
+      big: [[st.test + ' mean', mean.toFixed(t.dec), t.u], ['Min', mn.toFixed(t.dec), t.u], ['Flagged', String(flagged), 'pts'], ['SonReb (ind.)', son.toFixed(1), 'MPa']],
     }
   }
 
